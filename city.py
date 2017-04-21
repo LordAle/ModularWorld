@@ -82,6 +82,20 @@ class City():
         self.mines = base_city.mines
         self.update_values_list()
 
+    def special_traveller(self):
+        self.id = None
+        self.name = 'Traveller'
+        self.kind = 'Traveller'
+        self.population = 0
+        self.main_race = 'None'
+        self.forests = False
+        self.plains = False
+        self.river = False
+        self.sea = False
+        self.mountains = False
+        self.mines = False
+        self.update_values_list()
+
     def update_values_list(self):
         self.values_list = [self.id, self.name, self.kind, self.population, self.main_race, self.forests, self.plains,
                             self.river, self.sea, self.mountains, self.mines]

@@ -52,6 +52,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         if dbname[0]:
             self.loader.create_new(dbname[0])
             self.open_QConnection(dbname[0])
+            self.setup_new_db()
 
     def load_database(self):
         dbname = self.open_file_dialog('Open database', 'C:\\Users\LordAle\PycharmProjects\ModularWorld\database')
@@ -61,7 +62,6 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def open_QConnection(self, db_name):
         self.QConnection = QtSql.QSqlDatabase.addDatabase('QSQLITE')
-        print(db_name)
         self.QConnection.setDatabaseName(db_name)
         self.QConnection.open()
         if self.QConnection.open() == False:
@@ -89,6 +89,11 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.listViewSelectedName.setModel(self.side_view_name_model)
         self.side_view_value_model = models.StringListModel()
         self.listViewSelectedValue.setModel(self.side_view_value_model)
+
+    def setup_new_db(self):
+        self.add_traveller_city()
+        self.query_cities_name()
+
 
 # View query methods ---------------------------------------------------------------Begin
 
@@ -358,6 +363,16 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.query_characters_name(building_id)
 
         return new_character
+
+    def add_traveller_city(self):
+        traveller_city = city.City()
+        traveller_city.special_traveller()
+
+        connector = db_connector.City_Connector(self.loader)
+        traveller_city_id = connector.write_to_db(traveller_city)
+        connector.close_session()
+
+        self.add_floating_building(traveller_city_id)
 
     def add_floating_building(self, city_id):
         floating_building = building.Building()

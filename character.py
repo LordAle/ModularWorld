@@ -34,7 +34,7 @@ class Character():
 
         self.race = param['race']
         if self.race == 'Random':
-            if self.role == 'Child':
+            if self.role == 'Child' or in_city.main_race not in catalogs_character.races:
                 self.race = core.race
             else:
                 is_main_race = random.randrange(10)
@@ -116,8 +116,8 @@ class Character():
             is_main_race = random.randrange(10)
             if is_main_race != 9:
                 self.race = in_city.main_race
-            else:
-                self.race = random.choice(catalogs_character.races)
+        if in_city.main_race not in catalogs_character.races:
+            self.race = random.choice(catalogs_character.races)
 
         self.gender = param['gender']
         if self.gender == 'Random':
@@ -166,7 +166,7 @@ class Character():
 
         self.role = role
 
-        if self.role == 'Spouse' or self.role == 'Child':
+        if self.role == 'Spouse' or self.role == 'Child' or in_city.main_race not in catalogs_character.races:
             self.race = core.race
         else:
             is_main_race = random.randrange(10)
