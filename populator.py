@@ -9,15 +9,18 @@ class Populator():
     characters if available """
 
     def __init__(self,  core_dict, in_building, in_building_id, in_city, in_city_id, loader):
+        self.loader = loader
         self.in_city = in_city
         self.in_city_id = in_city_id
         self.in_building = in_building
         self.in_building_id = in_building_id
+        self.traveller_city_id = self.get_traveller_id()
+        self.traveller_floating_id = self.get_floating_building_id(self.traveller_city_id)
+        self.floating_id = self.get_floating_building_id(self.in_city_id)
         self.core_dict = core_dict
         self.core_character = character.Character()
         self.core_character_id = None
         self.constructor_info = catalogs_character.profession[in_building.kind][in_building.subkind]
-        self.loader = loader
         self.role = []
         self.profession = []
         self.floating_characters = []
@@ -25,7 +28,8 @@ class Populator():
 
     def populate(self):
         self.build_structure()
-        self.extract_floating_characters()
+        self.extract_floating_characters(self.floating_id)
+        self.extract_floating_characters(self.traveller_floating_id)
         self.set_core()
         self.purge_structure('Master')
         self.set_others()
@@ -61,24 +65,29 @@ class Populator():
             else:
                 purged = True
 
-    def extract_floating_characters(self):
-        floating_building_id = self.get_floating_building_id()
+    def extract_floating_characters(self, floating_id):
         connector = db_connector.Character_Connector(self.loader)
-        self.floating_characters = connector.load_from_db('building_id', floating_building_id)
-        for float in self.floating_characters:
-            print(float.values_list)
+        self.floating_characters = self.floating_characters + connector.load_from_db('building_id', floating_id)
         connector.close_session()
 
-    def get_floating_building_id(self):
+    def get_floating_building_id(self, city_id):
         connector = db_connector.Building_Connector(self.loader)
         floating_list = connector.load_from_db('kind', 'Floating')
         connector.close_session()
         for floating in floating_list:
-            if floating.city_id == self.in_city_id:
+            if floating.city_id == city_id:
                 return floating.id
             else:
                 continue
         return Exception  # possibility to add method call to create floating building in city
+
+    def get_traveller_id(self):
+        connector = db_connector.City_Connector(self.loader)
+        traveller_city = connector.load_from_db('kind', 'Traveller')
+        connector.close_session()
+        traveller_city_id = traveller_city[0].id
+
+        return traveller_city_id
 
     def set_core(self):
         existing_core = self.search_for_core()
@@ -109,12 +118,22 @@ class Populator():
                 added_character = character.Character()
                 added_character.set_autopopulate(added_role, added_profession, self.core_character, self.in_building,
                                                  self.in_city)
+
+                # Check if child are still at home or have left
                 if added_role == 'Child' and added_character.age >= catalogs_character.ages[added_character.race][0] \
                         and random.randint(1,10) != 1:
-                    added_character.set_building_id(self.get_floating_building_id())
+                    if random.randint(1,5) == 1:
+                        added_character.set_building_id(self.traveller_floating_id)
+                    else:
+                        added_character.set_building_id(self.floating_id)
                 else:
                     added_character.set_building_id(self.in_building_id)
-                added_character.set_city_id(self.in_city_id)
+
+                if added_character.building_id == self.traveller_floating_id:
+                    added_character.set_city_id(self.traveller_city_id)
+                else:
+                    added_character.set_city_id(self.in_city_id)
+
                 if added_role == 'Child':
                     added_character.set_parent_id(self.core_character_id)
                 self.add_character(added_character)
@@ -195,7 +214,6 @@ class Populator():
 
     def search_for_other(self, profession):
         for looking_at in self.floating_characters:
-            print(profession, looking_at.profession)
             if looking_at.profession == profession:
                 return looking_at
             else:
