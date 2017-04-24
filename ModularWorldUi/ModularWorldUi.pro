@@ -32,6 +32,7 @@ FORMS    += mainwindow.ui \
     add_city_dialog.ui \
     add_building_dialog.ui \
     add_char_dialog.ui \
-    delete_dialog.ui
+    delete_dialog.ui \
+    mainwindow_copy.ui
 
 DISTFILES +=
