@@ -1,4 +1,5 @@
 import character
+import family
 import catalogs_character
 import db_connector
 import random
@@ -18,7 +19,7 @@ class Populator():
         self.traveller_floating_id = self.get_floating_building_id(self.traveller_city_id)
         self.floating_id = self.get_floating_building_id(self.in_city_id)
         self.core_dict = core_dict
-        self.core_character = character.Character()
+        self.core_character = character.Character(in_city=self.in_city, in_building=self.in_building)
         self.core_character_id = None
         self.constructor_info = catalogs_character.profession[in_building.kind][in_building.subkind]
         self.role = []
@@ -100,6 +101,8 @@ class Populator():
             self.core_character.set_core_from_dialog(self.core_dict, profession, self.in_building, self.in_city)
             self.core_character.set_building_id(self.in_building_id)
             self.core_character.set_city_id(self.in_city_id)
+            new_family_id = self.add_family(self.core_character.fname)
+            self.core_character.set_family_id(new_family_id)
             self.core_character_id = self.add_character(self.core_character)
 
     def set_others(self):
@@ -114,10 +117,11 @@ class Populator():
             if type(existing_character) is character.Character:
                 self.update_character(existing_character.id, added_role, self.in_building_id)
                 self.floating_characters.remove(existing_character)
+
             else:
-                added_character = character.Character()
-                added_character.set_autopopulate(added_role, added_profession, self.core_character, self.in_building,
-                                                 self.in_city)
+                added_character = character.Character(in_city=self.in_city, in_building=self.in_building,
+                                                      core=self.core_character)
+                added_character.set_autopopulate(added_role, added_profession)
 
                 # Check if child are still at home or have left
                 if added_role == 'Child' and added_character.age >= catalogs_character.ages[added_character.race][0] \
@@ -129,13 +133,15 @@ class Populator():
                 else:
                     added_character.set_building_id(self.in_building_id)
 
+                # Set correct city_id
                 if added_character.building_id == self.traveller_floating_id:
                     added_character.set_city_id(self.traveller_city_id)
                 else:
                     added_character.set_city_id(self.in_city_id)
 
                 if added_role == 'Child':
-                    added_character.set_parent_id(self.core_character_id)
+                    added_character.set_family_id(self.core_character.family_id)
+
                 self.add_character(added_character)
 
     def get_number(self, distribution, value):
@@ -237,3 +243,11 @@ class Populator():
         connector = db_connector.Building_Connector(self.loader)
         connector.update_entry(self.in_building_id, 'name', new_name)
         connector.close_session()
+
+    def add_family(self, family_name):
+        new_family = family.Family(family_name)
+
+        connector = db_connector.Family_Connector(self.loader)
+        family_id = connector.write_to_db(new_family)
+        connector.close_session()
+        return family_id
