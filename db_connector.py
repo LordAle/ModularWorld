@@ -2,6 +2,7 @@ import base
 import city
 import building
 import character
+import family
 
 
 class Db_Connector():
@@ -19,11 +20,12 @@ class Db_Connector():
 class City_Connector(Db_Connector):
 
     def write_to_db(self, info_city):
-        # Expect a City object, return new city id
-        print(info_city.name, info_city.plains)
+        # Expect a City instance, return new city id
+        print(info_city.name, info_city.kind, info_city.population, info_city.main_race)
         new_city = base.City(name=info_city.name, kind=info_city.kind, population=info_city.population, main_race=info_city.main_race,
                              forests=info_city.forests, plains=info_city.plains, river=info_city.river, sea=info_city.sea,
                              mountains=info_city.mountains, mines=info_city.mines)
+        print('Here!!!')
         self.session.add(new_city)
         self.session.commit()
         return new_city.id
@@ -50,7 +52,7 @@ class City_Connector(Db_Connector):
 class Building_Connector(Db_Connector):
 
     def write_to_db(self, info_building):
-        # Expect Building object, return new building id
+        # Expect Building instance, return new building id
         new_building = base.Building(name=info_building.name, kind=info_building.kind, subkind=info_building.subkind,
                                     city_id=info_building.city_id)
         self.session.add(new_building)
@@ -79,7 +81,7 @@ class Building_Connector(Db_Connector):
 class Character_Connector(Db_Connector):
 
     def write_to_db(self, info_character):
-        # Expect Character object, return new character id
+        # Expect Character instance, return new character id
         new_character = base.Character(name=info_character.name, fname=info_character.fname, race=info_character.race,
                                        gender=info_character.gender, age=info_character.age, role=info_character.role,
                                        profession=info_character.profession, wealth=info_character.wealth,
@@ -108,5 +110,16 @@ class Character_Connector(Db_Connector):
     def delete_entry(self, row_id):
         self.session.query(base.Character).filter(base.Character.id == row_id).delete()
         self.session.commit()
+
+
+class Family_Connector(Db_Connector):
+
+    def write_to_db(self, info_family):
+        # Expect Family instance, return new family id
+        new_family = base.Family(name=info_family.name)
+
+        self.session.add(new_family)
+        self.session.commit()
+        return new_family.id
 
 
