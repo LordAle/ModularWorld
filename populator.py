@@ -95,10 +95,10 @@ class Populator():
         if existing_core is character.Character:
             self.core_character = existing_core
             self.core_character.set_building_id(self.in_building_id)
-            self.update_character(self.core_character.id, 'Master', self.in_building_id)
+            self.update_character(self.core_character.id, 'Master', self.in_building_id, new_city_id=self.in_city_id)
         else:
             profession = self.profession[self.get_core_index()]
-            self.core_character.set_core_from_dialog(self.core_dict, profession, self.in_building, self.in_city)
+            self.core_character.set_core_from_dialog(self.core_dict, profession)
             self.core_character.set_building_id(self.in_building_id)
             self.core_character.set_city_id(self.in_city_id)
             new_family_id = self.add_family(self.core_character.fname)
@@ -115,7 +115,7 @@ class Populator():
                 existing_character = self.search_for_other(added_profession)
 
             if type(existing_character) is character.Character:
-                self.update_character(existing_character.id, added_role, self.in_building_id)
+                self.update_character(existing_character.id, added_role, self.in_building_id, new_city_id=self.in_city_id)
                 self.floating_characters.remove(existing_character)
 
             else:
@@ -226,10 +226,12 @@ class Populator():
                 continue
         return False
 
-    def update_character(self, character_id, new_role, new_building_id):
+    def update_character(self, character_id, new_role, new_building_id, new_city_id=None):
         connector = db_connector.Character_Connector(self.loader)
         connector.update_entry(character_id, 'role', new_role)
         connector.update_entry(character_id, 'building_id', new_building_id)
+        if new_city_id:
+            connector.update_entry(character_id, 'city_id', new_city_id)
         connector.close_session()
 
     def add_character(self, added_character):
