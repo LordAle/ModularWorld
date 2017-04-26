@@ -142,7 +142,7 @@ class Character():
             if self.profession == 'Random' or self.profession == 'random':
                 profession_list = self.construct_profession(self.in_building, self.in_city, self.role)
                 self.profession = random.choice(profession_list)
-            elif self.profession == 'Same':
+            if self.profession == 'Same':
                 self.profession = self.core.profession
         except:
             self.profession = 'Error'

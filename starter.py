@@ -281,14 +281,13 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
     #Set special table model
 
     def show_selected_family(self):
-        '''
+
         selected_character = self.get_characters_from_db('id', self.get_selected_character_id())
         selected_character = selected_character[0]
         selected_id = selected_character.id
-        selected_parent_id = selected_character.parent_id
-        if type(selected_parent_id) is not int:
+        selected_family_id = selected_character.family_id
+        if type(selected_family_id) is not int:
             selected_parent_id = 0
-        '''
 
         self.table_special_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
         self.table_special_model.setTable('characters')
@@ -296,7 +295,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #self.table_special_model.setFilter('parent_id = {0} OR parent_id = {1}'.format(selected_id,
          #selected_parent_id))
-        self.table_special_model.setFilter('id IS NOT NULL')  # Parent
+        self.table_special_model.setFilter('family_id = {0}'.format(selected_family_id))  # Parent
         print(self.table_special_model.selectStatement())
         #self.table_special_model.setFilter('id = {0}'.format(selected_character.id))  # Itself / Not needed
         #self.table_special_model.setFilter('id = {0} OR parent_id = {1} OR id = {2} OR parent_id = {3}'.format(
@@ -317,7 +316,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_special_model.setHeaderData(8, QtCore.Qt.Horizontal, 'Wealth')
         self.table_special_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Class')
         self.table_special_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Level')
-        self.table_special_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Parent')
+        self.table_special_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Family')
         self.table_special_model.setHeaderData(12, QtCore.Qt.Horizontal, 'City')
         self.table_special_model.setHeaderData(13, QtCore.Qt.Horizontal, 'Building')
         self.table_special_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Visiting')
@@ -444,7 +443,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         new_character.set_building_id(building_id)
         new_character.set_city_id(city_id)
 
-        if core_character and (new_character.role == 'Spouse' or new_character.role == 'Child'):
+        if core_character and new_character.role == 'Child':
             new_character.set_family_id(core_character.family_id)
         else:
             family_id = self.add_family(new_character.fname)

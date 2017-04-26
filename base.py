@@ -49,7 +49,7 @@ class Family(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
-    characters = relationship('Character', back_populates='families')
+    # characters = relationship('Character', back_populates='families')
 
 
 class Character(Base):
@@ -67,8 +67,8 @@ class Character(Base):
     classe = Column(String)
     level = Column(Integer)
 
-    family_id = Column(Integer, ForeignKey('families.id'))
-    family = relationship(Family, back_populates='characters')
+    family_id = Column(Integer)
+    # family = relationship(Family, back_populates='characters') # Breaks base.City????
 
     city_id = Column(Integer, ForeignKey('cities.id'))
     city = relationship(City, back_populates='characters')
