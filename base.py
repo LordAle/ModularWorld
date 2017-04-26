@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
+
 class City(Base):
     __tablename__ = 'cities'
 
@@ -20,11 +21,11 @@ class City(Base):
     mountains = Column(Boolean)
     mines = Column(Boolean)
 
-
     buildings = relationship('Building', back_populates='city')
     characters = relationship('Character', back_populates='city')
 
     note = Column(String(10000))
+
 
 class Building(Base):
     __tablename__ = 'buildings'
@@ -38,9 +39,18 @@ class Building(Base):
     city = relationship(City, back_populates='buildings')
 
     characters = relationship('Character', back_populates='building')
-    # workers = relationship('Character', back_populate='building')
 
     note = Column(String(10000))
+
+
+class Family(Base):
+    __tablename__ = 'families'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+
+    # characters = relationship('Character', back_populates='families')
+
 
 class Character(Base):
     __tablename__ = 'characters'
@@ -57,7 +67,8 @@ class Character(Base):
     classe = Column(String)
     level = Column(Integer)
 
-    parent_id = Column(Integer)
+    family_id = Column(Integer)
+    # family = relationship(Family, back_populates='characters') # Breaks base.City????
 
     city_id = Column(Integer, ForeignKey('cities.id'))
     city = relationship(City, back_populates='characters')

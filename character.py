@@ -7,9 +7,9 @@ import catalogs_character_names
 class Character():
 
     names_list = ['Id', 'Name', 'Family', 'Race', 'Gender', 'Age', 'Role', 'Profession', 'Wealth', 'Class', 'Level',
-                  'Parent', 'Building', 'City', 'Visiting']
+                  'Family', 'Building', 'City', 'Visiting']
 
-    def __init__(self):
+    def __init__(self, in_city=None, in_building=None, core=None):
         self.id = None
         self.name = 'Default name'
         self.fname = 'Default fname'
@@ -21,200 +21,157 @@ class Character():
         self.wealth = 'Default Wealth'
         self.classe = 'Default class'
         self.level = 0
-        self.parent_id = None
+        self.family_id = None
         self.city_id = None
         self.building_id = None
         self.visiting_id = None
+        self.in_city = in_city
+        self.in_building = in_building
+        self.core = core
         self.update_value_list()
 
-    def set_from_dialog(self, param, core, in_building, in_city):
+    def set_from_dialog(self, param):
         # Generic function to add character from dialog
+        self.set_role(param['role'])
+        self.set_race(param['race'])
+        self.set_gender(param['gender'])
+        self.set_name(param['name'])
+        self.set_fname(param['fname'])
+        self.set_age(param['age'])
+        self.set_profession(param['profession'])
+        self.set_wealth(param['wealth'])
+        self.set_class(param['class'])
+        self.set_level(param['level'])
 
-        self.role = param['role']
+    def set_core_from_dialog(self, param, profession):
+        # Method used to create first character in a building
+        self.set_role(param['role'])
+        self.set_race(param['race'])
+        self.set_gender(param['gender'])
+        self.set_name(param['name'])
+        self.set_fname(param['fname'])
+        self.set_age(param['age'])
+        self.set_profession(profession)
+        self.set_wealth(param['wealth'])
+        self.set_class(param['class'])
+        self.set_level(param['level'])
 
-        self.race = param['race']
-        if self.race == 'Random':
-            if self.role == 'Child' or in_city.main_race not in catalogs_character.races:
-                self.race = core.race
-            else:
-                is_main_race = random.randrange(10)
-                if is_main_race != 9:
-                    self.race = in_city.main_race
-                else:
-                    self.race = random.choice(catalogs_character.races)
-
-        self.gender = param['gender']
-        if self.gender == 'Random':
-            if self.role == 'Spouse':
-                if core.gender == 'Male':
-                    self.gender = 'Female'
-                elif core.gender == 'Female':
-                    self.gender = 'Male'
-            else:
-                self.gender = random.choice(catalogs_character.genders)
-
-        self.name = param['name']
-        if self.name == 'Random':
-            self.name = random.choice(catalogs_character_names.names[self.gender][self.race])
-
-        self.fname = param['fname']
-        if self.fname == 'Random':
-            if self.role == 'Spouse' or 'Child':
-                self.fname = core.fname
-            else:
-                self.fname = random.choice(catalogs_character_names.fnames[self.race])
-
-        self.age = param['age']
-        if self.age == 'Random':
-            if self.role == 'Spouse':
-                self.age = max(18, core.age + random.randint(-5, 15))
-            elif self.role == 'Child':
-                self.age = max(0, core.age - random.randint(20, 40))
-            else:
-                self.age = random.randint(catalogs_character.ages[self.race][0], catalogs_character.ages[self.race][1])
-            #  Change to normal distribution?
-        self.age = int(self.age)
-
-        self.profession = param['profession']
-        if self.profession == 'Random':
-            profession_list = self.construct_profession(in_building, in_city, self.role)
-            self.profession = random.choice(profession_list)
-
-
-        self.wealth = param['wealth']
-        if self.wealth == 'Random':
-            try:
-                wealth_odds = catalogs_character.profession_info[self.profession]['Wealth']
-                if (wealth_odds % 1) >= random.random():
-                    wealth_odds = math.ceil(wealth_odds)
-                else:
-                    wealth_odds = math.floor(wealth_odds)
-                self.wealth = catalogs_character.wealth[int(wealth_odds)]
-            except:
-                self.wealth = 'Error'
-
-        self.classe = param['class']
-        if self.classe == 'Random':
-            self.classe = 'Random class (placeholder)'
-
-        self.level = param['level']
-        if self.level == 'Random':
-            self.level = random.paretovariate(2)
-            self.level = math.floor(self.level)
-        self.level = int(self.level)
-
-        if self.role == 'Child':
-            self.parent_id = core.id
-
-    def set_core_from_dialog(self, param, profession, in_building, in_city):
-        #Function used to create first character in a building
-
-        self.role = param['role']
-
-        self.race = param['race']
-        if self.race == 'Random':
-            is_main_race = random.randrange(10)
-            if is_main_race != 9:
-                self.race = in_city.main_race
-        if in_city.main_race not in catalogs_character.races:
-            self.race = random.choice(catalogs_character.races)
-
-        self.gender = param['gender']
-        if self.gender == 'Random':
-            self.gender = random.choice(catalogs_character.genders)
-
-        self.name = param['name']
-        if self.name == 'Random':
-            self.name = random.choice(catalogs_character_names.names[self.gender][self.race])
-
-        self.fname = param['fname']
-        if self.fname == 'Random':
-            self.fname = random.choice(catalogs_character_names.fnames[self.race])
-
-        self.age = param['age']
-        if self.age == 'Random':
-            self.age = random.randint(catalogs_character.ages[self.race][0],catalogs_character.ages[self.race][1])  #
-            #  Change to normal distribution?
-        self.age = int(self.age)
-
-        self.profession = profession
-
-        self.wealth = param['wealth']
-        if self.wealth == 'Random':
-            try:
-                wealth_odds = catalogs_character.profession_info[self.profession]['Wealth']
-                if (wealth_odds % 1) >= random.random():
-                    wealth_odds = math.ceil(wealth_odds)
-                else:
-                    wealth_odds = math.floor(wealth_odds)
-                self.wealth = catalogs_character.wealth[int(wealth_odds)]
-            except:
-                self.wealth = 'Error'
-
-        self.classe = param['class']
-        if self.classe == 'Random':
-            self.classe = 'Random class (placeholder)'
-
-        self.level = param['level']
-        if self.level == 'Random':
-            self.level = random.paretovariate(2)
-            self.level = math.floor(self.level)
-        self.level = int(self.level)
-
-    def set_autopopulate(self, role, profession, core, in_building, in_city):
+    def set_autopopulate(self, role, profession):
         # Method used to create a character during autopopulate process
+        self.set_role(role)
+        self.set_race('Random')
+        self.set_gender('Random')
+        self.set_name('Random')
+        self.set_fname('Random')
+        self.set_age('Random')
+        self.set_profession(profession)
+        self.set_wealth('Random')
+        self.set_class('Random')
+        self.set_level('Random')
 
+    def set_role(self, role):
         self.role = role
 
-        if self.role == 'Spouse' or self.role == 'Child' or in_city.main_race not in catalogs_character.races:
-            self.race = core.race
-        else:
-            is_main_race = random.randrange(10)
-            if is_main_race != 9:
-                self.race = in_city.main_race
-            else:
-                self.race = random.choice(catalogs_character.races)
-
-        if self.role == 'Spouse':
-            if core.gender == 'Male':
-                self.gender = 'Female'
-            elif core.gender == 'Female':
-                self.gender = 'Male'
-        else:
-            self.gender = random.choice(catalogs_character.genders)
-
-        self.name = random.choice(catalogs_character_names.names[self.gender][self.race])
-
-        if self.role == 'Spouse' or self.role == 'Child':
-            self.fname = core.fname
-        else:
-            self.fname = random.choice(catalogs_character_names.fnames[self.race])
-
-        if self.role == 'Spouse':
-            self.age = max(18, core.age + random.randint(-5,15))
-        elif self.role == 'Child':
-            self.age = max(0, core.age - random.randint(20,40))
-        else:
-            self.age = random.randint(catalogs_character.ages[self.race][0], catalogs_character.ages[self.race][1])
-
-        self.profession = profession
-        if self.profession == 'Same':
-            self.profession = core.profession
-
+    def set_race(self, race):
         try:
-            wealth_odds = catalogs_character.profession_info[self.profession]['Wealth']
-            if (wealth_odds % 1) >= random.random():
-                wealth_odds = math.ceil(wealth_odds)
-            else:
-                wealth_odds = math.floor(wealth_odds)
-            self.wealth = catalogs_character.wealth[int(wealth_odds)]
+            self.race = race
+            if self.race not in catalogs_character.races:
+                if self.role == 'Spouse' or self.role == 'Child' or self.in_city.main_race not in catalogs_character.races:
+                    self.race = self.core.race
+                else:
+                    is_main_race = random.randrange(10)
+                    if is_main_race != 9:
+                        self.race = self.in_city.main_race
+                    else:
+                        self.race = random.choice(catalogs_character.races)
+        except:
+            self.race = 'Error'
+
+    def set_gender(self, gender):
+        try:
+            self.gender = gender
+            if self.gender not in catalogs_character.genders:
+                if self.role == 'Spouse':
+                    if self.core.gender == 'Male':
+                        self.gender = 'Female'
+                    elif self.core.gender == 'Female':
+                        self.gender = 'Male'
+                else:
+                    self.gender = random.choice(catalogs_character.genders)
+        except:
+            self.gender = 'Error'
+
+    def set_name(self, name):
+        try:
+            self.name = name
+            if self.name == 'Random' or self.name == 'random':
+                self.name = random.choice(catalogs_character_names.names[self.gender][self.race])
+        except:
+            self.name = 'Error'
+
+    def set_fname(self, fname):
+        try:
+            self.fname = fname
+            if self.fname == 'Random' or self.fname == 'random':
+                if self.role == 'Spouse' or self.role == 'Child':
+                    self.fname = self.core.fname
+                else:
+                    self.fname = random.choice(catalogs_character_names.fnames[self.race])
+        except:
+            self.fname = 'Error'
+
+    def set_age(self, age):
+        try:
+            self.age = age
+            if self.age == 'Random' or self.age == 'random':
+                if self.role == 'Spouse':
+                    self.age = max(catalogs_character.ages[self.race][0], self.core.age + math.floor(random.gauss(0, 5)))
+                elif self.role == 'Child':
+                    self.age = max(0, self.core.age - max(catalogs_character.ages[self.race][0], math.floor(random.gauss(
+                        catalogs_character.ages[self.race][0]+5, 5))))
+                else:
+                    self.age = max(catalogs_character.ages[self.race][0] + random.randint(0, 4), math.floor(random.gauss(
+                        catalogs_character.ages[self.race][1]/2, catalogs_character.ages[self.race][0])))
+            self.age = int(self.age)
+        except:
+            self.age = -1
+
+    def set_profession(self, profession):
+        try:
+            self.profession = profession
+            if self.profession == 'Random' or self.profession == 'random':
+                profession_list = self.construct_profession(self.in_building, self.in_city, self.role)
+                self.profession = random.choice(profession_list)
+            if self.profession == 'Same':
+                self.profession = self.core.profession
+        except:
+            self.profession = 'Error'
+
+    def set_wealth(self, wealth):
+        try:
+            self.wealth = wealth
+            if self.wealth == 'Random' or self.wealth == 'random':
+                wealth_odds = catalogs_character.profession_info[self.profession]['Wealth']
+                if (wealth_odds % 1) >= random.random():
+                    wealth_odds = math.ceil(wealth_odds)
+                else:
+                    wealth_odds = math.floor(wealth_odds)
+                self.wealth = catalogs_character.wealth[int(wealth_odds)]
         except:
             self.wealth = 'Error'
 
+    def set_class(self, classe):
         self.classe = 'Placeholder'
 
-        self.level = random.paretovariate(2)
-        self.level = math.floor(self.level)
+    def set_level(self, level):
+        try:
+            self.level = level
+            if self.level == 'Random' or self.level == 'random':
+                self.level = random.paretovariate(2)
+                self.level = math.floor(self.level)
+            self.level = int(self.level)
+        except:
+            self.level = -1
 
     def set_building_id(self, building_id):
         self.building_id = building_id
@@ -222,8 +179,8 @@ class Character():
     def set_city_id(self, city_id):
         self.city_id = city_id
 
-    def set_parent_id(self, parent_id):
-        self.parent_id = parent_id
+    def set_family_id(self, family_id):
+        self.family_id = family_id
 
     def set_visiting_id(self, visiting_id):
         self.visiting_id = visiting_id
@@ -240,7 +197,7 @@ class Character():
         self.wealth = base_character.wealth
         self.classe = base_character.classe
         self.level = base_character.level
-        self.parent_id = base_character.parent_id
+        self.family_id = base_character.family_id
         self.city_id = base_character.city_id
         self.building_id = base_character.building_id
         self.visiting_id = base_character.visiting_id
@@ -248,7 +205,7 @@ class Character():
 
     def update_value_list(self):
         self.values_list = [self.id, self.name, self.fname, self.race, self.gender, self.age, self.role,
-                            self.profession, self.wealth, self.classe, self.level, self.parent_id, self.city_id,
+                            self.profession, self.wealth, self.classe, self.level, self.family_id, self.city_id,
                             self.building_id, self.visiting_id]
 
     def construct_profession(self, in_building, in_city, role):
