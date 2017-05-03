@@ -1,6 +1,8 @@
 import character
 import family
 import catalogs_character
+import catalogs_profession
+import catalogs_building
 import db_connector
 import random
 import math
@@ -21,7 +23,6 @@ class Populator():
         self.core_dict = core_dict
         self.core_character = character.Character(in_city=self.in_city, in_building=self.in_building)
         self.core_character_id = None
-        self.constructor_info = catalogs_character.profession[in_building.kind][in_building.subkind]
         self.role = []
         self.profession = []
         self.floating_characters = []
@@ -37,17 +38,18 @@ class Populator():
         self.rename_building()
 
     def build_structure(self):
-        for data in self.constructor_info:
-            amount = self.get_number(data['Quantity'][0], data['Quantity'][1])
+        building_subkind = next((x for x in catalogs_building.subkinds if x.name == self.in_building.subkind), None)
+        for data in building_subkind.groups:
+            amount = self.get_number(data.distribution_type, data.distribution_value)
             possible_profession = self.build_profession_list(data)
             for x in range(amount):
-                self.role.append(data['Role'])
-                if data['Role'] == 'Master' and self.core_dict['profession'] != 'Random':
+                self.role.append(data.role)
+                if data.role == 'Master' and self.core_dict['profession'] != 'Random':
                     self.profession.append(self.core_dict['profession'])
                 else:
                     self.profession.append(random.choice(possible_profession))
 
-                if data['Role'] == 'Unique':
+                if data.role == 'Unique':
                     possible_profession = self.remove_values_from_list(possible_profession, self.profession[-1])
                 if possible_profession is False:
                     break
@@ -151,18 +153,21 @@ class Populator():
             else:
                 return 0
         elif distribution == 'Flat':
-            return random.randint(value[0],value[1])
+            return random.randint(value[0], value[1])
         elif distribution == 'Normal':
-            return max(0, math.ceil(random.gauss(value[0],value[1])))
+            return max(0, math.ceil(random.gauss(value[0], value[1])))
         else:
             return Exception
 
     def build_profession_list(self, data):
+        # return a list of profession names
         profession_list = []
-        for x in range(len(data['Profession'])):
-            for y in range(data['Weight'][x]):
-                if self.test_geography(data['Geography'][x]):
-                    profession_list.append(data['Profession'][x])
+        for x in range(len(data.professions)):
+            required_feature = next((prof for prof in catalogs_profession.professions if prof == data.professions[x]), None)
+            required_feature = required_feature.geo_restric
+            for y in range(data.odds[x]):
+                if self.test_geography(required_feature):
+                    profession_list.append(data.professions[x].name)
                 else:
                     break
         return profession_list
