@@ -155,7 +155,7 @@ class Populator():
         elif distribution == 'Flat':
             return random.randint(value[0], value[1])
         elif distribution == 'Normal':
-            return max(0, math.ceil(random.gauss(value[0], value[1])))
+            return max(0, math.floor(random.gauss(value[0], value[1])))
         else:
             return Exception
 

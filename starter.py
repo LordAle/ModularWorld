@@ -290,22 +290,12 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         selected_character = self.get_characters_from_db('id', self.get_selected_character_id())
         selected_character = selected_character[0]
-        selected_id = selected_character.id
         selected_family_id = selected_character.family_id
-        if type(selected_family_id) is not int:
-            selected_parent_id = 0
 
         self.table_special_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
         self.table_special_model.setTable('characters')
         self.set_special_table_header()
-
-        #self.table_special_model.setFilter('parent_id = {0} OR parent_id = {1}'.format(selected_id,
-         #selected_parent_id))
         self.table_special_model.setFilter('family_id = {0}'.format(selected_family_id))  # Parent
-        print(self.table_special_model.selectStatement())
-        #self.table_special_model.setFilter('id = {0}'.format(selected_character.id))  # Itself / Not needed
-        #self.table_special_model.setFilter('id = {0} OR parent_id = {1} OR id = {2} OR parent_id = {3}'.format(
-            #selected_character.id, selected_character.id, selected_character.parent_id, selected_character.parent_id))
         self.table_special_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_special_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_special_model.select()
