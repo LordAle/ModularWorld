@@ -24,7 +24,7 @@ ages = {'Dwarf': (25, 150), 'Elf': (30, 200), 'Halfling': (20, 100), 'Human': (1
 # Wealth position is used in profession_info, ordering matters
 wealth = ['Poor', 'Middle', 'Rich']
 
-classes = ['Fighter', 'Rogue', 'Wizard', 'Cleric']
+classes = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard', 'Expert', 'Warrior']
 
 
 ##################Weight###############################
