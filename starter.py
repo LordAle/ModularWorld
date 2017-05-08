@@ -11,6 +11,8 @@ import db_connector
 import add_dialogs
 import delete_dialogs
 import populator
+import visitor_manager
+import catalogs_character
 
 
 class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -39,6 +41,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButtonDeleteCharacter.clicked.connect(self.delete_character_click)
 
         self.pushButtonShowFamily.clicked.connect(self.show_family_click)
+        self.pushButtonVisitor.clicked.connect(self.show_visitor_click)
 
         self.actionNewDatabase.triggered.connect(self.action_new_database)
         self.actionLoadDatabase.triggered.connect(self.action_load_database)
@@ -94,6 +97,10 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.side_view_value_model = models.StringListModel()
         self.listViewSelectedValue.setModel(self.side_view_value_model)
+
+        self.wealth_model = models.StringListModel()
+        self.wealth_model.setStringList(catalogs_character.wealth)
+        self.comboBoxVisitor.setModel(self.wealth_model)
 
     def setup_new_db(self):
         self.add_traveller_city()
@@ -296,6 +303,27 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_special_model.setTable('characters')
         self.set_special_table_header()
         self.table_special_model.setFilter('family_id = {0}'.format(selected_family_id))  # Parent
+        self.table_special_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
+        self.table_special_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
+        self.table_special_model.select()
+
+        self.tableViewSpecial.resizeColumnsToContents()
+
+    def show_visitor(self):
+
+        selected_building_id = self.get_selected_building_id()
+        selected_city_id = self.get_selected_city_id()
+
+        try:
+            manager = visitor_manager.Visitor_manager(selected_building_id, selected_city_id, self.comboBoxVisitor.currentText(), self.lineEditVisitor.text(), self.loader)
+            manager.add_visitor()
+        except:
+            return
+
+        self.table_special_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
+        self.table_special_model.setTable('characters')
+        self.set_special_table_header()
+        self.table_special_model.setFilter('visiting_id = {0}'.format(selected_building_id))
         self.table_special_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_special_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_special_model.select()
@@ -593,6 +621,9 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def show_family_click(self):
         self.show_selected_family()
+
+    def show_visitor_click(self):
+        self.show_visitor()
 
 # View Actions methods -------------------------------------------------------------End
 
