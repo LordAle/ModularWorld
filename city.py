@@ -2,6 +2,7 @@ import random
 import catalogs_city
 import catalogs_character
 
+
 class City():
 
     names_list = ['Id', 'Name', 'Kind', 'Population', 'Main race', 'Forests', 'Plains', 'Rivers', 'Sea',
@@ -19,6 +20,7 @@ class City():
         self.sea = False
         self.mountains = False
         self.mines = False
+        self.values_list = []
         self.update_values_list()
 
     def set_from_dialog(self, param):
