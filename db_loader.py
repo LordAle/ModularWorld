@@ -26,7 +26,7 @@ class Db_Loader():
             pass
 
     def bind_engine(self, path):
-        self.engine = create_engine('sqlite:///{0}'.format(path), echo=True)
+        self.engine = create_engine('sqlite:///{0}'.format(path), echo=False)
         base.Base.metadata.bind = self.engine
 
         self.Session = sessionmaker(bind=self.engine)

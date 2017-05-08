@@ -11,6 +11,8 @@ import db_connector
 import add_dialogs
 import delete_dialogs
 import populator
+import visitor_manager
+import catalogs_character
 
 
 class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -39,6 +41,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButtonDeleteCharacter.clicked.connect(self.delete_character_click)
 
         self.pushButtonShowFamily.clicked.connect(self.show_family_click)
+        self.pushButtonVisitor.clicked.connect(self.show_visitor_click)
 
         self.actionNewDatabase.triggered.connect(self.action_new_database)
         self.actionLoadDatabase.triggered.connect(self.action_load_database)
@@ -94,6 +97,10 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.side_view_value_model = models.StringListModel()
         self.listViewSelectedValue.setModel(self.side_view_value_model)
+
+        self.wealth_model = models.StringListModel()
+        self.wealth_model.setStringList(catalogs_character.wealth)
+        self.comboBoxVisitor.setModel(self.wealth_model)
 
     def setup_new_db(self):
         self.add_traveller_city()
@@ -208,6 +215,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_content_model.setFilter('city_id = {0}'.format(city_id))
         self.table_content_model.setRelation(4, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_content_model.select()
+        self.tableViewContent.resizeColumnsToContents()
 
     def set_character_table(self, building_id):
         self.table_content_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
@@ -217,12 +225,14 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_content_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_content_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_content_model.select()
+        self.tableViewContent.resizeColumnsToContents()
 
     def set_full_city_table(self):
         self.table_content_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
         self.table_content_model.setTable('cities')
         self.set_view_table_header('cities')
         self.table_content_model.select()
+        self.tableViewContent.resizeColumnsToContents()
 
     def set_full_building_table(self):
         self.table_content_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
@@ -230,6 +240,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.set_view_table_header('buildings')
         self.table_content_model.setRelation(4, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_content_model.select()
+        self.tableViewContent.resizeColumnsToContents()
 
     def set_full_character_table(self):
         self.table_content_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
@@ -238,6 +249,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_content_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_content_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_content_model.select()
+        self.tableViewContent.resizeColumnsToContents()
 
     def set_view_table_header(self, table):
         if table == 'cities':
@@ -272,11 +284,12 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table_content_model.setHeaderData(8, QtCore.Qt.Horizontal, 'Wealth')
             self.table_content_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Class')
             self.table_content_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Level')
-            self.table_content_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Parent')
+            self.table_content_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Family')
             self.table_content_model.setHeaderData(12, QtCore.Qt.Horizontal, 'City')
             self.table_content_model.setHeaderData(13, QtCore.Qt.Horizontal, 'Building')
             self.table_content_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Visiting')
             self.table_content_model.setHeaderData(15, QtCore.Qt.Horizontal, 'Note')
+
 
     #Set special table model
 
@@ -284,25 +297,38 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         selected_character = self.get_characters_from_db('id', self.get_selected_character_id())
         selected_character = selected_character[0]
-        selected_id = selected_character.id
         selected_family_id = selected_character.family_id
-        if type(selected_family_id) is not int:
-            selected_parent_id = 0
 
         self.table_special_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
         self.table_special_model.setTable('characters')
         self.set_special_table_header()
-
-        #self.table_special_model.setFilter('parent_id = {0} OR parent_id = {1}'.format(selected_id,
-         #selected_parent_id))
         self.table_special_model.setFilter('family_id = {0}'.format(selected_family_id))  # Parent
-        print(self.table_special_model.selectStatement())
-        #self.table_special_model.setFilter('id = {0}'.format(selected_character.id))  # Itself / Not needed
-        #self.table_special_model.setFilter('id = {0} OR parent_id = {1} OR id = {2} OR parent_id = {3}'.format(
-            #selected_character.id, selected_character.id, selected_character.parent_id, selected_character.parent_id))
         self.table_special_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_special_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_special_model.select()
+
+        self.tableViewSpecial.resizeColumnsToContents()
+
+    def show_visitor(self):
+
+        selected_building_id = self.get_selected_building_id()
+        selected_city_id = self.get_selected_city_id()
+
+        try:
+            manager = visitor_manager.Visitor_manager(selected_building_id, selected_city_id, self.comboBoxVisitor.currentText(), self.lineEditVisitor.text(), self.loader)
+            manager.add_visitor()
+        except:
+            return
+
+        self.table_special_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
+        self.table_special_model.setTable('characters')
+        self.set_special_table_header()
+        self.table_special_model.setFilter('visiting_id = {0}'.format(selected_building_id))
+        self.table_special_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
+        self.table_special_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
+        self.table_special_model.select()
+
+        self.tableViewSpecial.resizeColumnsToContents()
 
     def set_special_table_header(self):
         self.table_special_model.setHeaderData(0, QtCore.Qt.Horizontal, 'ID')
@@ -321,6 +347,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_special_model.setHeaderData(13, QtCore.Qt.Horizontal, 'Building')
         self.table_special_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Visiting')
         self.table_special_model.setHeaderData(15, QtCore.Qt.Horizontal, 'Note')
+        self.tableViewSpecial.resizeColumnsToContents()
 
     #Qury items from DB
 
@@ -405,9 +432,9 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         in_city = self.get_cities_from_db('id', city_id)
         in_city = in_city[0]
 
-        new_building = building.Building()
+        new_building = building.Building(in_city)
         try:
-            new_building.set_from_dialog(building_dict, in_city)
+            new_building.set_from_dialog(building_dict)
         except:
             raise Exception
         new_building.set_city_id(city_id)
@@ -594,6 +621,9 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def show_family_click(self):
         self.show_selected_family()
+
+    def show_visitor_click(self):
+        self.show_visitor()
 
 # View Actions methods -------------------------------------------------------------End
 

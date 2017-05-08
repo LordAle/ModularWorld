@@ -2,6 +2,9 @@ import random
 import math
 import catalogs_character
 import catalogs_character_names
+import catalogs_profession
+import catalogs_building
+import role_professions
 
 
 class Character():
@@ -76,8 +79,10 @@ class Character():
         try:
             self.race = race
             if self.race not in catalogs_character.races:
-                if self.role == 'Spouse' or self.role == 'Child' or self.in_city.main_race not in catalogs_character.races:
+                if (self.role == 'Spouse' or self.role == 'Child') and self.core is Character:
                     self.race = self.core.race
+                elif self.in_city.main_race not in catalogs_character.races:
+                    self.race = random.choice(catalogs_character.races)
                 else:
                     is_main_race = random.randrange(10)
                     if is_main_race != 9:
@@ -151,7 +156,8 @@ class Character():
         try:
             self.wealth = wealth
             if self.wealth == 'Random' or self.wealth == 'random':
-                wealth_odds = catalogs_character.profession_info[self.profession]['Wealth']
+                wealth_odds = [x for x in catalogs_profession.professions if x.name == self.profession]
+                wealth_odds = wealth_odds[0].wealth
                 if (wealth_odds % 1) >= random.random():
                     wealth_odds = math.ceil(wealth_odds)
                 else:
@@ -161,7 +167,13 @@ class Character():
             self.wealth = 'Error'
 
     def set_class(self, classe):
-        self.classe = 'Placeholder'
+        try:
+            self.classe = classe
+            if self.classe == 'Random' or self.classe == 'random':
+                class_list = self.construct_class_list(self.profession)
+                self.classe = random.choice(class_list)
+        except:
+            self.classe = 'Error'
 
     def set_level(self, level):
         try:
@@ -210,26 +222,38 @@ class Character():
 
     def construct_profession(self, in_building, in_city, role):
         good_preset = None
-        for preset in catalogs_character.profession[in_building.kind][in_building.subkind]:
-            if preset['Role'] == role:
+        preset_list = [x.groups for x in catalogs_building if x.name == in_building.subkind]
+        for preset in preset_list:
+            if preset.role == role:
                 good_preset = preset
                 break
             else:
                 continue
-        if type(good_preset) is dict:
-            possible_job = good_preset['Profession']
-            weight = good_preset['Weight']
-            geography = good_preset['Geography']
+        if type(good_preset) is role_professions.RoleProfessions:
+            possible_job = good_preset.professions
+            odds = good_preset.odds
             profession_list = []
             for x in range(len(possible_job)):
-                for y in range(weight[x]):
-                    if self.test_geography(geography[x], in_city):
-                        profession_list.append(possible_job[x])
+                required_feature = [x for x in catalogs_profession.professions if x == possible_job[x]]
+                required_feature = required_feature[0].geo_restric
+                for y in range(odds[x]):
+                    if self.test_geography(required_feature, in_city):
+                        profession_list.append(possible_job[x].name)
                     else:
                         break
         else:
             profession_list = ['No preset profession available']
         return profession_list
+
+    def construct_class_list(self, profession):
+        class_list = []
+        profession_object = next((x for x in catalogs_profession.professions if x.name == profession), [])
+        for x in range(len(profession_object.class_list)):
+            for y in range(profession_object.class_odds[x]):
+                class_list.append(profession_object.class_list[x])
+        return class_list
+
+
 
     def test_geography(self, feature, in_city):
         if feature == 'Plains':

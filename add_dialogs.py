@@ -6,6 +6,7 @@ import models
 import catalogs_city
 import catalogs_building
 import catalogs_character
+import catalogs_profession
 
 class add_city_dialog(QtWidgets.QDialog, add_city_ui):
 
@@ -52,7 +53,7 @@ class add_building_dialog(QtWidgets.QDialog, add_building_ui):
 
         # Set models to all combobox
         self.kindModel = models.StringListModel()
-        self.kindModel.setStringList(['Random'] + catalogs_building.kinds)
+        self.kindModel.setStringList(['Random'] + [x.name for x in catalogs_building.kinds])
         self.kindComboBox.setModel(self.kindModel)
 
         self.subkindModel = models.StringListModel()
@@ -68,7 +69,7 @@ class add_building_dialog(QtWidgets.QDialog, add_building_ui):
         self.genderComboBox.setModel(self.genderModel)
 
         self.professionModel = models.StringListModel()
-        self.professionModel.setStringList(['Random'] + catalogs_character.profession_list)
+        self.professionModel.setStringList(['Random'] + [x.name for x in catalogs_profession.professions])
         self.professionComboBox.setModel(self.professionModel)
 
         self.wealthModel = models.StringListModel()
@@ -83,14 +84,8 @@ class add_building_dialog(QtWidgets.QDialog, add_building_ui):
         self.kindComboBox.currentIndexChanged.connect(self.update_subkind)
 
     def update_subkind(self):
-        subkind_list = []
-        try:
-            for subkind_info in catalogs_building.subkinds[self.kindComboBox.currentText()]:
-                subkind_list.append(subkind_info[0])
-            self.subkindModel.setStringList(['Random'] + subkind_list)
-        except:
-            return
-
+        subkind_list = [x.name for x in catalogs_building.subkinds if x.kind.name == self.kindComboBox.currentText()]
+        self.subkindModel.setStringList(['Random'] + subkind_list)
 
     def accept(self):
         param = {'kind':self.kindComboBox.currentText(),
@@ -136,7 +131,7 @@ class add_character_dialog(QtWidgets.QDialog, add_char_ui):
         self.roleComboBox.setModel(self.roleModel)
 
         self.professionModel = models.StringListModel()
-        self.professionModel.setStringList(['Random'] + catalogs_character.profession_list)
+        self.professionModel.setStringList(['Random'] + [x.name for x in catalogs_profession.professions])
         self.professionComboBox.setModel(self.professionModel)
 
         self.wealthModel = models.StringListModel()
