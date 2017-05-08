@@ -79,8 +79,10 @@ class Character():
         try:
             self.race = race
             if self.race not in catalogs_character.races:
-                if self.role == 'Spouse' or self.role == 'Child' or self.in_city.main_race not in catalogs_character.races:
+                if (self.role == 'Spouse' or self.role == 'Child') and self.core is Character:
                     self.race = self.core.race
+                elif self.in_city.main_race not in catalogs_character.races:
+                    self.race = random.choice(catalogs_character.races)
                 else:
                     is_main_race = random.randrange(10)
                     if is_main_race != 9:
