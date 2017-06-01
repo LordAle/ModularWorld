@@ -1,6 +1,5 @@
-import catalogs_city
-import building_kind
-import catalogs_profession as cp
+from catalogs import catalog_profession as cp
+from objects import building_kind
 
 # Building kinds
 house = building_kind.Building_Kind('House', 20)
@@ -18,6 +17,7 @@ other = building_kind.Building_Kind('Other', 0)
 kinds = [house, service, shop, workshop, stronghold, religious, education, military, criminal, art, other]
 
 # Building subkinds (kind, name, min_city_size, odds)
+"""TO DO change min_size to population value"""
 farmer = building_kind.Building_Subkind(house, 'Farmer', 0, 20, [cp.farmer_house_master, cp.farmer_house_spouse, cp.farmer_house_child])
 commoner = building_kind.Building_Subkind(house, 'Commoner', 0, 10, [cp.commoner_house_master, cp.commoner_house_spouse, cp.child_commoner])
 bourgeois = building_kind.Building_Subkind(house, 'Bourgeois', 0, 2, [cp.bourgeois_house_master, cp.bourgeois_house_spouse, cp.child_bourgeois, cp.maid_2, cp.guard_1])

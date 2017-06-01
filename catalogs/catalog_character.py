@@ -1,13 +1,4 @@
-
-
-# Lists used when generating all other objects
-# Should be the only thing that require modification to create a new world type
-
-# Sources:
-#   Medieval demographics made easy By S. John Ross http://www222.pair.com/sjohn/blueroom/demog.htm
-#   What did people do in a Medieval City? By Shawn Vincent http://www.svincent.com/MagicJar/Economics/MedievalOccupations.html
-
-
+from objects import race
 
 # Master, Spouse, Child and Unique are special roles that are used in source code and should not be modified
 roles = ['Master', 'Spouse', 'Child', 'Servant', 'Security', 'Apprentice', 'Unique', 'Visitor']

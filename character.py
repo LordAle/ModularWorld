@@ -1,10 +1,12 @@
-import random
 import math
-import catalogs_character
-import catalogs_character_names
-import catalogs_profession
-import catalogs_building
-import role_professions
+import random
+
+from catalogs import catalog_building
+from catalogs import catalog_character
+from catalogs import catalog_profession
+
+from catalogs import catalog_character_names
+from objects import role_professions
 
 
 class Character():
@@ -78,31 +80,31 @@ class Character():
     def set_race(self, race):
         try:
             self.race = race
-            if self.race not in catalogs_character.races:
+            if self.race not in catalog_character.races:
                 if (self.role == 'Spouse' or self.role == 'Child') and self.core is Character:
                     self.race = self.core.race
-                elif self.in_city.main_race not in catalogs_character.races:
-                    self.race = random.choice(catalogs_character.races)
+                elif self.in_city.main_race not in catalog_character.races:
+                    self.race = random.choice(catalog_character.races)
                 else:
                     is_main_race = random.randrange(10)
                     if is_main_race != 9:
                         self.race = self.in_city.main_race
                     else:
-                        self.race = random.choice(catalogs_character.races)
+                        self.race = random.choice(catalog_character.races)
         except:
             self.race = 'Error'
 
     def set_gender(self, gender):
         try:
             self.gender = gender
-            if self.gender not in catalogs_character.genders:
+            if self.gender not in catalog_character.genders:
                 if self.role == 'Spouse':
                     if self.core.gender == 'Male':
                         self.gender = 'Female'
                     elif self.core.gender == 'Female':
                         self.gender = 'Male'
                 else:
-                    self.gender = random.choice(catalogs_character.genders)
+                    self.gender = random.choice(catalog_character.genders)
         except:
             self.gender = 'Error'
 
@@ -110,7 +112,7 @@ class Character():
         try:
             self.name = name
             if self.name == 'Random' or self.name == 'random':
-                self.name = random.choice(catalogs_character_names.names[self.gender][self.race])
+                self.name = random.choice(catalog_character_names.names[self.gender][self.race])
         except:
             self.name = 'Error'
 
@@ -121,7 +123,7 @@ class Character():
                 if self.role == 'Spouse' or self.role == 'Child':
                     self.fname = self.core.fname
                 else:
-                    self.fname = random.choice(catalogs_character_names.fnames[self.race])
+                    self.fname = random.choice(catalog_character_names.fnames[self.race])
         except:
             self.fname = 'Error'
 
@@ -130,13 +132,13 @@ class Character():
             self.age = age
             if self.age == 'Random' or self.age == 'random':
                 if self.role == 'Spouse':
-                    self.age = max(catalogs_character.ages[self.race][0], self.core.age + math.floor(random.gauss(0, 5)))
+                    self.age = max(catalog_character.ages[self.race][0], self.core.age + math.floor(random.gauss(0, 5)))
                 elif self.role == 'Child':
-                    self.age = max(0, self.core.age - max(catalogs_character.ages[self.race][0], math.floor(random.gauss(
-                        catalogs_character.ages[self.race][0]+5, 5))))
+                    self.age = max(0, self.core.age - max(catalog_character.ages[self.race][0], math.floor(random.gauss(
+                        catalog_character.ages[self.race][0] + 5, 5))))
                 else:
-                    self.age = max(catalogs_character.ages[self.race][0] + random.randint(0, 4), math.floor(random.gauss(
-                        catalogs_character.ages[self.race][1]/2, catalogs_character.ages[self.race][0])))
+                    self.age = max(catalog_character.ages[self.race][0] + random.randint(0, 4), math.floor(random.gauss(
+                        catalog_character.ages[self.race][1] / 2, catalog_character.ages[self.race][0])))
             self.age = int(self.age)
         except:
             self.age = -1
@@ -156,13 +158,13 @@ class Character():
         try:
             self.wealth = wealth
             if self.wealth == 'Random' or self.wealth == 'random':
-                wealth_odds = [x for x in catalogs_profession.professions if x.name == self.profession]
+                wealth_odds = [x for x in catalog_profession.professions if x.name == self.profession]
                 wealth_odds = wealth_odds[0].wealth
                 if (wealth_odds % 1) >= random.random():
                     wealth_odds = math.ceil(wealth_odds)
                 else:
                     wealth_odds = math.floor(wealth_odds)
-                self.wealth = catalogs_character.wealth[int(wealth_odds)]
+                self.wealth = catalog_character.wealth[int(wealth_odds)]
         except:
             self.wealth = 'Error'
 
@@ -222,7 +224,7 @@ class Character():
 
     def construct_profession(self, in_building, in_city, role):
         good_preset = None
-        preset_list = [x.groups for x in catalogs_building if x.name == in_building.subkind]
+        preset_list = [x.groups for x in catalog_building if x.name == in_building.subkind]
         for preset in preset_list:
             if preset.role == role:
                 good_preset = preset
@@ -234,7 +236,7 @@ class Character():
             odds = good_preset.odds
             profession_list = []
             for x in range(len(possible_job)):
-                required_feature = [x for x in catalogs_profession.professions if x == possible_job[x]]
+                required_feature = [x for x in catalog_profession.professions if x == possible_job[x]]
                 required_feature = required_feature[0].geo_restric
                 for y in range(odds[x]):
                     if self.test_geography(required_feature, in_city):
@@ -247,7 +249,7 @@ class Character():
 
     def construct_class_list(self, profession):
         class_list = []
-        profession_object = next((x for x in catalogs_profession.professions if x.name == profession), [])
+        profession_object = next((x for x in catalog_profession.professions if x.name == profession), [])
         for x in range(len(profession_object.class_list)):
             for y in range(profession_object.class_odds[x]):
                 class_list.append(profession_object.class_list[x])

@@ -21,15 +21,15 @@ class City_Connector(Db_Connector):
 
     def write_to_db(self, info_city):
         # Expect a City instance, return new city id
-        new_city = base.City(name=info_city.name, kind=info_city.kind, population=info_city.population, main_race=info_city.main_race,
-                             forests=info_city.forests, plains=info_city.plains, river=info_city.river, sea=info_city.sea,
-                             mountains=info_city.mountains, mines=info_city.mines)
+        new_city = base.City(name=info_city.name, culture=info_city.culture.name, kind=info_city.kind.name, size=info_city.size.name, population=info_city.population,
+                             forest=info_city.forest, plain=info_city.plain, river=info_city.river, sea=info_city.sea,
+                             mountain=info_city.mountain, mine=info_city.mine)
         self.session.add(new_city)
         self.session.commit()
         return new_city.id
 
     def load_from_db(self, filter_by, filter_value):
-        # return complete City objects
+        # return a list of City objects
         cities_list = []
         loaded_cities = self.session.query(base.City).filter(getattr(base.City, filter_by) == filter_value).all()
         for select in loaded_cities:
@@ -58,7 +58,7 @@ class Building_Connector(Db_Connector):
         return new_building.id
 
     def load_from_db(self, filter_by, filter_value):
-        # return complete Building objects
+        # return a list of Building objects
         building_list = []
         loaded_buildings = self.session.query(base.Building).filter(getattr(base.Building, filter_by) ==
                                                                     filter_value).all()
@@ -91,7 +91,7 @@ class Character_Connector(Db_Connector):
         return new_character.id
 
     def load_from_db(self, filter_by, filter_value):
-        # return complete Character objects
+        # return a list of Character objects
         character_list = []
         loaded_characters = self.session.query(base.Character).filter(getattr(base.Character, filter_by) ==
                                                                      filter_value).all()

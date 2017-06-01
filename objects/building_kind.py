@@ -9,10 +9,10 @@ class Building_Kind():
 
 class Building_Subkind():
 
-    def __init__(self, kind, name, min_city_size, odds, groups=[]):
+    def __init__(self, kind, name, min_pop, odds, groups=[]):
         self.kind = kind
         self.name = name
-        self.min_city_size = min_city_size
+        self.min_pop = min_pop
         self.odds = odds
         self.groups = groups
 

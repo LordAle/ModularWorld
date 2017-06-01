@@ -14,28 +14,6 @@ class ItemModel (QtGui.QStandardItemModel):
         super().__init__()
 
 
-class ValueListModel(QtCore.QAbstractListModel):
-
-    def __init__(self):
-        super().__init__()
-        self.values = []
-
-    def rowCount(self, parent=None, *args, **kwargs):
-        return len(self.values)
-
-    def data(self, index, role=None):
-        print('Inside data function')
-        if role == QtCore.Qt.DisplayRole:
-            print(self.values[index.row()])
-            return self.values[index.row()]
-        return QtCore.QVariant()
-
-    def set_values(self, values):
-        self.values = values
-        print(self.dataChanged.emit(0,0))
-        print('Bloup)')
-
-
 class SqlQueryModel(QtSql.QSqlQueryModel):
 
     def __init__(self):

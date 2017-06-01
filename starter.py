@@ -1,18 +1,18 @@
 import sys
-from PyQt5 import Qt, QtCore, QtWidgets, QtSql
-from ModularWorldUi.mainwindow import Ui_MainWindow
-import models
-import db_loader
-import city
+from PyQt5 import QtCore, QtWidgets, QtSql
+import add_dialogs
 import building
 import character
-import family
+import city
 import db_connector
-import add_dialogs
+import db_loader
 import delete_dialogs
+import family
+import models
 import populator
 import visitor_manager
-import catalogs_character
+from ModularWorldUi.mainwindow import Ui_MainWindow
+from catalogs import catalog_character
 
 
 class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -99,7 +99,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.listViewSelectedValue.setModel(self.side_view_value_model)
 
         self.wealth_model = models.StringListModel()
-        self.wealth_model.setStringList(catalogs_character.wealth)
+        self.wealth_model.setStringList(catalog_character.wealth)
         self.comboBoxVisitor.setModel(self.wealth_model)
 
     def setup_new_db(self):
@@ -153,22 +153,22 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         selected_city = self.get_cities_from_db('id', city_id)
         selected_city = selected_city[0]
 
-        self.side_values_list.append('{0} of {1}'.format(selected_city.kind, selected_city.name))
+        self.side_values_list.append('{0} ({1}) of {2}'.format(selected_city.kind.name, selected_city.size.name, selected_city.name))
         self.side_values_list.append('Population of {0}'.format(selected_city.population))
-        self.side_values_list.append('Most inhabitants are {0}'.format(selected_city.main_race))
+        self.side_values_list.append('Dominant culture is {0}'.format(selected_city.culture.name))
         self.side_values_list.append('Geographical features are :')
-        if selected_city.plains:
-            self.side_values_list.append('  Plains')
-        if selected_city.forests:
-            self.side_values_list.append('  Forests')
+        if selected_city.plain:
+            self.side_values_list.append('  Plain')
+        if selected_city.forest:
+            self.side_values_list.append('  Forest')
         if selected_city.river:
             self.side_values_list.append('  River')
         if selected_city.sea:
             self.side_values_list.append('  Sea')
-        if selected_city.mountains:
-            self.side_values_list.append('  Mountains')
-        if selected_city.mines:
-            self.side_values_list.append('  Mines')
+        if selected_city.mountain:
+            self.side_values_list.append('  Mountain')
+        if selected_city.mine:
+            self.side_values_list.append('  Mine')
 
         for x in range(len(self.side_values_list)):
             if type(self.side_values_list[x]) is not str:
@@ -258,12 +258,12 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table_content_model.setHeaderData(2, QtCore.Qt.Horizontal, 'Kind')
             self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Population')
             self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Main race')
-            self.table_content_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Forests')
-            self.table_content_model.setHeaderData(6, QtCore.Qt.Horizontal, 'Plains')
+            self.table_content_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Forest')
+            self.table_content_model.setHeaderData(6, QtCore.Qt.Horizontal, 'Plain')
             self.table_content_model.setHeaderData(7, QtCore.Qt.Horizontal, 'River')
             self.table_content_model.setHeaderData(8, QtCore.Qt.Horizontal, 'Sea')
-            self.table_content_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Mountains')
-            self.table_content_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Mines')
+            self.table_content_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Mountain')
+            self.table_content_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Mine')
             self.table_content_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Note')
         elif table == 'buildings':
             self.table_content_model.setHeaderData(0, QtCore.Qt.Horizontal, 'ID')

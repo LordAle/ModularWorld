@@ -232,7 +232,7 @@ class Ui_MainWindow(object):
         self.visitorLabel.setText(_translate("MainWindow", "Visitor"))
         self.numberLabel.setText(_translate("MainWindow", "Number"))
         self.visitorLabel_2.setText(_translate("MainWindow", "Visitor"))
-        self.pushButtonVisitor.setText(_translate("MainWindow", "PushButton"))
+        self.pushButtonVisitor.setText(_translate("MainWindow", "Visitor"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuShow.setTitle(_translate("MainWindow", "Show"))
         self.actionNewDatabase.setText(_translate("MainWindow", "New Database"))

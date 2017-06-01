@@ -1,11 +1,12 @@
-import character
-import family
-import catalogs_character
-import catalogs_profession
-import catalogs_building
-import db_connector
-import random
 import math
+import random
+from catalogs import catalog_character
+from catalogs import catalog_profession
+import character
+import db_connector
+import family
+from catalogs import catalog_building
+
 
 class Populator():
     """ Use this object to automatically populate a building with random characters. Uses compatible floating
@@ -38,7 +39,7 @@ class Populator():
         self.rename_building()
 
     def build_structure(self):
-        building_subkind = next((x for x in catalogs_building.subkinds if x.name == self.in_building.subkind), None)
+        building_subkind = next((x for x in catalog_building.subkinds if x.name == self.in_building.subkind), None)
         for data in building_subkind.groups:
             amount = self.get_number(data.distribution_type, data.distribution_value)
             possible_profession = self.build_profession_list(data)
@@ -126,7 +127,7 @@ class Populator():
                 added_character.set_autopopulate(added_role, added_profession)
 
                 # Check if child are still at home or have left
-                if added_role == 'Child' and added_character.age >= catalogs_character.ages[added_character.race][0] \
+                if added_role == 'Child' and added_character.age >= catalog_character.ages[added_character.race][0] \
                         and random.randint(1,10) != 1:
                     if random.randint(1,5) == 1:
                         added_character.set_building_id(self.traveller_floating_id)
@@ -163,7 +164,7 @@ class Populator():
         # return a list of profession names
         profession_list = []
         for x in range(len(data.professions)):
-            required_feature = next((prof for prof in catalogs_profession.professions if prof == data.professions[x]), None)
+            required_feature = next((prof for prof in catalog_profession.professions if prof == data.professions[x]), None)
             required_feature = required_feature.geo_restric
             for y in range(data.odds[x]):
                 if self.test_geography(required_feature):
@@ -173,18 +174,18 @@ class Populator():
         return profession_list
 
     def test_geography(self, feature):
-        if feature == 'Plains':
-            return self.in_city.plains
+        if feature == 'Plain':
+            return self.in_city.plain
         elif feature == 'Forest':
-            return self.in_city.forests
+            return self.in_city.forest
         elif feature == 'River':
             return self.in_city.river
         elif feature == 'Sea':
             return self.in_city.sea
-        elif feature == 'Mountains':
-            return self.in_city.mountains
-        elif feature == 'Mines':
-            return self.in_city.mines
+        elif feature == 'Mountain':
+            return self.in_city.mountain
+        elif feature == 'Mine':
+            return self.in_city.mine
         elif feature == 'Water':
             if self.in_city.river or self.in_city.sea:
                 return True

@@ -1,5 +1,12 @@
+import itertools
 
-a_list = [['A','B','C'],[4,5,6],[7,8,9]]
+a_string = 'One, Two,Three, Four,Five'
 
-a_new_list = [x * 3 for x in a_list[0]]
-print(a_new_list)
+a_list = a_string.split(', ')
+for index, value in enumerate(a_list):
+    split = value.split(',')
+    a_list[index] = split
+
+a_list = list(itertools.chain.from_iterable(a_list))
+
+print(a_list)

@@ -10,16 +10,17 @@ class City(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    culture = Column(String)
     kind = Column(String)
+    size = Column(String)
     population = Column(Integer)
-    main_race = Column(String)
 
-    forests = Column(Boolean)
-    plains = Column(Boolean)
+    forest = Column(Boolean)
+    plain = Column(Boolean)
     river = Column(Boolean)
     sea = Column(Boolean)
-    mountains = Column(Boolean)
-    mines = Column(Boolean)
+    mountain = Column(Boolean)
+    mine = Column(Boolean)
 
     buildings = relationship('Building', back_populates='city')
     characters = relationship('Character', back_populates='city')

@@ -1,49 +1,57 @@
-import profession
-import role_professions as rp
+from objects import role_professions as rp
+from objects import profession
+
+# Sources:
+#   Medieval demographics made easy By S. John Ross http://www222.pair.com/sjohn/blueroom/demog.htm
+#   What did people do in a Medieval City? By Shawn Vincent http://www.svincent.com/MagicJar/Economics/MedievalOccupations.html
+
+# Professions definition
+# (name, wealth, [class], [odds of class], geography
+# Geography is used to specify a required geographical feature. Support: [Plains, Forests, River, Sea, Mountains, Mines and Water (River or Sea)]
 
 # Governance
 catchpole = profession.Profession('Catchpole', 1.2, ['Expert'], [1])
-chancellor = profession.Profession('Chancellor', 1.9, ['Expert', 'Wizard'], [100,1])
+chancellor = profession.Profession('Chancellor', 1.9, ['Expert', 'Wizard'], [100, 1])
 diplomat = profession.Profession('Diplomat', 1.7, ['Expert'], [1])
 exchequer = profession.Profession('Exchequer', 1.9, ['Expert'], [1])
-forester = profession.Profession('Forester', 1.6, ['Expert', 'Ranger'], [10,1], 'Forests')
+forester = profession.Profession('Forester', 1.6, ['Expert', 'Ranger'], [10, 1], 'Forests')
 hayward = profession.Profession('Hayward', 1.6, ['Expert'], [1])
 herald = profession.Profession('Herald', 1.1, ['Expert'], [1])
 judge = profession.Profession('Judge', 2, ['Expert'], [1])
-knight = profession.Profession('Knight', 1.8, ['Fighter', 'Paladin'], [50,1])
+knight = profession.Profession('Knight', 1.8, ['Fighter', 'Paladin'], [50, 1])
 liner = profession.Profession('Liner', 1.5, ['Expert'], [1])
-local_lord = profession.Profession('Local Lord', 2, ['Expert', 'Fighter'], [10,3])
-noble = profession.Profession('Noble', 2, ['Expert', 'Sorcerer', 'Wizard'], [100,1,1])
+local_lord = profession.Profession('Local Lord', 2, ['Expert', 'Fighter'], [10, 3])
+noble = profession.Profession('Noble', 2, ['Expert', 'Sorcerer', 'Wizard'], [100, 1, 1])
 summoner = profession.Profession('Summoner', 1.1, ['Expert'], [1])
 # Military
-bowman = profession.Profession('Bowman', 0.3, ['Warrior', 'Fighter'], [10,1])
-engineer = profession.Profession('Engineer', 0.9, ['Expert', 'Fighter'], [10,1])
-footman = profession.Profession('Footman', 0.2, ['Warrior', 'Fighter'], [10,1])
-mercenary = profession.Profession('Mercenary', 0.3, ['Warrior', 'Fighter'], [5,1])
-pikeman = profession.Profession('Pikeman', 0.3, ['Warrior', 'Fighter'], [10,1])
-sapper = profession.Profession('Sapper', 0.4, ['Expert', 'Rogue'], [10,1])
-scout = profession.Profession('Scout', 0.2, ['Warrior', 'Fighter', 'Rogue', 'Ranger'], [10,1,1,1])
-sergeant = profession.Profession('Sergeant', 0.7, ['Warrior', 'Fighter'], [10,1])
+bowman = profession.Profession('Bowman', 0.3, ['Warrior', 'Fighter'], [10, 1])
+engineer = profession.Profession('Engineer', 0.9, ['Expert', 'Fighter'], [10, 1])
+footman = profession.Profession('Footman', 0.2, ['Warrior', 'Fighter'], [10, 1])
+mercenary = profession.Profession('Mercenary', 0.3, ['Warrior', 'Fighter'], [5, 1])
+pikeman = profession.Profession('Pikeman', 0.3, ['Warrior', 'Fighter'], [10, 1])
+sapper = profession.Profession('Sapper', 0.4, ['Expert', 'Rogue'], [10, 1])
+scout = profession.Profession('Scout', 0.2, ['Warrior', 'Fighter', 'Rogue', 'Ranger'], [10, 1, 1, 1])
+sergeant = profession.Profession('Sergeant', 0.7, ['Warrior', 'Fighter'], [10, 1])
 general = profession.Profession('General', 1.5, ['Fighter'], [1])
 # Security
-bailiff = profession.Profession('Bailiff', 1.5, ['Expert', 'Fighter'], [10,1])
+bailiff = profession.Profession('Bailiff', 1.5, ['Expert', 'Fighter'], [10, 1])
 constable = profession.Profession('Constable', 1.5, ['Fighter'], [1])
-guard = profession.Profession('Guard', 0.1, ['Warrior', 'Fighter'], [10,1])
+guard = profession.Profession('Guard', 0.1, ['Warrior', 'Fighter'], [10, 1])
 guard_captain = profession.Profession('Guard Captain', 0.2, ['Fighter'], [1])
-jailer = profession.Profession('Jailer', 0.1, ['Warrior', 'Fighter'], [10,1])
+jailer = profession.Profession('Jailer', 0.1, ['Warrior', 'Fighter'], [10, 1])
 sheriff = profession.Profession('Sheriff', 0.9, ['Fighter'], [1])
 # Criminal
-burglar = profession.Profession('Burglar', 0.05, ['Expert', 'Rogue'], [5,1])
+burglar = profession.Profession('Burglar', 0.05, ['Expert', 'Rogue'], [5, 1])
 con_artist = profession.Profession('Con Artist', 0.2, ['Expert'], [1])
-fence = profession.Profession('Fence', 0.4, ['Expert', 'Rogue'], [5,1])
-footpad = profession.Profession('Footpad', 0.05, ['Rogue', 'Fighter', 'Warrior'], [2,1,5])
-pickpocket = profession.Profession('Pickpocket', 0, ['Expert', 'Rogue'], [5,1])
-poacher = profession.Profession('Poacher', 0, ['Expert', 'Ranger'], [10,1], 'Forests')
+fence = profession.Profession('Fence', 0.4, ['Expert', 'Rogue'], [5, 1])
+footpad = profession.Profession('Footpad', 0.05, ['Rogue', 'Fighter', 'Warrior'], [2, 1, 5])
+pickpocket = profession.Profession('Pickpocket', 0, ['Expert', 'Rogue'], [5, 1])
+poacher = profession.Profession('Poacher', 0, ['Expert', 'Ranger'], [10, 1], 'Forests')
 # Religious
 archbishop = profession.Profession('Archbishop', 1.9, ['Cleric'], [1])
 bishop = profession.Profession('Bishop', 1.8, ['Cleric'], [1])
 cardinal = profession.Profession('Cardinal', 2, ['Cleric'], [1])
-monk = profession.Profession('Monk', 0, ['Expert', 'Monk'], [5,1])
+monk = profession.Profession('Monk', 0, ['Expert', 'Monk'], [5, 1])
 priest = profession.Profession('Priest', 0.4, ['Cleric'], [1])
 # Merchant
 apothecary = profession.Profession('Apothecary', 1, ['Expert'], [1])
@@ -54,16 +62,16 @@ merchant_cloth = profession.Profession('Cloth Merchant', 0.1, ['Expert'], [1])
 merchant_food = profession.Profession('Food Merchant', 0.1, ['Expert'], [1])
 merchant_fuel = profession.Profession('Fuel Merchant', 0.1, ['Expert'], [1])
 merchant_jewelry = profession.Profession('Jewelry Merchant', 1.2, ['Expert'], [1])
-merchant_magic = profession.Profession('Magic Merchant', 1.2, ['Expert', 'Wizard', 'Sorcerer'], [5,1,1])
+merchant_magic = profession.Profession('Magic Merchant', 1.2, ['Expert', 'Wizard', 'Sorcerer'], [5, 1, 1])
 merchant_skin = profession.Profession('Skin Merchant', 0.1, ['Expert'], [1])
 merchant_spice = profession.Profession('Spice Merchant', 1, ['Expert'], [1])
 merchant_stone = profession.Profession('Stone Merchant', 0.1, ['Expert'], [1])
 merchant_textile = profession.Profession('Textile Merchant', 0.1, ['Expert'], [1])
 merchant_wood = profession.Profession('Wood Merchant', 0.1, ['Expert'], [1])
 # Entertainer
-acrobat = profession.Profession('Acrobat', 0, ['Expert', 'Rogue'], [5,1])
-actor = profession.Profession('Actor', 0.1, ['Expert', 'Bard'], [5,1])
-musician = profession.Profession('Musician', 0.1, ['Expert', 'Bard'], [5,1])
+acrobat = profession.Profession('Acrobat', 0, ['Expert', 'Rogue'], [5, 1])
+actor = profession.Profession('Actor', 0.1, ['Expert', 'Bard'], [5, 1])
+musician = profession.Profession('Musician', 0.1, ['Expert', 'Bard'], [5, 1])
 painter = profession.Profession('Painter', 0.1, ['Expert'], [1])
 sculptor = profession.Profession('Sculptor', 0.1, ['Expert'], [1])
 writer = profession.Profession('Writer', 0.1, ['Expert'], [1])
@@ -81,7 +89,7 @@ mathematician = profession.Profession('Mathematician', 0.5, ['Expert'], [1])
 mage = profession.Profession('Mage', 1.1, ['Wizard'], [1])
 philosopher = profession.Profession('Philosopher', 0.5, ['Expert'], [1])
 professor = profession.Profession('Professor', 0.5, ['Expert'], [1])
-theologian = profession.Profession('Theologian', 0.5, ['Expert', 'Cleric'], [2,1])
+theologian = profession.Profession('Theologian', 0.5, ['Expert', 'Cleric'], [2, 1])
 # Sailor
 navigator = profession.Profession('Navigator', 0.5, ['Expert'], [1], 'Sea')
 sailor = profession.Profession('Sailor', 0, ['Expert'], [1], 'Sea')
@@ -120,13 +128,13 @@ glovemaker = profession.Profession('Glovemaker', 0.01, ['Expert'], [1])
 woodcarver = profession.Profession('Woodcarver', 0.01, ['Expert'], [1])
 accoutrement_maker = profession.Profession('Accoutrement Maker', 0.01, ['Expert'], [1])
 arkwright = profession.Profession('Arkwright', 0.01, ['Expert'], [1])
-armorer = profession.Profession('Armorer', 0.05, ['Expert', 'Fighter'], [25,1])
+armorer = profession.Profession('Armorer', 0.05, ['Expert', 'Fighter'], [25, 1])
 balancemaker = profession.Profession('Balancemaker', 0.05, ['Expert'], [1])
 basketmaker = profession.Profession('Basketmaker', 0, ['Expert'], [1])
 brewer = profession.Profession('Brewer', 0.01, ['Expert'], [1])
 bellmaker = profession.Profession('Bellmaker', 0.01, ['Expert'], [1])
 bottelier = profession.Profession('Bottelier', 0, ['Expert'], [1])
-bowyer = profession.Profession('Bowyer', 0.05, ['Expert', 'Fighter'], [25,1])
+bowyer = profession.Profession('Bowyer', 0.05, ['Expert', 'Fighter'], [25, 1])
 brickmaker = profession.Profession('Brickmaker', 0, ['Expert'], [1])
 broom_maker = profession.Profession('Broom Maker', 0, ['Expert'], [1])
 canvasser = profession.Profession('Canvasser', 0, ['Expert'], [1])
@@ -143,16 +151,16 @@ fletcher = profession.Profession('Fletcher', 0.01, ['Expert'], [1])
 foundryman = profession.Profession('Foundryman', 0, ['Expert'], [1], 'Mines')
 girdler = profession.Profession('Girdler', 0, ['Expert'], [1])
 glassblower = profession.Profession('Glassblower', 0.01, ['Expert'], [1])
-horner = profession.Profession('Horner', 0.01, ['Expert', 'Bard'], [5,1])
+horner = profession.Profession('Horner', 0.01, ['Expert', 'Bard'], [5, 1])
 illuminator = profession.Profession('Illuminator', 0.05, ['Expert'], [1])
 lampwright = profession.Profession('Lampwright', 0.01, ['Expert'], [1])
-luthier = profession.Profession('Luthier', 0.01, ['Expert', 'Bard'], [5,1])
+luthier = profession.Profession('Luthier', 0.01, ['Expert', 'Bard'], [5, 1])
 minter = profession.Profession('Minter', 1.5, ['Expert'], [1])
 mirrorer = profession.Profession('Mirrorer', 0.01, ['Expert'], [1])
 nedeller = profession.Profession('Nedeller', 0, ['Expert'], [1])
 parchmenter = profession.Profession('Parchmenter', 0, ['Expert'], [1])
 rectifier = profession.Profession('Rectifier', 0.01, ['Expert'], [1])
-reedmaker = profession.Profession('Reedmaker', 0.01, ['Expert', 'Bard'], [5,1])
+reedmaker = profession.Profession('Reedmaker', 0.01, ['Expert', 'Bard'], [5, 1])
 rugweaver = profession.Profession('Rugweaver', 0.01, ['Expert'], [1])
 spectaclemaker = profession.Profession('Spectaclemaker', 0.01, ['Expert'], [1])
 stonecutter = profession.Profession('Stonecutter', 0.01, ['Expert'], [1])
@@ -192,14 +200,19 @@ water_carrier = profession.Profession('Water Carrier', 0, ['Expert'], [1])
 # Other
 adventurer = profession.Profession('Adventurer', 0.1, [])
 beggar = profession.Profession('Beggar', 0, ['Expert'], [1])
-hermit = profession.Profession('Hermit', 0, ['Expert', 'Druid', 'Monk', 'Sorcerer', 'Warlock', 'Wizard'], [1,1,1,1,1,1])
-savage = profession.Profession('Savage', 0, ['Warrior', 'Barbarian', 'Druid', 'Sorcerer'], [10,4,1,1])
+hermit = profession.Profession('Hermit', 0, ['Expert', 'Druid', 'Monk', 'Sorcerer', 'Warlock', 'Wizard'], [1, 1, 1, 1, 1, 1])
+savage = profession.Profession('Savage', 0, ['Warrior', 'Barbarian', 'Druid', 'Sorcerer'], [10, 4, 1, 1])
 same = profession.Profession('Same', 0, ['Error'], [1])
 
 professions = [catchpole, chancellor, diplomat, exchequer, forester, hayward, herald, judge, knight, liner, local_lord, noble, summoner, bowman, engineer, footman, mercenary, pikeman, sapper, scout, sergeant, general, bailiff, constable, guard, guard_captain, jailer, sheriff, burglar, con_artist, fence, footpad, pickpocket, poacher, archbishop, bishop, cardinal, monk, priest, apothecary, banker, innkeeper, merchant_book, merchant_cloth, merchant_food, merchant_fuel, merchant_jewelry, merchant_magic, merchant_skin, merchant_spice, merchant_stone, merchant_textile, merchant_wood, acrobat, actor, musician, painter, sculptor, writer, farmer, fisherman, herder, hunter, alchemist, astronomer, historian, librarian, mathematician, mage, philosopher, professor, theologian, navigator, sailor, captain, sailmaker, shipwright, shoemaker, furrier, tailor, jeweler, pastrycook, mason, carpenter, weaver, chandler, cooper, baker, hatmaker, saddler, chicken_butcher, pursemaker, butcher, buckle_maker, plasterer, blacksmith, painter_craft, roofer, locksmith, ropemaker, tanner, harness_maker, bleacher, cutler, glovemaker, woodcarver, accoutrement_maker, arkwright, armorer, balancemaker, basketmaker, brewer, bellmaker, bottelier, bowyer, brickmaker, broom_maker, canvasser, card_maker, cartographer, cartwright, chainmaker, cheesemaker, clockmaker, dyer, embroiderer, feltmaker, fletcher, foundryman, girdler, glassblower, horner, illuminator, lampwright, luthier, minter, mirrorer, nedeller, parchmenter, rectifier, reedmaker, rugweaver, spectaclemaker, stonecutter, tapicer, vintner, wheelwright, advocate, architect, assistant, barber, bather, builder, carter, copyist, dentist, doctor, falconer, fewterer, ferryman, gardner, gravedigger, horse_groomer, launderer, link_boy, maid, messanger, miner, miller, midwife, porter, prostitute, raker, cook, tenter, water_carrier, adventurer, beggar, hermit, savage, same]
 
 
 # --------- profession distribution by role and building ----------
+# Profession structures
+# Role:" ", Quantity: Distribution_type, (Par1,Par2), Profession: [A,B,C], Weight:[1,2,3]
+# Supportedd Quantity are ['One', Odds], ['Flat',(Min,Max)] and ['Normal',(Mean, Standard_Deviation)]
+# 'same' is a special profession, gives the character the same profession as the Master
+
 
 # House
 farmer_house_master = rp.RoleProfessions('Master', 'One', 1, [farmer, fisherman, herder, hunter], [20,20,1,1])
@@ -359,280 +372,4 @@ profession_list = profession_governance + profession_military + profession_secur
                   profession_religious + profession_merchant + profession_entertainer + profession_scholar + \
                   profession_sailor + profession_craftsman + profession_service + profession_other
 
-# Profession structures
-#[ {Role:" ", Quantity:['Formula, (Par1,Par2)], Profession: [A,B,C], Weight:[1,2,3], 'Geography':[None,'Plains',
-# 'Sea'] }, { ... } ]
-# Supportedd Quantity are ['One', Odds], ['Flat',(Min,Max)] and ['Normal',(Mean, Standard_Deviation)]
-# 'Same' is a special profession, gives the character the same profession as the Master
-# Geography is used to specify a required geographical feature. Support: [Plains, Forests, River, Sea, Mountains,
-# Mines and Water (River or Sea)]
 
-profession = {'House': {'Farmer':
-                            [{'Role': 'Master', 'Quantity': ['One', 1], 'Profession': ['Farmer','Fisherman','Herder','Hunter'],
-                              'Weight': [20,20,1,1], 'Geography': [None,'Water','Plains',None]},
-                             {'Role': 'Spouse', 'Quantity': ('One', 0.9), 'Profession': ['Same','Farmer','Fisherman','Herder','Hunter'],
-                              'Weight': [50,20,10,1,1], 'Geography': [None,None,'Water','Plains',None]},
-                             {'Role': 'Child', 'Quantity': ('Normal', (3,1)), 'Profession': ['Same','Farmer','Fisherman','Herder','Hunter'],
-                              'Weight': [50,20,10,1,1], 'Geography': [None,None,'Water','Plains',None]}
-                             ],
-                        'Commoner':
-                            [{'Role': 'Master', 'Quantity': ('One', 1), 'Profession': ['Barber'], 'Weight': [1],
-                              'Geography': [None]},
-                             {'Role': 'Spouse', 'Quantity': ('One', 0.9), 'Profession': ['Same'], 'Weight': [1],
-                              'Geography': [None]},
-                             {'Role': 'Child', 'Quantity': ('Normal', (3,1)), 'Profession': ['Guardsman','Maid'],
-                              'Weight': [1,1], 'Geography': [None,None]},
-                             ],
-                        'Bourgeois':
-                            [{'Role': 'Master', 'Quantity': (1, 1), 'Profession': [], 'Weight': [], 'Geography': []},
-                             {'Role': 'Spouse', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                             {'Role': 'Child', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                             {'Role': 'Servant', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                             {'Role': 'Security', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                             {'Role': 'Apprentice', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                             {'Role': 'Unique', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                             {'Role': 'Visitor', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []}
-                             ],
-                        'Noble': [1,1]},
-            'Service': [['Tavern',0,10],
-                        ['Inn',1,5],
-                        ['Hospital',1,1],
-                        ['Whorehouse',1,5]],
-            'Shop': [['General',0,20],
-                     ['Food',0,10],
-                     ['Health',1,5],
-                     ['Book',1,2],
-                     ['Magic',2,1],
-                     ['Luxury',2,2]],
-            'Workshop': [['Blacksmith',0,2],
-                         ['Tailor',0,5],
-                         ['Leatherwork',0,2],
-                         ['Woodwork',0,4],
-                         ['Other',1,1]],
-            'Castle': {'Keep':
-                           [{'Role': 'Master', 'Quantity': ('One', 1), 'Profession': ['Local Lord'], 'Weight': [1],
-                             'Geography': [None]},
-                            {'Role': 'Spouse', 'Quantity': ('One', 0.9), 'Profession': ['Nobleman(woman)'],
-                             'Weight': [1], 'Geography': [None]},
-                            {'Role': 'Child', 'Quantity': ('Normal', (3,1)), 'Profession': ['Nobleman(woman)'],
-                             'Weight': [1], 'Geography': [None]},
-                            {'Role': 'Servant', 'Quantity': ('Normal', (2,1)), 'Profession': ['Maid'], 'Weight': [1],
-                             'Geography': [None]},
-                            {'Role': 'Security', 'Quantity': ('Normal', (3,1)), 'Profession': ['Guardsman'],
-                             'Weight': [1], 'Geography': [None]},
-                            {'Role': 'Apprentice', 'Quantity': ('Normal', (1,1)), 'Profession': ['Knight'],
-                             'Weight': [1], 'Geography': [None]},
-                            {'Role': 'Unique', 'Quantity': ('Normal', (1,1)), 'Profession': ['Chancellor','Exchequer','Forester','Hayward'],
-                             'Weight': [5,3,5,2,], 'Geography': [None,None,'Forests',None]},
-                            {'Role': 'Visitor', 'Quantity': ('Normal', (0,1)), 'Profession': ['Diplomat'],
-                             'Weight': [1], 'Geography': [None]}],
-                       'Castle':
-                           [{'Role': 'Master', 'Quantity': ('One', 1), 'Profession': [], 'Weight': [], 'Geography': []},
-                            {'Role': 'Spouse', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                            {'Role': 'Child', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                            {'Role': 'Servant', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                            {'Role': 'Security', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                            {'Role': 'Apprentice', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                            {'Role': 'Unique', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []},
-                            {'Role': 'Visitor', 'Quantity': (), 'Profession': [], 'Weight': [], 'Geography': []}]
-                       },
-            'Religious': [['Shrine',0,20],
-                          ['Monastery',0,10],
-                          ['Church',1,4],
-                          ['Cathedral',2,1]],
-            'Education': [['School',1,10],
-                          ['University',2,1]],
-            'Military': [['Prison',1,20],
-                         ['Barrack',1,20],
-                         ['Fortress',2,1],
-                         ['Army',0,0]],
-            'Criminal': [['Den',1,1],
-                         ['Front',1,4],
-                         ['Camp',0,0]],
-            'Art': [['Artist Guild',1,5],
-                    ['Circus',0,2],
-                    ['Museum',2,1]],
-            'Other': [['Homeless',0,1],
-                      ['Ship',0,0]]
-            }
-
-
-profession_info = {'Catchpole': {'Wealth': 0, 'Class': []},
-                   'Chancellor': {'Wealth': 1.8, 'Class': []},
-                   'Diplomat': {'Wealth': 1.5, 'Class': []},
-                   'Exchequer': {'Wealth': 1.8, 'Class': []},
-                   'Forester': {'Wealth': 1.5, 'Class': []},
-                   'Hayward': {'Wealth': 1.5, 'Class': []},
-                   'Herald': {'Wealth': 0, 'Class': []},
-                   'Judge': {'Wealth': 0, 'Class': []},
-                   'Knight': {'Wealth': 1.5, 'Class': []},
-                   'Liner': {'Wealth': 0, 'Class': []},
-                   'Local Lord': {'Wealth': 2, 'Class': []},
-                   'Nobleman(woman)': {'Wealth': 2, 'Class': []},
-                   'Summoner': {'Wealth': 0, 'Class': []},
-                   'Bowman': {'Wealth': 0, 'Class': []},
-                   'Engineer': {'Wealth': 0, 'Class': []},
-                   'Footman': {'Wealth': 0, 'Class': []},
-                   'Mercenary': {'Wealth': 0, 'Class': []},
-                   'Pikeman': {'Wealth': 0, 'Class': []},
-                   'Sapper': {'Wealth': 0, 'Class': []},
-                   'Scout': {'Wealth': 0, 'Class': []},
-                   'Sergeant': {'Wealth': 0, 'Class': []},
-                   'General': {'Wealth': 0, 'Class': []},
-                   'Bailiff': {'Wealth': 0, 'Class': []},
-                   'Constable': {'Wealth': 0, 'Class': []},
-                   'Guardsman': {'Wealth': 0.5, 'Class': []},
-                   'Jailer': {'Wealth': 0, 'Class': []},
-                   'Sherrif': {'Wealth': 0, 'Class': []},
-                   'Burglar': {'Wealth': 0, 'Class': []},
-                   'Con Artist': {'Wealth': 0, 'Class': []},
-                   'Fence': {'Wealth': 0, 'Class': []},
-                   'Footpad': {'Wealth': 0, 'Class': []},
-                   'Pickpocket': {'Wealth': 0, 'Class': []},
-                   'Poacher': {'Wealth': 0, 'Class': []},
-                   'Archbishop': {'Wealth': 0, 'Class': []},
-                   'Bishop': {'Wealth': 0, 'Class': []},
-                   'Cardinal': {'Wealth': 0, 'Class': []},
-                   'Monk': {'Wealth': 0, 'Class': []},
-                   'Priest': {'Wealth': 0, 'Class': []},
-                   'Apothecary': {'Wealth': 0, 'Class': []},
-                   'Banker': {'Wealth': 0, 'Class': []},
-                   'Merchant (Beverage)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Book)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Cloth)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Food)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Fuel)': {'Wealth': 0, 'Class': []},
-                   'Innkeeper': {'Wealth': 0, 'Class': []},
-                   'Merchant (Jewelry)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Magic)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Skin)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Spice)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Stone and Ore)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Textile)': {'Wealth': 0, 'Class': []},
-                   'Merchant (Wood)': {'Wealth': 0, 'Class': []},
-                   'Acrobat': {'Wealth': 0, 'Class': []},
-                   'Actor': {'Wealth': 0, 'Class': []},
-                   'Illuminator': {'Wealth': 0, 'Class': []},
-                   'Musician': {'Wealth': 0, 'Class': []},
-                   'Painter (Art)': {'Wealth': 0, 'Class': []},
-                   'Sculptor': {'Wealth': 0, 'Class': []},
-                   'Singer': {'Wealth': 0, 'Class': []},
-                   'Writer': {'Wealth': 0, 'Class': []},
-                   'Farmer': {'Wealth': 0, 'Class': []},
-                   'Fisherman': {'Wealth': 0, 'Class': []},
-                   'Herder': {'Wealth': 0, 'Class': []},
-                   'Hunter': {'Wealth': 0, 'Class': []},
-                   'Alchemist': {'Wealth': 0, 'Class': []},
-                   'Astronomer': {'Wealth': 0, 'Class': []},
-                   'Librarian': {'Wealth': 0, 'Class': []},
-                   'Mathematician': {'Wealth': 0, 'Class': []},
-                   'Mage': {'Wealth': 0, 'Class': []},
-                   'Philosopher': {'Wealth': 0, 'Class': []},
-                   'Professor': {'Wealth': 0, 'Class': []},
-                   'Theologian': {'Wealth': 0, 'Class': []},
-                   'Navigator': {'Wealth': 0, 'Class': []},
-                   'Sailor': {'Wealth': 0, 'Class': []},
-                   'Captain': {'Wealth': 0, 'Class': []},
-                   'Sailmaker': {'Wealth': 0, 'Class': []},
-                   'Shipwright': {'Wealth': 0, 'Class': []},
-                   'Shoemaker': {'Wealth': 0, 'Class': []},
-                   'Furrier': {'Wealth': 0, 'Class': []},
-                   'Tailor': {'Wealth': 0, 'Class': []},
-                   'Jeweler': {'Wealth': 0, 'Class': []},
-                   'Pastrycook': {'Wealth': 0, 'Class': []},
-                   'Mason': {'Wealth': 0, 'Class': []},
-                   'Carpenter': {'Wealth': 0, 'Class': []},
-                   'Weaver': {'Wealth': 0, 'Class': []},
-                   'Chandler': {'Wealth': 0, 'Class': []},
-                   'Cooper (Barrel-maker)': {'Wealth': 0, 'Class': []},
-                   'Baker': {'Wealth': 0, 'Class': []},
-                   'Hatmaker': {'Wealth': 0, 'Class': []},
-                   'Saddler': {'Wealth': 0, 'Class': []},
-                   'Chicken Butcher': {'Wealth': 0, 'Class': []},
-                   'Pursemaker': {'Wealth': 0, 'Class': []},
-                   'Butcher': {'Wealth': 0, 'Class': []},
-                   'Buckler-maker': {'Wealth': 0, 'Class': []},
-                   'Plasterer': {'Wealth': 0, 'Class': []},
-                   'Blacksmith': {'Wealth': 0, 'Class': []},
-                   'Painter': {'Wealth': 0, 'Class': []},
-                   'Roofer': {'Wealth': 0, 'Class': []},
-                   'Locksmith': {'Wealth': 0, 'Class': []},
-                   'Ropemaker': {'Wealth': 0, 'Class': []},
-                   'Tanner': {'Wealth': 0, 'Class': []},
-                   'Rugmaker': {'Wealth': 0, 'Class': []},
-                   'Harness-Maker': {'Wealth': 0, 'Class': []},
-                   'Bleacher': {'Wealth': 0, 'Class': []},
-                   'Cutler': {'Wealth': 0, 'Class': []},
-                   'Glovemaker': {'Wealth': 0, 'Class': []},
-                   'Woodcarver': {'Wealth': 0, 'Class': []},
-                   'Accoutrement maker': {'Wealth': 0, 'Class': []},
-                   'Arkwright': {'Wealth': 0, 'Class': []},
-                   'Armorer': {'Wealth': 0, 'Class': []},
-                   'Balancemaker': {'Wealth': 0, 'Class': []},
-                   'Basketmaker': {'Wealth': 0, 'Class': []},
-                   'Brewer': {'Wealth': 0, 'Class': []},
-                   'Bellmaker': {'Wealth': 0, 'Class': []},
-                   'Bottelier': {'Wealth': 0, 'Class': []},
-                   'Bowyer': {'Wealth': 0, 'Class': []},
-                   'Brickmaker': {'Wealth': 0, 'Class': []},
-                   'Broom maker': {'Wealth': 0, 'Class': []},
-                   'Canvasser': {'Wealth': 0, 'Class': []},
-                   'Card maker': {'Wealth': 0, 'Class': []},
-                   'Cartographer': {'Wealth': 0, 'Class': []},
-                   'Cartwright': {'Wealth': 0, 'Class': []},
-                   'Chainmaker': {'Wealth': 0, 'Class': []},
-                   'Cheesemaker': {'Wealth': 0, 'Class': []},
-                   'Clockmaker': {'Wealth': 0, 'Class': []},
-                   'Dyer': {'Wealth': 0, 'Class': []},
-                   'Embroiderer': {'Wealth': 0, 'Class': []},
-                   'Feltmaker': {'Wealth': 0, 'Class': []},
-                   'Fletcher': {'Wealth': 0, 'Class': []},
-                   'Foundryman': {'Wealth': 0, 'Class': []},
-                   'Girdler': {'Wealth': 0, 'Class': []},
-                   'Glassblower': {'Wealth': 0, 'Class': []},
-                   'Horner,': {'Wealth': 0, 'Class': []},
-                   'Lampwright': {'Wealth': 0, 'Class': []},
-                   'Luthier': {'Wealth': 0, 'Class': []},
-                   'Minter': {'Wealth': 0, 'Class': []},
-                   'Mirrorer': {'Wealth': 0, 'Class': []},
-                   'Nedeller': {'Wealth': 0, 'Class': []},
-                   'Parchmenter': {'Wealth': 0, 'Class': []},
-                   'Rectifier': {'Wealth': 0, 'Class': []},
-                   'Reedmaker': {'Wealth': 0, 'Class': []},
-                   'Rugweaver': {'Wealth': 0, 'Class': []},
-                   'Spectaclemaker': {'Wealth': 0, 'Class': []},
-                   'Stonecutter': {'Wealth': 0, 'Class': []},
-                   'Tapicer': {'Wealth': 0, 'Class': []},
-                   'Vintner': {'Wealth': 0, 'Class': []},
-                   'Wheelwright': {'Wealth': 0, 'Class': []},
-                   'Advocate': {'Wealth': 0, 'Class': []},
-                   'Architect': {'Wealth': 0, 'Class': []},
-                   'Barber': {'Wealth': 0, 'Class': []},
-                   'Bather': {'Wealth': 0, 'Class': []},
-                   'Builder': {'Wealth': 0, 'Class': []},
-                   'Carter': {'Wealth': 0, 'Class': []},
-                   'Copyist': {'Wealth': 0, 'Class': []},
-                   'Dentist': {'Wealth': 0, 'Class': []},
-                   'Doctor': {'Wealth': 0, 'Class': []},
-                   'Falconer': {'Wealth': 0, 'Class': []},
-                   'Fewterer (Keeper of dogs)': {'Wealth': 0, 'Class': []},
-                   'Ferryman': {'Wealth': 0, 'Class': []},
-                   'Gardner': {'Wealth': 0, 'Class': []},
-                   'Gravedigger': {'Wealth': 0, 'Class': []},
-                   'Horse groomer': {'Wealth': 0, 'Class': []},
-                   'Launderer': {'Wealth': 0, 'Class': []},
-                   'Link boy (Torch carrier)': {'Wealth': 0, 'Class': []},
-                   'Maid': {'Wealth': 0, 'Class': []},
-                   'Messanger': {'Wealth': 0, 'Class': []},
-                   'Miner': {'Wealth': 0, 'Class': []},
-                   'Miller': {'Wealth': 0, 'Class': []},
-                   'Porter': {'Wealth': 0, 'Class': []},
-                   'Prostitute': {'Wealth': 0, 'Class': []},
-                   'Raker': {'Wealth': 0, 'Class': []},
-                   'Cook': {'Wealth': 0, 'Class': []},
-                   'Tenter': {'Wealth': 0, 'Class': []},
-                   'Water Carrier': {'Wealth': 0, 'Class': []},
-                   'Adventurer': {'Wealth': 0, 'Class': []},
-                   'Beggar': {'Wealth': 0, 'Class': []},
-                   'Hermit': {'Wealth': 0, 'Class': []},
-                   'Savage': {'Wealth': 0, 'Class': []}}

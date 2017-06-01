@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
-    <height>330</height>
+    <width>418</width>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>280</y>
+     <y>410</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -35,7 +35,7 @@
      <x>10</x>
      <y>10</y>
      <width>381</width>
-     <height>276</height>
+     <height>371</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -87,7 +87,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="0">
+      <item row="5" column="0">
        <widget class="QLabel" name="kindLabel">
         <property name="font">
          <font>
@@ -99,36 +99,16 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="5" column="1">
        <widget class="QComboBox" name="kindComboBox">
         <item>
          <property name="text">
           <string>Random</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>Village</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Town</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>City</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Metropolis</string>
-         </property>
-        </item>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="6" column="1">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -141,7 +121,33 @@
         </property>
        </spacer>
       </item>
-      <item row="4" column="0">
+      <item row="9" column="1">
+       <widget class="QLineEdit" name="populationLineEdit">
+        <property name="text">
+         <string>Random</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Geography :</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <widget class="QRadioButton" name="geographyButton">
+        <property name="text">
+         <string>Random</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
        <widget class="QLabel" name="populationLabel">
         <property name="font">
          <font>
@@ -153,15 +159,29 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="populationLineEdit">
+      <item row="2" column="0">
+       <widget class="QLabel" name="cultureLabel">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
         <property name="text">
-         <string>Random</string>
+         <string>Culture :</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <spacer name="verticalSpacer">
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cultureComboBox">
+        <item>
+         <property name="text">
+          <string>Random</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <spacer name="verticalSpacer_4">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -174,38 +194,19 @@
        </spacer>
       </item>
       <item row="7" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="sizeLabel">
         <property name="font">
          <font>
           <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Geography :</string>
+         <string>Size :</string>
         </property>
        </widget>
       </item>
       <item row="7" column="1">
-       <widget class="QRadioButton" name="geographyButton">
-        <property name="text">
-         <string>Random</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="mainRaceLabel">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Main Race :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QComboBox" name="mainRaceComboBox">
+       <widget class="QComboBox" name="sizeComboBox">
         <property name="editable">
          <bool>false</bool>
         </property>
@@ -214,41 +215,34 @@
           <string>Random</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>Human</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Dwarf</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Elf</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Gnome</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Halfling</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Half-Elf</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Half-Orc</string>
-         </property>
-        </item>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="exclusiveCheckBox"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="exclusiveLabel">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Exclusive</string>
+        </property>
        </widget>
       </item>
      </layout>

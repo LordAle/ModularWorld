@@ -1,103 +1,140 @@
 import random
-import catalogs_city
-import catalogs_character
+#from catalogs import catalog_city
+#from catalogs import catalog_character
+import catalog
 
 
 class City():
-
-    names_list = ['Id', 'Name', 'Kind', 'Population', 'Main race', 'Forests', 'Plains', 'Rivers', 'Sea',
-                  'Mountains', 'Mines']
+    """ Class used to gererate and handle cities. A 'city' is any large association of people clustered in 'buildings'. """
 
     def __init__(self):
         self.id = None
         self.name = 'Default name'
-        self.kind = 'Default kind'
+        self.culture = catalog.cultures['Error']
+        self.kind = catalog.city_kinds['Error']
+        self.size = catalog.city_sizes['Error']
         self.population = 0
-        self.main_race = 'Default race'
-        self.forests = False
-        self.plains = False
+        self.forest = False
+        self.plain = False
         self.river = False
         self.sea = False
-        self.mountains = False
-        self.mines = False
-        self.values_list = []
-        self.update_values_list()
+        self.mountain = False
+        self.mine = False
 
     def set_from_dialog(self, param):
-        # Expect dictionary with keys: name, kind, population, main_race, geography
+        # Expect dictionary with keys: name, culture, kind, size, population, geography
 
-        self.name = param['name']
-        if self.name == 'Random':
-            self.name = random.choice(catalogs_city.names)
+        self.set_culture(param['culture'])
+        self.set_name(param['name'])
+        self.set_kind(param['kind'])
+        self.set_size(param['size'])
+        self.set_population(param['population'])
+        self.set_geography(param['geography'])
 
-        self.kind = param['kind']
-        if self.kind == 'Random':
-            self.kind = random.choice(catalogs_city.kinds)
+        print(self.name, self.culture.name, self.kind.name, self.size.name, self.population)
+        print(self.forest, self.plain, self.river, self.sea, self.mountain, self.mine)
 
-        self.population = param['population']
-        if self.population == 'Random':
-            for x in range(len(catalogs_city.kinds)):
-                    if self.kind == catalogs_city.kinds[x]:
-                        self.population = random.randint(catalogs_city.population_ranges[x][0],
-                                                         catalogs_city.population_ranges[x][1])
-                        break
+    def set_culture(self, culture):
+        try:
+            if culture == 'Random' or culture == 'random':
+                culture_list = list(catalog.cultures.values())
+                culture_list.remove(catalog.cultures['Error'])
+                self.culture = random.choice(culture_list)
+            else:
+                self.culture = catalog.cultures[culture]
+        except:
+            self.culture = catalog.cultures['Error']
 
-        self.main_race = param['main_race']
-        if self.main_race == 'Random':
-            self.main_race = random.choice(catalogs_character.races)
+    def set_name(self, name):
+        try:
+            if name == 'Random' or name == 'random':
+                self.name = random.choice(self.culture.city_names)
+            else:
+                self.name = name
+        except:
+            self.name = 'Error'
 
-        if param['geography'] == 'Random':
-            self.forests = random.choice([True, False])
-            self.plains = random.choice([True, False])
-            self.river = random.choice([True, False])
-            self.sea = random.choice([True, False])
-            self.mountains = random.choice([True, False])
-            self.mines = random.choice([True, False])
-        else:
-            try:
-                if param['geography']['forests']:
-                    self.forests = True
-                if param['geography']['plains']:
-                    self.plains = True
-                if param['geography']['river']:
+    def set_kind(self, kind):
+        try:
+            if kind == 'Random' or kind == 'random':
+                kind_list = list(catalog.city_kinds.values())
+                kind_list.remove(catalog.city_kinds['Error'])
+                self.kind = random.choice(kind_list)
+            else:
+                self.kind = catalog.city_kinds[kind]
+        except:
+            self.kind = catalog.city_kinds['Error']
+
+    def set_size(self, size):
+        try:
+            if size == 'Random' or size == 'random':
+                size_list = list(catalog.city_sizes.values())
+                size_list.remove(catalog.city_sizes['Error'])
+                self.size = random.choice(size_list)
+            else:
+                self.size = catalog.city_sizes[size]
+        except:
+            self.size = catalog.city_sizes['Error']
+
+    def set_population(self, pop):
+        try:
+            if pop == 'Random' or pop == 'random':
+                self.population = random.randint(self.size.pop_range[0], self.size.pop_range[1])
+            else:
+                self.population = int(pop)
+        except:
+            self.population = 0
+
+    def set_geography(self, geo):
+        try:
+            if geo == 'Random' or geo == 'random':
+                self.forest = random.choice([True, False])
+                self.plain = random.choice([True, False])
+                self.river = random.choice([True, False])
+                self.sea = random.choice([True, False])
+                self.mountain = random.choice([True, False])
+                self.mine = random.choice([True, False])
+            else:
+                if geo['forest']:
+                    self.forest = True
+                if geo['plain']:
+                    self.plain = True
+                if geo['river']:
                     self.river = True
-                if param['geography']['sea']:
+                if geo['sea']:
                     self.sea = True
-                if param['geography']['mountains']:
-                    self.mountains = True
-                if param['geography']['mines']:
-                    self.mines = True
-            except:
-                pass
+                if geo['mountain']:
+                    self.mountain = True
+                if geo['mine']:
+                    self.mine = True
+        except:
+            pass
 
     def set_from_db(self, base_city):
         self.id = base_city.id
         self.name = base_city.name
-        self.kind = base_city.kind
+        self.culture = catalog.cultures[base_city.culture]
+        self.kind = catalog.city_kinds[base_city.kind]
+        self.size = catalog.city_sizes[base_city.size]
         self.population = base_city.population
-        self.main_race = base_city.main_race
-        self.forests = base_city.forests
-        self.plains = base_city.plains
+        self.forest = base_city.forest
+        self.plain = base_city.plain
         self.river = base_city.river
         self.sea = base_city.sea
-        self.mountains = base_city.mountains
-        self.mines = base_city.mines
-        self.update_values_list()
+        self.mountain = base_city.mountain
+        self.mine = base_city.mine
 
     def special_traveller(self):
         self.id = None
-        self.name = 'Traveller'
-        self.kind = 'Traveller'
+        self.name = 'Travellers'
+        self.culture = catalog.cultures['Human']
+        self.kind = catalog.city_kinds['Traveller']
+        self.size = catalog.city_sizes['Error']
         self.population = 0
-        self.main_race = 'None'
-        self.forests = False
-        self.plains = False
+        self.forest = False
+        self.plain = False
         self.river = False
         self.sea = False
-        self.mountains = False
-        self.mines = False
-        self.update_values_list()
+        self.mountain = False
+        self.mine = False
 
-    def update_values_list(self):
-        self.values_list = [self.id, self.name, self.kind, self.population, self.main_race, self.forests, self.plains,
-                            self.river, self.sea, self.mountains, self.mines]

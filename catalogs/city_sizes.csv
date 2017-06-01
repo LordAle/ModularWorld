@@ -1,0 +1,6 @@
+Name;Min_pop;Max_pop
+Error;0;0
+Village;20;1000
+Town;1000;8000
+City;8000;20000
+Metropolis;20000;100000

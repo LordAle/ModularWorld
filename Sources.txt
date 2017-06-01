@@ -1,0 +1,9 @@
+Here you can find the sources used to populate the default catalogs.
+
+Name related:
+#   Fantasy Name Generator at http://www.fantasynamegenerators.com/
+#   Mithril and Mages by Mark Hassman at http://www.mithrilandmages.com/
+
+Profession related:
+#   Medieval demographics made easy By S. John Ross at http://www222.pair.com/sjohn/blueroom/demog.htm
+#   What did people do in a Medieval City? By Shawn Vincent at http://www.svincent.com/MagicJar/Economics/MedievalOccupations.html
