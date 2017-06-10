@@ -1,0 +1,31 @@
+Name;Social_group;Main_figure;Dist_type;Dist_value;Professions;Odds
+Master Food;Farmer;1;One;1;Farmer, Fisherman, Herder;10,10,5
+Master Commoner;Commoner;1;One;1;Barber, Ferryman, Gravedigger, Midwife, Raker, Water Carrier;1,1,1,1,1,1
+Master Bourgeois;Bourgeois;1;One;1;Animal Keeper, Bather, Burgomeister, Doctor, Miller;2,1,5,2,3
+Master Noble;Noble;1;One;1;Diplomat, Knight, Noble;1,2,2
+Master Tavern;Commoner;1;One;1;Cook;1
+Master Inn;Bourgeois;1;One;1;Innkeeeper;1
+Master Hospital;Bourgeois;1;One;1;Doctoe;1
+Master Bank;Bourgeois;1;One;1;Banker;1
+Master General Store;Commoner;1;One;1;Merchant;1
+Master Luxury Store;Bourgeois;1;One;1;Merchant;1
+Master Blacksmith;Craftsman;1;One;1;Blacksmith;1
+Master Tailor;Craftsman;1;One;1;Tailor;1
+Master Leatherwork;Craftsman;1;One;1;Leatherworker;1
+Master Woodwork;Craftsman;1;One;1;Woodworker;1
+Master Builder;Craftsman;1;One;1;Builder;1
+Master Misc Workshop;Craftsman;1;One;1;Specialist Craftsman;1
+Master Stronghold;Noble;1;One;1;Local Lord;1
+Master Shrine;Religious;1;One;1;Acolyte, Priest;1
+Master Church;Religious;1;One;1;Priest;1
+Master Cathedral;Religious;1;One;1;High Priest;1
+Master School;Scholar;1;One;1;Scholar;1
+Master University;Scholar;1;One;1;Scholar;1
+Master Prison;Military;1;One;1;Guard;1
+Master Barrack;Military;1;One;1;Soldier;1
+Master Fortress;Military;1;One;1;Soldier;1
+Master Thieves Den;Criminal;1;One;1;Thief;1
+Master Criminal Front;Criminal;1;One;1;Thief;1
+Master Artists Guild;Artist;1;One;1;Artist;1
+Master Circus;Artist;1;One;1;Artist;1
+Master Museum;Scholar;1;One;1;Scholar;1

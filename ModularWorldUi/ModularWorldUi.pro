@@ -24,15 +24,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    map_view.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    map_view.h
 
 FORMS    += mainwindow.ui \
     add_city_dialog.ui \
     add_building_dialog.ui \
     add_char_dialog.ui \
     delete_dialog.ui \
-    mainwindow_copy.ui
+    mainwindow_copy.ui \
+    map_view.ui
 
 DISTFILES +=

@@ -1,9 +1,8 @@
-Name;Adult_age;Old_age
-Error;1;1
-Human;16;80
-Dwarf;25;150
-Elf;30;200
-Halfling;20;100
-Gnome;22;120
-Half-Elf;22;120
-Half-Orc;14;70
+Name;Working_age;Adult_age;Old_age;Attributes_modifiers
+Human;12;16;80;
+Dwarf;14;25;150;Charisma-1, Constitution+2
+Elf;18;30;200;Dexterity+2, Constitution-1
+Halfling;13;20;100;Strength-1, Dexterity+2
+Gnome;13;22;120;Intelligence+2
+Half-Elf;13;22;120;
+Half-Orc;10;14;70;Strength+2, Intelligence-1

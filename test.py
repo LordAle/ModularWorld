@@ -1,12 +1,9 @@
-import itertools
 
-a_string = 'One, Two,Three, Four,Five'
+Order = 1
 
-a_list = a_string.split(', ')
-for index, value in enumerate(a_list):
-    split = value.split(',')
-    a_list[index] = split
+a_string = 'Order<2'
 
-a_list = list(itertools.chain.from_iterable(a_list))
-
-print(a_list)
+if '<' in a_string:
+    split = a_string.split('<')
+    if Order <
+    print(split)

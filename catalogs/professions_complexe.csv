@@ -1,0 +1,178 @@
+Name;Wealth;Geo_restriction;Unique;Classes;Classes_odds
+Catchpole;0.4;;1;Expert, Fighter, Rogue;3,1,1
+Chancellor;0.6;;1;Expert, Sorcerer, Wizard;5,1,1
+Diplomat;0.5;;0;Expert;1
+Exchequer;0.6;;1;Expert;1
+Forester;0.4;Forest;1;Expert, Ranger;2,1
+Herald;0.3;;1;Expert, Bard;2,1
+Judge;0.6;;1;Expert;1
+Knight;0.5;;0;Fighter, Paladin;4,1
+Liner;0.4;;1;Expert;1
+Local Lord;0.8;;1;Expert, Bard, Fighter, Sorcerer;3,1,2,1
+Noble;0.75;;0;Expert, Bard, Fighter, Sorcerer;3,1,2,1
+Sommoner;0.3;;1;Expert, Bard;2,1
+Bowman;0.15;;0;Warrior, Fighter, Ranger;5,2,1
+Footman;0.1;;0;Warrior, Fighter;3,1
+Mercenary;0.15;;0;Barbarian, Fighter, Rogue, Warlock;2,4,2,1
+Military Engineer;0.2;;0;Expert, Rogue;4,1
+Scout;0.1;;0;Warrior, Fighter, Ranger, Rogue;4,2,1,2
+Sergeant;0.2;;0;Fighter;1
+General;0.4;;0;Fighter, Paladin, Sorcerer;5,1,1
+Bailiff;0.3;;1;Fighter, Rogue;1,1
+Constable;0.4;;1;Bard, Fighter, Paladin, Sorcerer, Wizard;1,3,1,2,1
+Guard;0.1;;0;Warrior;1
+Guard Captain;0.2;;1;Fighter;1
+Jailer;0.1;;0;Warrior;1
+Con Artist;0.1;;0;Expert, Bard, Rogue;1,1,1
+Fence;0.2;;0;Expert;1,1
+Footpad;0.1;;0;Warrior, Fighter, Rogue;1,1,1
+Poacher;0.05;Forest;0;Warrior, Ranger;2,1
+Thief;0.1;;0;Rogue;1
+Acolyte;0.05;;0;Expert;1
+Archbishop;0.5;;1;Cleric;1
+Bishop;0.3;;0;Cleric;1
+Cardinal;0.7;;1;Cleric;1
+Monk;0;;0;Expert, Monk;1,1
+Priest;0.15;;0;Cleric;1
+Apothecary;0.2;;0;Expert;1
+Banker;0.7;;0;Expert;1
+Innkeeper;0.3;;0;Expert;1
+Book Merchant;0.2;;0;Expert;1
+Cloth Merchant;0.05;;0;Expert;1
+Food Merchant;0.05;;0;Expert;1
+Fuel Merchant;0.05;;0;Expert;1
+Jewelry Merchant;0.3;;0;Expert;1
+Magic Merchant;0.3;;0;Expert;1
+Skin Merchant;0.05;;0;Expert;1
+Spice Merchant;0.3;;0;Expert;1
+Stone Merchant;0.1;;0;Expert;1
+Textile Merchant;0.05;;0;Expert;1
+Wood Merchant;0.05;;0;Expert;1
+Acrobat;0.05;;0;Expert, Bard, Rogue;2,1,1
+Actor;0.05;;0;Expert, Bard;2,1
+Musician;0.05;;0;Expert, Bard;2,2
+Painter;0.05;;0;Expert;1
+Sculptor;0.1;;0;Expert;1
+Writer;0.05;;0;Expert;1
+Farmer;0.05;;0;Expert;1
+Fisherman;0.05;Water;0;Expert;1
+Herder;0.2;Plain;0;Expert;1
+Hunter;0.05;;0;Expert;1
+Alchemist;0.3;;0;Expert, Wizard;1,1
+Astronomer;0.3;Mountain;0;Expert;1
+Historian;0.3;;0;Expert;1
+Librarian;0.1;;0;Expert;1
+Mathematician;0.3;;0;Expert;1
+Mage;0.3;;0;Wizard;1
+Philosopher;0.2;;0;Expert;1
+Professor;0.2;;0;Expert;1
+Theologian;0.2;;0;Expert;1
+Navigator;0.2;Sea;0;Expert;1
+Sailor;0.05;Sea;0;Expert;1
+Ship Captain;0.3;Sea;0;Expert;1
+Sailmaker;0.1;Water;0;Expert;1
+Shipwright;0.15;Water;0;Expert;1
+Accoutrement Maker;0.1;;0;Expert;1
+Apprentice;0.05;;0;Expert;1
+Arkwright;0.1;;0;Expert;1
+Armorer;0.2;;0;Expert;1
+Baker;0.1;;0;Expert;1
+Balancemaker;0.2;;0;Expert;1
+Basketmaker;0.05;;0;Expert;1
+Bellmaker;0.15;;0;Expert;1
+Blacksmith;0.15;;0;Expert;1
+Bleacher;0.05;;0;Expert;1
+Bottelier;0.1;;0;Expert;1
+Bowyer;0.15;;0;Expert;1
+Brewer;0.1;;0;Expert;1
+Brickmaker;0.1;;0;Expert;1
+Broom Maker;0.05;;0;Expert;1
+Buckle Maker;0.1;;0;Expert;1
+Butcher;0.15;;0;Expert;1
+Canvasser;0.1;;0;Expert;1
+Card Maker;0.1;;0;Expert;1
+Carpenter;0.1;;0;Expert;1
+Cartographer;0.2;;0;Expert;1
+Cartwright;0.15;;0;Expert;1
+Chainmaker;0.1;;0;Expert;1
+Chandler;0.05;;0;Expert;1
+Cheesemaker;0.1;;0;Expert;1
+Chicken Butcher;0.1;;0;Expert;1
+Clockmaker;0.2;;0;Expert;1
+Cooper;0.1;;0;Expert;1
+Cutler;0.1;;0;Expert;1
+Dyer;0.05;;0;Expert;1
+Embroiderer;0.1;;0;Expert;1
+Feltmaker;0.05;;0;Expert;1
+Fletcher;0.1;;0;Expert;1
+Foundryman;0.1;Mine;0;Expert;1
+Furrier;0.1;;0;Expert;1
+Girdler;0.1;;0;Expert;1
+Glassblower;0.15;;0;Expert;1
+Glovemaker;0.1;;0;Expert;1
+Harness Maker;0.1;;0;Expert;1
+Hatmaker;0.1;;0;Expert;1
+Horner;0.1;;0;Expert;1
+Illuminator;0.1;;0;Expert;1
+Jeweler;0.25;;0;Expert;1
+Lampwright;0.1;;0;Expert;1
+Locksmith;0.15;;0;Expert;1
+Luthier;0.1;;0;Expert;1
+Mason;0.1;;0;Expert;1
+Minter;0.3;;0;Expert;1
+Mirrorer;0.1;;0;Expert;1
+Nedeller;0.05;;0;Expert;1
+Painter (craft);0.05;;0;Expert;1
+Parchmenter;0.1;;0;Expert;1
+Pastrycook;0.1;;0;Expert;1
+Plasterer;0.05;;0;Expert;1
+Pursemaker;0.1;;0;Expert;1
+Rectifier;0.1;;0;Expert;1
+Reedmaker;0.1;;0;Expert;1
+Roofer;0.1;;0;Expert;1
+Ropemaker;0.1;;0;Expert;1
+Rugweaver;0.1;;0;Expert;1
+Saddler;0.1;;0;Expert;1
+Shoemaker;0.1;;0;Expert;1
+Spectaclemaker;0.15;;0;Expert;1
+Stoncutter;0.15;;0;Expert;1
+Tailor;0.1;;0;Expert;1
+Tanner;0.05;;0;Expert;1
+Tapicer;0.15;;0;Expert;1
+Vintner;0.15;;0;Expert;1
+Weaver;0.05;;0;Expert;1
+Wheelwright;0.1;;0;Expert;1
+Woodcarver;0.1;;0;Expert;1
+Advocate;0.3;;0;Expert;1
+Architect;0.3;;0;Expert;1
+Assistant;0.05;;0;Expert;1
+Barber;0.05;;0;Expert;1
+Bather;0.15;;0;Expert;1
+Carter;0.05;;0;Expert;1
+Copyist;0.05;;0;Expert;1
+Dentist;0.2;;0;Expert;1
+Doctor;0.2;;0;Expert;1
+Falconer;0.3;;0;Expert;1
+Fewterer;0.35;;0;Expert;1
+Ferryman;0.05;River;0;Expert;1
+Gardner;0.1;;0;Expert;1
+Gravedigger;0;;0;Expert;1
+Horse Groomer;0.35;Plain;0;Expert;1
+Launderer;0.05;;0;Expert;1
+Link Boy;0;;0;Expert;1
+Maid;0.05;;0;Expert;1
+Messanger;0.05;;0;Expert;1
+Miner;0.05;;0;Expert;1
+Miller;0.2;;0;Expert;1
+Midwife;0.05;;0;Expert;1
+Porter;0;;0;Expert;1
+Prostitute;0.05;;0;Expert;1
+Raker;0;;0;Expert;1
+Cook;0.1;;0;Expert;1
+Tenter;0.05;;0;Expert;1
+Water Carrier;0;;0;Expert;1
+Adventurer;0.3;;0;Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard;1,1,1,1,1,1,1,1,1,1,1,1
+Beggar;0;;0;Expert;1
+Hermit;0;;0;Druid, Monk, Ranger, Warlock;1,1,1,1
+Savage;0;;0;Warrior, Barbarian, Druid;10,2,1
+Child;0;;0;Expert;1
