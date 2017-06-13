@@ -2,10 +2,10 @@ Name;Social_group;Main_figure;Dist_type;Dist_value;Professions;Odds
 Master Food;Farmer;1;One;1;Farmer, Fisherman, Herder;10,10,5
 Master Commoner;Commoner;1;One;1;Barber, Ferryman, Gravedigger, Midwife, Raker, Water Carrier;1,1,1,1,1,1
 Master Bourgeois;Bourgeois;1;One;1;Animal Keeper, Bather, Burgomeister, Doctor, Miller;2,1,5,2,3
-Master Noble;Noble;1;One;1;Diplomat, Knight, Noble;1,2,2
+Master Noble;Noble;1;One;1;Diplomat, Knight, Noble, Chancellor, Constable, Exchequer, Forester;1,2,2,3,3,3,3
 Master Tavern;Commoner;1;One;1;Cook;1
-Master Inn;Bourgeois;1;One;1;Innkeeeper;1
-Master Hospital;Bourgeois;1;One;1;Doctoe;1
+Master Inn;Bourgeois;1;One;1;Innkeeper;1
+Master Hospital;Bourgeois;1;One;1;Doctor;1
 Master Bank;Bourgeois;1;One;1;Banker;1
 Master General Store;Commoner;1;One;1;Merchant;1
 Master Luxury Store;Bourgeois;1;One;1;Merchant;1
@@ -29,3 +29,21 @@ Master Criminal Front;Criminal;1;One;1;Thief;1
 Master Artists Guild;Artist;1;One;1;Artist;1
 Master Circus;Artist;1;One;1;Artist;1
 Master Museum;Scholar;1;One;1;Scholar;1
+Maid Few;Servant;0;Normal;2,1;Maid;1
+Maid Some;Servant;0;Normal;5,1;Maid;1
+Maid Many;Servant;0;Normal;10,2;Maid;1
+Guard Few;Military;0;Normal;2,1;Guard;1
+Guard Some;Military;0;Normal;5,1;Guard;1
+Guard Many;Military;0;Normal;10,2;Guard;1
+Apprentice Few;Craftsman;0;Normal;1,1;Apprentice;1
+Apprentice Some;Craftsman;0;Normal;3,1;Apprentice;1
+Apprentice Many;Craftsman;0;Normal;5,1;Apprentice;1
+Tenter Few;Craftsman;0;Normal;2,1;Tenter;1
+Tenter Some;Craftsman;0;Normal;5,1;Tenter;1
+Tenter Many;Craftsman;0;Normal;10,2;Tenter;1
+Hospital Employee;Commoner;0;Normal;4,2;Cook, Midwife, Water Carrier;1,3,1
+Acolyte Few;Religious;0;Normal;3,1;Acolyte;1
+Priest Few;Religious;0;Normal;2,1;Priest;1
+Scholar Many;Scholar;0;Normal;10,2;Scholar;1
+Thief Some;Criminal;0;Normal;6,2;Thief;1
+Artist Some;Artist;0;Normal;4,1;Artist;1

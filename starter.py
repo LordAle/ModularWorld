@@ -13,6 +13,7 @@ import populator
 import visitor_manager
 from ModularWorldUi.mainwindow import Ui_MainWindow
 from catalogs import catalog_character
+import catalog_writer
 
 
 class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -103,7 +104,6 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.comboBoxVisitor.setModel(self.wealth_model)
 
     def setup_new_db(self):
-        self.add_traveller_city()
         self.query_cities_name()
 
 
@@ -213,7 +213,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_content_model.setTable('buildings')
         self.set_view_table_header('buildings')
         self.table_content_model.setFilter('city_id = {0}'.format(city_id))
-        self.table_content_model.setRelation(4, QtSql.QSqlRelation('cities', 'id', 'name'))
+        self.table_content_model.setRelation(3, QtSql.QSqlRelation('cities', 'id', 'name'))
         self.table_content_model.select()
         self.tableViewContent.resizeColumnsToContents()
 
@@ -246,8 +246,8 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_content_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
         self.table_content_model.setTable('characters')
         self.set_view_table_header('characters')
-        self.table_content_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
-        self.table_content_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
+        self.table_content_model.setRelation(13, QtSql.QSqlRelation('cities', 'id', 'name'))
+        self.table_content_model.setRelation(14, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_content_model.select()
         self.tableViewContent.resizeColumnsToContents()
 
@@ -255,9 +255,9 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         if table == 'cities':
             self.table_content_model.setHeaderData(0, QtCore.Qt.Horizontal, 'ID')
             self.table_content_model.setHeaderData(1, QtCore.Qt.Horizontal, 'Name')
-            self.table_content_model.setHeaderData(2, QtCore.Qt.Horizontal, 'Kind')
-            self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Population')
-            self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Main race')
+            self.table_content_model.setHeaderData(2, QtCore.Qt.Horizontal, 'Culture')
+            self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Size')
+            self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Population')
             self.table_content_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Forest')
             self.table_content_model.setHeaderData(6, QtCore.Qt.Horizontal, 'Plain')
             self.table_content_model.setHeaderData(7, QtCore.Qt.Horizontal, 'River')
@@ -269,26 +269,26 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table_content_model.setHeaderData(0, QtCore.Qt.Horizontal, 'ID')
             self.table_content_model.setHeaderData(1, QtCore.Qt.Horizontal, 'Name')
             self.table_content_model.setHeaderData(2, QtCore.Qt.Horizontal, 'Kind')
-            self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Subkind')
-            self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'City')
-            self.table_content_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Note')
+            self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'City')
+            self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Note')
         elif table == 'characters':
             self.table_content_model.setHeaderData(0, QtCore.Qt.Horizontal, 'ID')
             self.table_content_model.setHeaderData(1, QtCore.Qt.Horizontal, 'Name')
             self.table_content_model.setHeaderData(2, QtCore.Qt.Horizontal, 'Family')
-            self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Race')
-            self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Gender')
-            self.table_content_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Age')
-            self.table_content_model.setHeaderData(6, QtCore.Qt.Horizontal, 'Role')
-            self.table_content_model.setHeaderData(7, QtCore.Qt.Horizontal, 'Profession')
-            self.table_content_model.setHeaderData(8, QtCore.Qt.Horizontal, 'Wealth')
-            self.table_content_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Class')
-            self.table_content_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Level')
-            self.table_content_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Family')
-            self.table_content_model.setHeaderData(12, QtCore.Qt.Horizontal, 'City')
-            self.table_content_model.setHeaderData(13, QtCore.Qt.Horizontal, 'Building')
-            self.table_content_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Visiting')
-            self.table_content_model.setHeaderData(15, QtCore.Qt.Horizontal, 'Note')
+            self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Culture')
+            self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Race')
+            self.table_content_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Gender')
+            self.table_content_model.setHeaderData(6, QtCore.Qt.Horizontal, 'Age')
+            self.table_content_model.setHeaderData(7, QtCore.Qt.Horizontal, 'Social Group')
+            self.table_content_model.setHeaderData(8, QtCore.Qt.Horizontal, 'Profession')
+            self.table_content_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Wealth')
+            self.table_content_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Attributes')
+            self.table_content_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Morality')
+            self.table_content_model.setHeaderData(12, QtCore.Qt.Horizontal, 'Family')
+            self.table_content_model.setHeaderData(13, QtCore.Qt.Horizontal, 'City')
+            self.table_content_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Building')
+            self.table_content_model.setHeaderData(15, QtCore.Qt.Horizontal, 'Visiting')
+            self.table_content_model.setHeaderData(16, QtCore.Qt.Horizontal, 'Note')
 
 
     #Set special table model
@@ -303,8 +303,8 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_special_model.setTable('characters')
         self.set_special_table_header()
         self.table_special_model.setFilter('family_id = {0}'.format(selected_family_id))  # Parent
-        self.table_special_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
-        self.table_special_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
+        self.table_special_model.setRelation(13, QtSql.QSqlRelation('cities', 'id', 'name'))
+        self.table_special_model.setRelation(14, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_special_model.select()
 
         self.tableViewSpecial.resizeColumnsToContents()
@@ -324,29 +324,30 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_special_model.setTable('characters')
         self.set_special_table_header()
         self.table_special_model.setFilter('visiting_id = {0}'.format(selected_building_id))
-        self.table_special_model.setRelation(12, QtSql.QSqlRelation('cities', 'id', 'name'))
-        self.table_special_model.setRelation(13, QtSql.QSqlRelation('buildings', 'id', 'name'))
+        self.table_special_model.setRelation(13, QtSql.QSqlRelation('cities', 'id', 'name'))
+        self.table_special_model.setRelation(14, QtSql.QSqlRelation('buildings', 'id', 'name'))
         self.table_special_model.select()
 
         self.tableViewSpecial.resizeColumnsToContents()
 
     def set_special_table_header(self):
-        self.table_special_model.setHeaderData(0, QtCore.Qt.Horizontal, 'ID')
-        self.table_special_model.setHeaderData(1, QtCore.Qt.Horizontal, 'Name')
-        self.table_special_model.setHeaderData(2, QtCore.Qt.Horizontal, 'Family')
-        self.table_special_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Race')
-        self.table_special_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Gender')
-        self.table_special_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Age')
-        self.table_special_model.setHeaderData(6, QtCore.Qt.Horizontal, 'Role')
-        self.table_special_model.setHeaderData(7, QtCore.Qt.Horizontal, 'Profession')
-        self.table_special_model.setHeaderData(8, QtCore.Qt.Horizontal, 'Wealth')
-        self.table_special_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Class')
-        self.table_special_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Level')
-        self.table_special_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Family')
-        self.table_special_model.setHeaderData(12, QtCore.Qt.Horizontal, 'City')
-        self.table_special_model.setHeaderData(13, QtCore.Qt.Horizontal, 'Building')
-        self.table_special_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Visiting')
-        self.table_special_model.setHeaderData(15, QtCore.Qt.Horizontal, 'Note')
+        self.table_content_model.setHeaderData(0, QtCore.Qt.Horizontal, 'ID')
+        self.table_content_model.setHeaderData(1, QtCore.Qt.Horizontal, 'Name')
+        self.table_content_model.setHeaderData(2, QtCore.Qt.Horizontal, 'Family')
+        self.table_content_model.setHeaderData(3, QtCore.Qt.Horizontal, 'Culture')
+        self.table_content_model.setHeaderData(4, QtCore.Qt.Horizontal, 'Race')
+        self.table_content_model.setHeaderData(5, QtCore.Qt.Horizontal, 'Gender')
+        self.table_content_model.setHeaderData(6, QtCore.Qt.Horizontal, 'Age')
+        self.table_content_model.setHeaderData(7, QtCore.Qt.Horizontal, 'Social Group')
+        self.table_content_model.setHeaderData(8, QtCore.Qt.Horizontal, 'Profession')
+        self.table_content_model.setHeaderData(9, QtCore.Qt.Horizontal, 'Wealth')
+        self.table_content_model.setHeaderData(10, QtCore.Qt.Horizontal, 'Attributes')
+        self.table_content_model.setHeaderData(11, QtCore.Qt.Horizontal, 'Morality')
+        self.table_content_model.setHeaderData(12, QtCore.Qt.Horizontal, 'Family')
+        self.table_content_model.setHeaderData(13, QtCore.Qt.Horizontal, 'City')
+        self.table_content_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Building')
+        self.table_content_model.setHeaderData(15, QtCore.Qt.Horizontal, 'Visiting')
+        self.table_content_model.setHeaderData(16, QtCore.Qt.Horizontal, 'Note')
         self.tableViewSpecial.resizeColumnsToContents()
 
     #Qury items from DB
@@ -492,16 +493,6 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         connector.close_session()
 
         return family_id
-
-    def add_traveller_city(self):
-        traveller_city = city.City()
-        traveller_city.special_traveller()
-
-        connector = db_connector.City_Connector(self.loader)
-        traveller_city_id = connector.write_to_db(traveller_city)
-        connector.close_session()
-
-        self.add_floating_building(traveller_city_id)
 
     def add_floating_building(self, city_id):
         floating_building = building.Building()

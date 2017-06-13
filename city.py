@@ -1,18 +1,16 @@
 import random
-#from catalogs import catalog_city
-#from catalogs import catalog_character
 import catalog
+import selector
 
 
-class City():
-    """ Class used to gererate and handle cities. A 'city' is any large association of people clustered in 'buildings'. """
+class City:
+    """ Class used to generate and handle cities. A 'city' is any large association of people clustered in 'buildings'. """
 
     def __init__(self):
         self.id = None
         self.name = 'Default name'
-        self.culture = catalog.cultures['Error']
-        self.kind = catalog.city_kinds['Error']
-        self.size = catalog.city_sizes['Error']
+        self.culture = catalog.cultures['Default']
+        self.size = catalog.city_sizes['Default']
         self.population = 0
         self.forest = False
         self.plain = False
@@ -22,24 +20,22 @@ class City():
         self.mine = False
 
     def set_from_dialog(self, param):
-        # Expect dictionary with keys: name, culture, kind, size, population, geography
+        # Expect dictionary with keys: name, culture, size, population, geography
 
         self.set_culture(param['culture'])
         self.set_name(param['name'])
-        self.set_kind(param['kind'])
         self.set_size(param['size'])
         self.set_population(param['population'])
         self.set_geography(param['geography'])
 
-        print(self.name, self.culture.name, self.kind.name, self.size.name, self.population)
+        print(self.name, self.culture.name, self.size.name, self.population)
         print(self.forest, self.plain, self.river, self.sea, self.mountain, self.mine)
 
     def set_culture(self, culture):
         try:
             if culture == 'Random' or culture == 'random':
-                culture_list = list(catalog.cultures.values())
-                culture_list.remove(catalog.cultures['Error'])
-                self.culture = random.choice(culture_list)
+                new_selector = selector.Selector(catalog.cultures)
+                self.culture = new_selector.simple()
             else:
                 self.culture = catalog.cultures[culture]
         except:
@@ -54,23 +50,11 @@ class City():
         except:
             self.name = 'Error'
 
-    def set_kind(self, kind):
-        try:
-            if kind == 'Random' or kind == 'random':
-                kind_list = list(catalog.city_kinds.values())
-                kind_list.remove(catalog.city_kinds['Error'])
-                self.kind = random.choice(kind_list)
-            else:
-                self.kind = catalog.city_kinds[kind]
-        except:
-            self.kind = catalog.city_kinds['Error']
-
     def set_size(self, size):
         try:
             if size == 'Random' or size == 'random':
-                size_list = list(catalog.city_sizes.values())
-                size_list.remove(catalog.city_sizes['Error'])
-                self.size = random.choice(size_list)
+                new_selector = selector.Selector(catalog.city_sizes)
+                self.culture = new_selector.simple()
             else:
                 self.size = catalog.city_sizes[size]
         except:
@@ -114,7 +98,6 @@ class City():
         self.id = base_city.id
         self.name = base_city.name
         self.culture = catalog.cultures[base_city.culture]
-        self.kind = catalog.city_kinds[base_city.kind]
         self.size = catalog.city_sizes[base_city.size]
         self.population = base_city.population
         self.forest = base_city.forest
@@ -123,18 +106,4 @@ class City():
         self.sea = base_city.sea
         self.mountain = base_city.mountain
         self.mine = base_city.mine
-
-    def special_traveller(self):
-        self.id = None
-        self.name = 'Travellers'
-        self.culture = catalog.cultures['Human']
-        self.kind = catalog.city_kinds['Traveller']
-        self.size = catalog.city_sizes['Error']
-        self.population = 0
-        self.forest = False
-        self.plain = False
-        self.river = False
-        self.sea = False
-        self.mountain = False
-        self.mine = False
 

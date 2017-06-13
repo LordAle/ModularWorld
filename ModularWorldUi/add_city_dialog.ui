@@ -87,78 +87,6 @@
         </property>
        </spacer>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="kindLabel">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Kind :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QComboBox" name="kindComboBox">
-        <item>
-         <property name="text">
-          <string>Random</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="9" column="1">
-       <widget class="QLineEdit" name="populationLineEdit">
-        <property name="text">
-         <string>Random</string>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Geography :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="1">
-       <widget class="QRadioButton" name="geographyButton">
-        <property name="text">
-         <string>Random</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="populationLabel">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Population :</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="cultureLabel">
         <property name="font">
@@ -180,7 +108,7 @@
         </item>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="3" column="1">
        <spacer name="verticalSpacer_4">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -193,7 +121,7 @@
         </property>
        </spacer>
       </item>
-      <item row="7" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="sizeLabel">
         <property name="font">
          <font>
@@ -205,7 +133,7 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
+      <item row="4" column="1">
        <widget class="QComboBox" name="sizeComboBox">
         <property name="editable">
          <bool>false</bool>
@@ -217,7 +145,7 @@
         </item>
        </widget>
       </item>
-      <item row="8" column="1">
+      <item row="5" column="1">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -230,18 +158,41 @@
         </property>
        </spacer>
       </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="exclusiveCheckBox"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="exclusiveLabel">
+      <item row="6" column="0">
+       <widget class="QLabel" name="populationLabel">
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Exclusive</string>
+         <string>Population :</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="populationLineEdit">
+        <property name="text">
+         <string>Random</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Geography :</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QRadioButton" name="geographyButton">
+        <property name="text">
+         <string>Random</string>
         </property>
        </widget>
       </item>

@@ -21,7 +21,7 @@ class City_Connector(Db_Connector):
 
     def write_to_db(self, info_city):
         # Expect a City instance, return new city id
-        new_city = base.City(name=info_city.name, culture=info_city.culture.name, kind=info_city.kind.name, size=info_city.size.name, population=info_city.population,
+        new_city = base.City(name=info_city.name, culture=info_city.culture.name, size=info_city.size.name, population=info_city.population,
                              forest=info_city.forest, plain=info_city.plain, river=info_city.river, sea=info_city.sea,
                              mountain=info_city.mountain, mine=info_city.mine)
         self.session.add(new_city)

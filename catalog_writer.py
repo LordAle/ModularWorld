@@ -67,8 +67,9 @@ with open('catalog.py', 'w') as catalog:
     catalog.write('races = {')
     file_path = os.path.join(path, 'races.csv')
     with open(file_path, newline='') as read_file:
-        reader = csv.DictReader(read_file, delimiter=';')
         catalog.write('''"Error": race.Race("Error", 0, 0, 0, []), \n''')
+        catalog.write('''"Default": race.Race("Default", 0, 0, 0, []), \n''')
+        reader = csv.DictReader(read_file, delimiter=';')
         for row in reader:
             attr_mod_list = list_builder(row['Attributes_modifiers'])
             catalog.write('''"{name}": race.Race("{name}", {working}, {adult}, {old}, {attr_mod}), \n'''.format(
@@ -78,6 +79,8 @@ with open('catalog.py', 'w') as catalog:
     catalog.write('cultures = {')
     file_path = os.path.join(path, 'cultures.csv')
     with open(file_path, newline='') as read_file:
+        catalog.write('''"Error": culture.Culture("Error", races["Error"], [], "Equal", 0, [], []), \n''')
+        catalog.write('''"Default": culture.Culture("Default", races["Error"], [], "Equal", 0, [], []), \n''')
         reader = csv.DictReader(read_file, delimiter=';')
         for row in reader:
             morality_mod_list = list_builder(row['Morality_modifiers'])
@@ -89,41 +92,34 @@ with open('catalog.py', 'w') as catalog:
     catalog.write('city_sizes = {')
     file_path = os.path.join(path, 'city_sizes.csv')
     with open(file_path, newline='') as read_file:
+        catalog.write('''"Error": city_size.City_Size("Error", (0, 0)), \n''')
+        catalog.write('''"Default": city_size.City_Size("Default", (0, 0)), \n''')
         reader = csv.DictReader(read_file, delimiter=';')
         for row in reader:
             catalog.write('''"{name}": city_size.City_Size("{name}", ({min_pop}, {max_pop})), \n'''.format(
                 name=row['Name'], min_pop=row['Min_pop'], max_pop=row['Max_pop']))
     catalog.write('} \n\n')
 
-    catalog.write('building_kinds = {')
-    file_path = os.path.join(path, 'building_kinds.csv')
-    with open(file_path, newline='') as read_file:
-        reader = csv.DictReader(read_file, delimiter=';')
-        for row in reader:
-            groups_list = list_builder(row['Groups'])
-            home_groups_list = list_builder(row['Home_groups'])
-            work_groups_list = list_builder(row['Work_groups'])
-            catalog.write('''"{name}": building_kind.Building_Kind("{name}", {min_pop}, {odds}, {spouse}, {children}, {inheritance}, {groups}, {home_groups}, {work_groups}), \n'''.format(
-                name=row['Name'], min_pop=row['Min_pop'], odds=row['Odds'], spouse=row['Spouse'], children=row['Children'], inheritance=row['Inheritance'], groups=groups_list,
-                home_groups=home_groups_list, work_groups=work_groups_list))
-    catalog.write('} \n\n')
-
     catalog.write('social_groups = {')
     file_path = os.path.join(path, 'social_groups.csv')
     with open(file_path, newline='') as read_file:
+        catalog.write('''"Error": social_group.Social_Group("Error", 0, "", "", [], [], [cultures["Error"]]), \n''')
+        catalog.write('''"Default": social_group.Social_Group("Default", 0, "", "", [], [], [cultures["Error"]]), \n''')
         reader = csv.DictReader(read_file, delimiter=';')
         for row in reader:
             attributes_list = list_builder(row['Attributes'])
             moralities_list = list_builder(row['Moralities'])
             cultures_list = list_builder(row['Cultures'], 'dict_list', 'cultures')
-            catalog.write('''"{name}": social_group.Social_Group("{name}", {inherit}, {odds}, {bias}, "{gender}", "{wealth}", {attributes}, {moralities}, {cultures}), \n'''.format(
-                name=row['Name'], inherit=row['Strict_inheritance'], odds=row['Odds'], bias=row['Parent_bias'], gender=row['Gender'], wealth=row['Wealth'], attributes=attributes_list,
+            catalog.write('''"{name}": social_group.Social_Group("{name}", {inherit}, "{gender}", "{wealth}", {attributes}, {moralities}, {cultures}), \n'''.format(
+                name=row['Name'], inherit=row['Strict_inheritance'], gender=row['Gender'], wealth=row['Wealth'], attributes=attributes_list,
                 moralities=moralities_list, cultures=cultures_list))
     catalog.write('} \n\n')
 
     catalog.write('professions = {')
     file_path = os.path.join(path, 'professions.csv')
     with open(file_path, newline='') as read_file:
+        catalog.write('''"Error": profession.Profession("Error", 0, "", 0), \n''')
+        catalog.write('''"Default": profession.Profession("Default", 0, "", 0), \n''')
         reader = csv.DictReader(read_file, delimiter=';')
         for row in reader:
             catalog.write('''"{name}": profession.Profession("{name}", {wealth}, "{geo}", {unique}), \n'''.format(
@@ -137,7 +133,22 @@ with open('catalog.py', 'w') as catalog:
         for row in reader:
             professions_list = list_builder(row['Professions'], 'dict_list', 'professions')
             catalog.write('''"{name}": professions_group.Professions_Group("{name}", {main}, social_groups["{social}"], "{dist_type}", [{dist_value}], {professions}, [{odds}]), \n'''.format(
-                name=row['Name'], main=row['Base_wealth'], social=row['Social_group'], dist_type=row['Dist_type'], dist_value=row['Dist_value'], professions=professions_list, odds=row['Odds']))
+                name=row['Name'], main=row['Main_figure'], social=row['Social_group'], dist_type=row['Dist_type'], dist_value=row['Dist_value'], professions=professions_list, odds=row['Odds']))
+    catalog.write('} \n\n')
+
+    catalog.write('building_kinds = {')
+    file_path = os.path.join(path, 'building_kinds.csv')
+    with open(file_path, newline='') as read_file:
+        catalog.write('''"Error": building_kind.Building_Kind("Error", 0, 0, 0, 0, 0, [], [], []), \n''')
+        catalog.write('''"Default": building_kind.Building_Kind("Default", 0, 0, 0, 0, 0, [], [], []), \n''')
+        reader = csv.DictReader(read_file, delimiter=';')
+        for row in reader:
+            groups_list = list_builder(row['Groups'], 'dict_list', 'professions_groups')
+            home_groups_list = list_builder(row['Home_groups'], 'dict_list', 'professions_groups')
+            work_groups_list = list_builder(row['Work_groups'], 'dict_list', 'professions_groups')
+            catalog.write('''"{name}": building_kind.Building_Kind("{name}", {min_pop}, {odds}, {spouse}, {children}, {inheritance}, {groups}, {home_groups}, {work_groups}), \n'''.format(
+                name=row['Name'], min_pop=row['Min_pop'], odds=row['Odds'], spouse=row['Spouse'], children=row['Children'], inheritance=row['Inheritance'], groups=groups_list,
+                home_groups=home_groups_list, work_groups=work_groups_list))
     catalog.write('} \n\n')
 
     file_path = os.path.join(path, 'cultures_names.csv')

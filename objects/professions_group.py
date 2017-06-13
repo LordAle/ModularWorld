@@ -12,5 +12,5 @@ class Professions_Group:
         self.professions = professions  # A list of possible Profession objects
         self.professions_odds = professions_odds  # A list of int the same length as professions
 
-        if professions != professions_odds:  # Sends warning message if a error is found in the catalogs csv files
+        if len(professions) != len(professions_odds):  # Sends warning message if a error is found in the catalogs csv files
             print('Profession group {0} has professions and professions_odds of different length! Error will occur!'.format(name))

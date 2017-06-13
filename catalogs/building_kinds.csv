@@ -1,34 +1,34 @@
 Name;Min_pop;Odds;Spouse;Children;Inheritance;Groups;Home_groups;Work_groups
-Farmer;0;8;1;1;1;;;
-Commoner;0;3;1;1;1;;;
-Bourgeois;500;2;1;1;1;;;
-Noble;1000;1;1;1;1;;;
-Tavern;250;5;1;1;1;;;
-Inn;750;2;1;1;1;;;
-Hospital;1500;1;1;1;1;;;
-Bank;5000;1;1;1;1;;;
-General Store;500;5;1;1;1;;;
-Luxury Store;1500;1;1;1;1;;;
-Blacksmith;200;2;1;1;1;;;
-Tailor;0;3;1;1;1;;;
-Leatherwork;0;3;1;1;1;;;
-Woodwork;0;2;1;1;1;;;
-Builder;500;2;1;1;1;;;
-Misc Workshop;1000;1;1;1;1;;;
-Keep;0;0;1;1;1;;;
-Castle (Small);1000;0;1;1;1;;;
-Castle (Large);8000;0;1;1;1;;;
-Shrine;0;5;0;0;0;;;
-Church;1000;2;0;0;0;;;
-Cathedral;8000;1;0;0;0;;;
-School;1000;5;0;0;0;;;
-University;8000;1;0;0;0;;;
-Prison;500;5;0;0;0;;;
-Barrack;1000;5;0;0;0;;;
-Fortress;8000;1;0;0;0;;;
-Thieves Den;1000;1;0;0;0;;;
-Criminal Front;1000;1;0;0;0;;;
-Artists Guild;1000;5;0;0;0;;;
-Circus;3000;2;0;0;0;;;
-Museum;8000;1;0;0;0;;;
+Farmer;0;8;1;4;1;Master Food;;
+Commoner;0;3;1;4;1;Master Commoner;;
+Bourgeois;500;2;1;3;1;Master Bourgeois;;Maid Few
+Noble;1000;1;1;4;1;Maid Some, Guard Few;Master Noble;
+Tavern;250;5;1;4;1;Master Tavern;;Maid Few
+Inn;750;2;1;3;1;Master Inn, Maid Some;;
+Hospital;1500;1;1;3;1;Master Hospital;;Hospital Employee
+Bank;5000;1;1;3;1;Master Bank;;Guard Some
+General Store;500;5;1;3;1;Master General Store;;
+Luxury Store;1500;1;1;3;1;Master Luxury Store;;Guard Few
+Blacksmith;200;2;1;4;1;Master Blacksmith, Apprentice Few;;Tenter Some
+Tailor;0;3;1;4;1;Master Tailor, Apprentice Few;;Tenter Few
+Leatherwork;0;3;1;4;1;Master Leatherwork, Apprentice Few;;Tenter Few
+Woodwork;0;2;1;4;1;Master Woodwork, Apprentice Few;;Tenter Some
+Builder;500;2;1;4;1;Master Builder, Apprentice Some;;Tenter Many
+Misc Workshop;1000;1;1;4;1;Master Misc Workshop, Apprentice Few;;Tenter Few
+Keep;0;0;1;4;1;Master Stronghold, Maid Some, Guard Some;;
+Castle (Small);1000;0;1;4;1;Master Stronghold, Maid Some, Guard Some;;
+Castle (Large);8000;0;1;4;1;Master Stronghold, Maid Many, Guard Many;;
+Shrine;0;5;0;0;0;Master Shrine;;
+Church;1000;2;0;0;0;Master Church, Acolyte Few;;
+Cathedral;8000;1;0;0;0;Master Cathedral, Acolyte Few, Priest Few;;
+School;1000;5;0;0;0;Master School;;
+University;8000;1;0;0;0;Master University, Scholar Many;;
+Prison;500;5;0;0;0;;;Master Prison, Guard Some
+Barrack;1000;5;0;0;0;Master Barrack, Guard Many;;
+Fortress;8000;1;0;0;0;Master Fortress, Guard Many;;
+Thieves Den;1000;1;0;0;0;Master Thieves Den, Thief Some;;
+Criminal Front;1000;1;0;2;0;Master Criminal Front;;
+Artists Guild;1000;5;0;0;0;Master Artists Guild, Artist Some;;
+Circus;3000;2;0;0;0;Master Circus, Artist Some;;
+Museum;8000;1;0;0;0;Master Museum;;Guard Few
 Homeless;0;0;0;0;0;;;

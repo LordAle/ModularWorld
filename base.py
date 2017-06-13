@@ -11,7 +11,6 @@ class City(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     culture = Column(String)
-    kind = Column(String)
     size = Column(String)
     population = Column(Integer)
 
@@ -22,8 +21,8 @@ class City(Base):
     mountain = Column(Boolean)
     mine = Column(Boolean)
 
-    buildings = relationship('Building', back_populates='city')
-    characters = relationship('Character', back_populates='city')
+    #buildings = relationship('Building', back_populates='city')
+    #characters = relationship('Character', back_populates='city')
 
     note = Column(String(10000))
 
@@ -34,12 +33,11 @@ class Building(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     kind = Column(String)
-    subkind = Column(String)
 
     city_id = Column(Integer, ForeignKey('cities.id'))
-    city = relationship(City, back_populates='buildings')
+    #city = relationship(City, back_populates='buildings')
 
-    characters = relationship('Character', back_populates='building')
+    #characters = relationship('Character', back_populates='building')
 
     note = Column(String(10000))
 
@@ -59,27 +57,29 @@ class Character(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     fname = Column(String)
+    culture = Column(String)
     race = Column(String)
     gender = Column(String)
     age = Column(Integer)
-    role = Column(String)
+    social_group = Column(String)
     profession = Column(String)
     wealth = Column(String)
-    classe = Column(String)
-    level = Column(Integer)
+    attributes = Column(String)
+    moralities = Column(Integer)
+    family_role = Column(Integer)
 
-    family_id = Column(Integer)
+    family_id = Column(Integer, ForeignKey('families.id'))
     # family = relationship(Family, back_populates='characters') # Breaks base.City????
 
     city_id = Column(Integer, ForeignKey('cities.id'))
-    city = relationship(City, back_populates='characters')
+    #city = relationship(City, back_populates='characters')
 
     building_id = Column(Integer, ForeignKey('buildings.id'))
-    building = relationship(Building, back_populates='characters')
+    #building = relationship(Building, back_populates='characters')
 
-    visiting_id = Column(Integer)
+    work_building_id = Column(Integer, ForeignKey('buildings.id'))
+
+    visiting_id = Column(Integer, ForeignKey('buildings.id'))
 
     note = Column(String(10000))
 
-    # work_building_id = Column(Integer, ForeignKey('buildings.id'))
-    # work_building = relationship(Building, back_populate='characters')

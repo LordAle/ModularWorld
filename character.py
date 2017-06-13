@@ -1,39 +1,42 @@
 import math
 import random
+import catalog
 
-from catalogs import catalog_building
-from catalogs import catalog_character
-from catalogs import catalog_profession
+#from catalogs import catalog_building
+#from catalogs import catalog_character
+#from catalogs import catalog_profession
 
-from catalogs import catalog_character_names
-from objects import role_professions
+#from catalogs import catalog_character_names
+#from objects import role_professions
 
 
 class Character():
 
-    names_list = ['Id', 'Name', 'Family', 'Race', 'Gender', 'Age', 'Role', 'Profession', 'Wealth', 'Class', 'Level',
-                  'Family', 'Building', 'City', 'Visiting']
-
-    def __init__(self, in_city=None, in_building=None, core=None):
+    def __init__(self, in_city=None, in_building=None):
         self.id = None
         self.name = 'Default name'
         self.fname = 'Default fname'
-        self.race = 'Default race'
+        self.culture = catalog.cultures['Default']
+        self.race = catalog.races['Error']
         self.gender = 'Default gender'
         self.age = 0
-        self.role = 'Default role'
+        self.social_group = catalog.social_groups['Default']
         self.profession = 'Default profession'
         self.wealth = 'Default Wealth'
-        self.classe = 'Default class'
-        self.level = 0
+        self.attributes = []
+        for x in catalog.attributes:
+            self.attributes.append(0)
+        self.moralities = []
+        for x in catalog.moralities:
+            self.moralities.append(0)
+        self.family_role = None
         self.family_id = None
         self.city_id = None
         self.building_id = None
+        self.working_id = None
         self.visiting_id = None
         self.in_city = in_city
         self.in_building = in_building
-        self.core = core
-        self.update_value_list()
 
     def set_from_dialog(self, param):
         # Generic function to add character from dialog

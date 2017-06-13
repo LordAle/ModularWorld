@@ -23,10 +23,6 @@ class add_city_dialog(QtWidgets.QDialog, add_city_ui):
         self.cultureModel.setStringList(['Random'] + [x.name for x in catalog.cultures.values() if x.name != 'Error'])
         self.cultureComboBox.setModel(self.cultureModel)
 
-        self.kindModel = models.StringListModel()
-        self.kindModel.setStringList([x.name for x in catalog.city_kinds.values() if x.name != 'Error'])
-        self.kindComboBox.setModel(self.kindModel)
-
         self.sizeModel = models.StringListModel()
         self.sizeModel.setStringList(['Random'] + [x.name for x in catalog.city_sizes.values() if x.name != 'Error'])
         self.sizeComboBox.setModel(self.sizeModel)
@@ -40,7 +36,6 @@ class add_city_dialog(QtWidgets.QDialog, add_city_ui):
                         'sea': self.seaCheckBox.checkState(), 'mountain': self.mountainsCheckBox.checkState(), 'mine': self.minesCheckBox.checkState()}
 
         param = {'name': self.nameLineEdit.text(),
-                 'kind': self.kindComboBox.currentText(),
                  'population': self.populationLineEdit.text(),
                  'culture': self.cultureComboBox.currentText(),
                  'size': self.sizeComboBox.currentText(),

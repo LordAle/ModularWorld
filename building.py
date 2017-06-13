@@ -1,69 +1,48 @@
-import random
-# from catalogs import catalog_city
-from catalogs import catalog_building
+import catalog
+import selector
+import city
 
 
-class Building():
-
-    names_list = ['Id', 'Name', 'Kind', 'Subkind', 'City']
+class Building:
+    """ Class used to generate and handle buildings. A 'building' is location used to group people together by their occupations """
 
     def __init__(self, in_city=None):
         self.id = None
         self.name = 'Default name'
-        self.kind = 'Default kind'
-        self.subkind = 'Default subkind'
+        self.kind = catalog.building_kinds['Default']
         self.in_city = in_city
         self.city_id = None
+
+        if type(in_city) is not city.City:
+            print('No city associated with building!')
+            raise Exception
 
     def set_from_dialog(self, param):
         # Expect dictionary with keys: name, kind
         self.set_name(param['name'])
         self.set_kind(param['kind'])
-        self.set_subkind(param['subkind'])
+        self.set_city_id(self.in_city.id)
 
     def set_name(self, name):
         self.name = name
-        if self.name == 'Random':
-            self.name = 'Random (placeholder)'
+        if self.name == 'Random' or self.name == 'random':
+            self.name = 'Random'
 
     def set_kind(self, kind):
-        self.kind = kind
-        if self.kind == 'Random':
-            info_list = [(x.name, x.odds) for x in catalog_building.kinds]
-            choice_list = self.build_weighted_list(info_list)
-            self.kind = random.choice(choice_list)
-
-    def set_subkind(self, subkind):
-        self.subkind = subkind
-        if self.subkind == 'Random':
-            info_list = [(x.name, x.odds) for x in catalog_building.subkinds if (x.kind.name == self.kind and
-                                                                                 x.min_city_size <= self.in_city.population)]
-            choice_list = self.build_weighted_list(info_list)
-            if choice_list:
-                self.subkind = random.choice(choice_list)
+        try:
+            if kind == 'Random':
+                new_selector = selector.Selector(catalog.building_kinds)
+                self.kind = new_selector.building_kind(self.in_city.population)
             else:
-                self.subkind = 'No valid subkind'
+                self.kind = catalog.building_kinds[kind]
+        except:
+            self.kind = catalog.building_kinds['Error']
 
     def set_city_id(self, city_id):
         self.city_id = city_id
 
-    def special_floating(self, city_id):
-        self.name = 'Floating'
-        self.kind = 'Floating'
-        self.subkind = 'Floating'
-        self.set_city_id(city_id)
-
     def set_from_db(self, base_building):
         self.id = base_building.id
         self.name = base_building.name
-        self.kind = base_building.kind
-        self.subkind = base_building.subkind
+        self.kind = catalog.building_kinds[base_building.kind]
         self.city_id = base_building.city_id
-
-    def build_weighted_list(self, info_list):
-        # require a list of tuples in the form [{item, weight}, (item, weight)...]
-        new_list = []
-        for item in info_list:
-            for time in range(item[1]):
-                new_list.append(item[0])
-        return new_list
