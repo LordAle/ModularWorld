@@ -1,14 +1,16 @@
+from constructor import Constructor
 import random
 import catalog
 import selector
 
 
-class City:
+
+class City (Constructor):
     """ Class used to generate and handle cities. A 'city' is any large association of people clustered in 'buildings'. """
 
     def __init__(self):
         self.id = None
-        self.name = 'Default name'
+        self.name = 'Default'
         self.culture = catalog.cultures['Default']
         self.size = catalog.city_sizes['Default']
         self.population = 0

@@ -6,174 +6,194 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>447</width>
-    <height>510</height>
+    <width>480</width>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="horizontalLayoutWidget">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>40</y>
-     <width>311</width>
-     <height>361</height>
+     <x>10</x>
+     <y>10</y>
+     <width>451</width>
+     <height>359</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="font">
-           <font>
-            <pointsize>14</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
+       <widget class="QLabel" name="label">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Character</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="nameLabel_2">
           <property name="text">
-           <string>Character</string>
+           <string>Name :</string>
           </property>
          </widget>
         </item>
-        <item>
-         <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
-           <widget class="QLabel" name="nameLabel_2">
-            <property name="text">
-             <string>Name :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="coreNameLineEdit">
-            <property name="text">
-             <string>Random</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="familyNameLabel">
-            <property name="text">
-             <string>Family Name :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="familyNameLineEdit">
-            <property name="text">
-             <string>Random</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="raceLabel">
-            <property name="text">
-             <string>Race :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QComboBox" name="raceComboBox"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="genderLabel">
-            <property name="text">
-             <string>Gender :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QComboBox" name="genderComboBox"/>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="ageLabel">
-            <property name="text">
-             <string>Age :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="roleLabel">
-            <property name="text">
-             <string>Role :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="professionLabel">
-            <property name="text">
-             <string>Profession :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QComboBox" name="professionComboBox"/>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="classLabel">
-            <property name="text">
-             <string>Class :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1">
-           <widget class="QComboBox" name="classComboBox"/>
-          </item>
-          <item row="9" column="0">
-           <widget class="QLabel" name="levelLabel">
-            <property name="text">
-             <string>Level :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1">
-           <widget class="QLineEdit" name="levelLineEdit">
-            <property name="text">
-             <string>Random</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="ageLineEdit">
-            <property name="text">
-             <string>Random</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="wealthLabel">
-            <property name="text">
-             <string>Wealth :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QComboBox" name="wealthComboBox"/>
-          </item>
-          <item row="5" column="1">
-           <widget class="QComboBox" name="roleComboBox"/>
-          </item>
-         </layout>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="coreNameLineEdit">
+          <property name="text">
+           <string>Random</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="familyNameLabel">
+          <property name="text">
+           <string>Family Name :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="familyNameLineEdit">
+          <property name="text">
+           <string>Random</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="cultureLabel">
+          <property name="text">
+           <string>Culture : </string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="cultureComboBox"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="raceLabel">
+          <property name="text">
+           <string>Race :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="raceComboBox"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="genderLabel">
+          <property name="text">
+           <string>Gender :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QComboBox" name="genderComboBox"/>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="ageLabel">
+          <property name="text">
+           <string>Age :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="ageLineEdit">
+          <property name="text">
+           <string>Random</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="socialGroupLabel">
+          <property name="text">
+           <string>Social Group</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QComboBox" name="socialGroupComboBox"/>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="professionLabel">
+          <property name="text">
+           <string>Profession :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QComboBox" name="professionComboBox"/>
+        </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="familyRoleLabel">
+          <property name="text">
+           <string>Family Role</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QComboBox" name="familyRoleComboBox"/>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="wealthLabel">
+          <property name="text">
+           <string>Wealth : </string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1">
+         <widget class="QLineEdit" name="wealthLineEdit">
+          <property name="text">
+           <string>Random</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QDialogButtonBox" name="buttonBox">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       <widget class="QCheckBox" name="liveCheckBox">
+        <property name="text">
+         <string> Live</string>
         </property>
-        <property name="standardButtons">
-         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="workCheckBox">
+        <property name="text">
+         <string> Work</string>
         </property>
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

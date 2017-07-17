@@ -31,3 +31,4 @@ class Db_Loader():
 
         self.Session = sessionmaker(bind=self.engine)
 
+loader = Db_Loader()

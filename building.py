@@ -1,27 +1,23 @@
+from constructor import Constructor
 import catalog
 import selector
+import associator
 import city
 
 
-class Building:
+class Building(Constructor):
     """ Class used to generate and handle buildings. A 'building' is location used to group people together by their occupations """
 
-    def __init__(self, in_city=None):
+    def __init__(self):
         self.id = None
-        self.name = 'Default name'
+        self.name = 'Default'
         self.kind = catalog.building_kinds['Default']
-        self.in_city = in_city
-        self.city_id = None
-
-        if type(in_city) is not city.City:
-            print('No city associated with building!')
-            raise Exception
+        self.in_city = city.City()
 
     def set_from_dialog(self, param):
         # Expect dictionary with keys: name, kind
         self.set_name(param['name'])
         self.set_kind(param['kind'])
-        self.set_city_id(self.in_city.id)
 
     def set_name(self, name):
         self.name = name
@@ -38,11 +34,12 @@ class Building:
         except:
             self.kind = catalog.building_kinds['Error']
 
-    def set_city_id(self, city_id):
-        self.city_id = city_id
-
     def set_from_db(self, base_building):
         self.id = base_building.id
         self.name = base_building.name
         self.kind = catalog.building_kinds[base_building.kind]
-        self.city_id = base_building.city_id
+        self.associate(base_building.city_id)
+
+    def associate(self, city_id):
+        new_associator = associator.Associator(self)
+        new_associator.associate(city_id=city_id)

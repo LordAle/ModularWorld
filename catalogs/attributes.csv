@@ -1,7 +1,7 @@
-Name;Dist_type;Dist_value
-Strength;Triangular;8,19,10
-Dexterity;Triangular;8,19,10
-Constitution;Triangular;8,19,10
-Intelligence;Triangular;8,19,10
-Wisdom;Triangular;8,19,10
-Charisma;Triangular;8,19,10
+Name;Range;Mean;Variance;Rounding
+Strength;7,19;10;2;1
+Dexterity;7,19;10;2;1
+Constitution;7,19;10;2;1
+Intelligence;7,19;10;2;1
+Wisdom;7,19;10;2;1
+Charisma;7,19;10;2;1

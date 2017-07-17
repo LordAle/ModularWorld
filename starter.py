@@ -5,7 +5,7 @@ import building
 import character
 import city
 import db_connector
-import db_loader
+from db_loader import loader
 import delete_dialogs
 import family
 import models
@@ -19,14 +19,12 @@ import catalog_writer
 class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
     """Initialize main window, attribute models and define Actions method. Also keep sqlAlcehmy database interface alive"""
 
-    def __init__(self, loader):
+    def __init__(self):
         super(self.__class__, self).__init__()
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.add_dialog = None
         self.delete_dialog = None
-
-        self.loader = loader
 
         # Models triggers
         self.listViewCities.clicked.connect(self.action_city_click)
@@ -57,14 +55,14 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
     def new_database(self):
         dbname = self.new_file_dialog('New database', 'C:\\Users\LordAle\PycharmProjects\ModularWorld\database')
         if dbname[0]:
-            self.loader.create_new(dbname[0])
+            loader.create_new(dbname[0])
             self.open_QConnection(dbname[0])
             self.setup_new_db()
 
     def load_database(self):
         dbname = self.open_file_dialog('Open database', 'C:\\Users\LordAle\PycharmProjects\ModularWorld\database')
         if dbname[0]:
-            self.loader.create_new(dbname[0])
+            loader.create_new(dbname[0])
             self.open_QConnection(dbname[0])
 
     def open_QConnection(self, db_name):
@@ -315,7 +313,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         selected_city_id = self.get_selected_city_id()
 
         try:
-            manager = visitor_manager.Visitor_manager(selected_building_id, selected_city_id, self.comboBoxVisitor.currentText(), self.lineEditVisitor.text(), self.loader)
+            manager = visitor_manager.Visitor_manager(selected_building_id, selected_city_id, self.comboBoxVisitor.currentText(), self.lineEditVisitor.text(), loader)
             manager.add_visitor()
         except:
             return
@@ -353,19 +351,19 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
     #Qury items from DB
 
     def get_cities_from_db(self, filter_by, filter_value):
-        connector = db_connector.City_Connector(self.loader)
+        connector = db_connector.City_Connector()
         result = connector.load_from_db(filter_by, filter_value)
         connector.close_session()
         return result
 
     def get_buildings_from_db(self, filter_by, filter_value):
-        connector = db_connector.Building_Connector(self.loader)
+        connector = db_connector.Building_Connector()
         result = connector.load_from_db(filter_by, filter_value)
         connector.close_session()
         return result
 
     def get_characters_from_db(self, filter_by, filter_value):
-        connector = db_connector.Character_Connector(self.loader)
+        connector = db_connector.Character_Connector()
         result = connector.load_from_db(filter_by, filter_value)
         connector.close_session()
         return result
@@ -416,38 +414,29 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         new_city = city.City()
         new_city.set_from_dialog(city_dict)
 
-        connector = db_connector.City_Connector(self.loader)
+        connector = db_connector.City_Connector()
         new_city_id = connector.write_to_db(new_city)
         connector.close_session()
 
-        self.add_floating_building(new_city_id)
-
         self.query_cities_name()
 
-    def add_building(self, building_dict, auto_populate, core_character=None,  in_city_id='selected'):
+    def add_building(self, building_dict, auto_populate, in_city_id='selected'):
         if in_city_id == 'selected':
             city_id = self.get_selected_city_id()
         else:
             city_id = in_city_id
 
-        in_city = self.get_cities_from_db('id', city_id)
-        in_city = in_city[0]
+        new_building = building.Building()
+        new_building.associate(city_id)
+        new_building.set_from_dialog(building_dict)
 
-        new_building = building.Building(in_city)
-        try:
-            new_building.set_from_dialog(building_dict)
-        except:
-            raise Exception
-        new_building.set_city_id(city_id)
-
-        connector = db_connector.Building_Connector(self.loader)
+        connector = db_connector.Building_Connector()
         new_building_id = connector.write_to_db(new_building)
         connector.close_session()
 
         if auto_populate:
             # construction_info = catalogs_character.profession[new_building.kind][new_building.subkind]
-            new_populator = populator.Populator(core_character, new_building, new_building_id, in_city, city_id,
-                                                self.loader)
+            new_populator = populator.Populator(new_building, new_building_id, city_id, loader)
             new_populator.populate()
 
         self.query_buildings_name(city_id)
@@ -459,17 +448,9 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         if building_id == 'selected':
             building_id = self.get_selected_building_id()
 
-        in_city = self.get_cities_from_db('id', city_id)
-        in_city = in_city[0]
-        in_building = self.get_buildings_from_db('id', building_id)
-        in_building = in_building[0]
-
-        core_character = self.get_core_character(building_id)
-
-        new_character = character.Character(in_city=in_city, in_building=in_building, core=core_character)
+        new_character = character.Character()
+        new_character.basic_associate(city_id, building_id, character_dict)
         new_character.set_from_dialog(character_dict)
-        new_character.set_building_id(building_id)
-        new_character.set_city_id(city_id)
 
         if core_character and new_character.role == 'Child':
             new_character.set_family_id(core_character.family_id)
@@ -477,7 +458,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             family_id = self.add_family(new_character.fname)
             new_character.set_family_id(family_id)
 
-        connector = db_connector.Character_Connector(self.loader)
+        connector = db_connector.Character_Connector()
         connector.write_to_db(new_character)
         connector.close_session()
 
@@ -488,27 +469,11 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
     def add_family(self, family_name):
         new_family = family.Family(family_name)
 
-        connector = db_connector.Family_Connector(self.loader)
+        connector = db_connector.Family_Connector()
         family_id = connector.write_to_db(new_family)
         connector.close_session()
 
         return family_id
-
-    def add_floating_building(self, city_id):
-        floating_building = building.Building()
-        floating_building.special_floating(city_id)
-
-        connector = db_connector.Building_Connector(self.loader)
-        new_building_id = connector.write_to_db(floating_building)
-        connector.close_session()
-
-    def get_core_character(self, building_id):
-        connector = db_connector.Character_Connector(self.loader)
-        characters = connector.load_from_db('building_id', building_id)
-        for character in characters:
-            if character.role == 'Master':
-                return character
-        return None
 
 # Add entry from popup methods -----------------------------------------------------End
 
@@ -518,7 +483,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         if character_id == 'selected':
             character_id = self.get_selected_character_id()
 
-        connector = db_connector.Character_Connector(self.loader)
+        connector = db_connector.Character_Connector()
         connector.delete_entry(character_id)
         connector.close_session()
 
@@ -528,13 +493,13 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         if building_id == 'selected':
             building_id = self.get_selected_building_id()
 
-        char_connector = db_connector.Character_Connector(self.loader)
+        char_connector = db_connector.Character_Connector()
         characters = char_connector.load_from_db('building_id', building_id)
         char_connector.close_session()
         for deleted in characters:
             self.delete_character(deleted.id)
 
-        connector = db_connector.Building_Connector(self.loader)
+        connector = db_connector.Building_Connector()
         connector.delete_entry(building_id)
         connector.close_session()
 
@@ -544,13 +509,13 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         if city_id == 'selected':
             city_id = self.get_selected_city_id()
 
-        building_connector = db_connector.Building_Connector(self.loader)
+        building_connector = db_connector.Building_Connector()
         buildings = building_connector.load_from_db('city_id', city_id)
         building_connector.close_session()
         for deleted in buildings:
             self.delete_building(deleted.id)
 
-        connector = db_connector.City_Connector(self.loader)
+        connector = db_connector.City_Connector()
         connector.delete_entry(city_id)
         connector.close_session()
 
@@ -622,8 +587,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    loader = db_loader.Db_Loader()
-    controller = Controller(loader)
+    controller = Controller()
 
     controller.show()
     sys.exit(app.exec_())

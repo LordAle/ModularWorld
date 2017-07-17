@@ -22,11 +22,21 @@ class Selector:
 
     def building_kind(self, city_pop):
         total_odds = 0
+        to_delete = []
         for key, value in self.selection.items():
             if value.min_pop > city_pop:
-                del self.selection[key]
+                to_delete.append(key)
             else:
                 total_odds = total_odds + value.odds
+        for key in to_delete:
+            del self.selection[key]
+        return self.weighted(total_odds)
+
+    def minority_culture(self, main_culture):
+        self.selection = {name: self.selection[name] for name in main_culture.other_cultures}
+        total_odds = 0
+        for key, value in self.selection.items():
+            total_odds = total_odds + value.other_cultures_odds
         return self.weighted(total_odds)
 
     def remove_error(self):
