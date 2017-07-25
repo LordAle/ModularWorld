@@ -35,7 +35,8 @@ FORMS    += mainwindow.ui \
     add_building_dialog.ui \
     add_char_dialog.ui \
     delete_dialog.ui \
-    mainwindow_copy.ui \
-    map_view.ui
+    map_view.ui \
+    mainwindow_dev.ui \
+    add_group_dialog.ui
 
 DISTFILES +=

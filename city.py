@@ -30,12 +30,9 @@ class City (Constructor):
         self.set_population(param['population'])
         self.set_geography(param['geography'])
 
-        print(self.name, self.culture.name, self.size.name, self.population)
-        print(self.forest, self.plain, self.river, self.sea, self.mountain, self.mine)
-
     def set_culture(self, culture):
         try:
-            if culture == 'Random' or culture == 'random':
+            if culture == 'Random':
                 new_selector = selector.Selector(catalog.cultures)
                 self.culture = new_selector.simple()
             else:
@@ -45,7 +42,7 @@ class City (Constructor):
 
     def set_name(self, name):
         try:
-            if name == 'Random' or name == 'random':
+            if name == 'Random' or name == 'random' or not name:
                 self.name = random.choice(self.culture.city_names)
             else:
                 self.name = name
@@ -54,9 +51,9 @@ class City (Constructor):
 
     def set_size(self, size):
         try:
-            if size == 'Random' or size == 'random':
+            if size == 'Random':
                 new_selector = selector.Selector(catalog.city_sizes)
-                self.culture = new_selector.simple()
+                self.size = new_selector.simple()
             else:
                 self.size = catalog.city_sizes[size]
         except:
@@ -64,7 +61,7 @@ class City (Constructor):
 
     def set_population(self, pop):
         try:
-            if pop == 'Random' or pop == 'random':
+            if pop == 'Random' or pop == 'random' or not pop:
                 self.population = random.randint(self.size.pop_range[0], self.size.pop_range[1])
             else:
                 self.population = int(pop)
@@ -81,17 +78,17 @@ class City (Constructor):
                 self.mountain = random.choice([True, False])
                 self.mine = random.choice([True, False])
             else:
-                if geo['forest']:
+                if geo.get('forest', False):
                     self.forest = True
-                if geo['plain']:
+                if geo.get('plain', False):
                     self.plain = True
-                if geo['river']:
+                if geo.get('river', False):
                     self.river = True
-                if geo['sea']:
+                if geo.get('sea', False):
                     self.sea = True
-                if geo['mountain']:
+                if geo.get('mountain', False):
                     self.mountain = True
-                if geo['mine']:
+                if geo.get('mine', False):
                     self.mine = True
         except:
             pass

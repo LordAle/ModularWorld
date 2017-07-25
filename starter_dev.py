@@ -1,5 +1,5 @@
 import sys
-from PyQt5 import QtCore, QtWidgets, QtSql
+from PyQt5 import Qt, QtCore, QtWidgets, QtSql, QtGui
 from db_loader import loader
 from ModularWorldUi.mainwindow import Ui_MainWindow
 import catalog_writer
@@ -26,31 +26,41 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.add_dialog = None
         self.delete_dialog = None
 
+        # Declare models
+        self.treeModel = QtGui.QStandardItemModel()
+
         # Models triggers
-        self.listViewCities.clicked.connect(self.action_city_click)
-        self.listViewBuildings.clicked.connect(self.action_building_click)
-        self.listViewCharacters.clicked.connect(self.action_character_click)
+        # self.listViewCities.clicked.connect(self.action_city_click)
+        # self.listViewBuildings.clicked.connect(self.action_building_click)
+        # self.listViewCharacters.clicked.connect(self.action_character_click)
 
         # Buttons triggers
-        self.pushButtonAddCity.clicked.connect(self.add_city_click)
-        self.pushButtonAddBuilding.clicked.connect(self.add_building_click)
-        self.pushButtonAddCharacter.clicked.connect(self.add_character_click)
-        self.pushButtonDeleteCity.clicked.connect(self.delete_city_click)
-        self.pushButtonDeleteBuilding.clicked.connect(self.delete_building_click)
-        self.pushButtonDeleteCharacter.clicked.connect(self.delete_character_click)
+        # self.pushButtonAddCity.clicked.connect(self.add_city_click)
+        # self.pushButtonAddBuilding.clicked.connect(self.add_building_click)
+        # self.pushButtonAddCharacter.clicked.connect(self.add_character_click)
+        # self.pushButtonDeleteCity.clicked.connect(self.delete_city_click)
+        # self.pushButtonDeleteBuilding.clicked.connect(self.delete_building_click)
+        # self.pushButtonDeleteCharacter.clicked.connect(self.delete_character_click)
+
+        # Contextual menus
+        self.treeView.addAction(self.actionAddCity)
+        self.treeView.addAction(self.actionAddBuilding)
+        self.treeView.addAction(self.actionAddGroup)
 
         self.pushButtonShowFamily.clicked.connect(self.show_family_click)
         self.pushButtonVisitor.clicked.connect(self.show_visitor_click)
 
+        # Actions triggers
         self.actionNewDatabase.triggered.connect(self.action_new_database)
         self.actionLoadDatabase.triggered.connect(self.action_load_database)
+
+        self.actionAddCity.triggered.connect(self.add_city_click)
+        self.actionAddBuilding.triggered.connect(self.add_building_click)
+        self.actionAddGroup.triggered.connect(self.add_group_click)
 
         self.actionCity_table.triggered.connect(self.action_full_city)
         self.actionBuilding_table.triggered.connect(self.action_full_building)
         self.actionCharacter_table.triggered.connect(self.action_full_character)
-
-        # Other variable
-        side_values_list = []
 
     def new_database(self):
         dbname = self.new_file_dialog('New database', 'C:\\Users\LordAle\PycharmProjects\ModularWorld\database')
@@ -74,16 +84,11 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             print('Connection OK!')
         self.set_models()
-        self.query_cities_name()
+        self.build_tree_model()
 
     def set_models(self):
-        self.cities_list_model = models.SqlQueryModel()
-        self.listViewCities.setModel(self.cities_list_model)
-        self.buildings_list_model = models.SqlQueryModel()
-        self.listViewBuildings.setModel(self.buildings_list_model)
-        self.characters_list_model = models.SqlQueryModel()
-        self.listViewCharacters.setModel(self.characters_list_model)
 
+        #Assign models
         self.table_content_model = models.SqlRelationalModel(db=self.QConnection)
         self.tableViewContent.setModel(self.table_content_model)
         self.tableViewContent.setItemDelegate(QtSql.QSqlRelationalDelegate(self.tableViewContent))
@@ -96,50 +101,71 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.listViewSelectedValue.setModel(self.side_view_value_model)
 
     def setup_new_db(self):
-        self.query_cities_name()
+        pass
 
 
 # View query methods ---------------------------------------------------------------Begin
 
-    #Selected object ID
+    # Selected object ID
+    def get_selected_id(self):
+        selected_index = self.treeView.selectionModel().currentIndex()
+        selected_item = self.treeModel.itemFromIndex(selected_index)
+        return selected_item.data(20)
 
-    def get_selected_city_id(self):
-        city_index = self.listViewCities.currentIndex()
-        city_record = self.cities_list_model.record(city_index.row())
-        city_id = city_record.field(1).value()
-        return city_id
+    # Set correct list for city / building / character
+    def build_tree_model(self):
+        # Data role 20 is for item id in database, 21 is for table name
 
-    def get_selected_building_id(self):
-        building_index = self.listViewBuildings.currentIndex()
-        building_record = self.buildings_list_model.record(building_index.row())
-        building_id = building_record.field(1).value()
-        return building_id
+        self.treeModel.clear()
+        self.treeModel.setHorizontalHeaderItem(0, QtGui.QStandardItem('World'))
+        parent_node = self.treeModel.invisibleRootItem()
 
-    def get_selected_character_id(self):
-        character_index = self.listViewCharacters.currentIndex()
-        character_record = self.characters_list_model.record(character_index.row())
-        character_id = character_record.field(1).value()
-        return character_id
+        # Sql Queries
+        city_query = QtSql.QSqlQuery("SELECT name, id FROM cities")
+        cities_list = []
+        while city_query.next():
+            cities_list.append([city_query.value(0), city_query.value(1)])
 
-    #Set correct list for city / building / character
+        building_query = QtSql.QSqlQuery("SELECT name, id, city_id FROM buildings")
+        buildings_list = []
+        while building_query.next():
+            buildings_list.append([building_query.value(0), building_query.value(1), building_query.value(2)])
 
-    def query_cities_name(self):
-        self.cities_list_model.clear()
-        query = QtSql.QSqlQuery("SELECT name, id FROM cities")
-        self.cities_list_model.setQuery(query)
+        for cit in cities_list:
+            c = QtGui.QStandardItem(cit[0])
+            c.setData(cit[1], 20)
+            c.setData('cities', 21)
+            parent_node.appendRow(c)
+            parent_city = c
 
-    def query_buildings_name(self, city_id):
-        self.buildings_list_model.clear()
-        query = QtSql.QSqlQuery("SELECT name, id FROM buildings WHERE city_id = {0}".format(city_id))
-        self.buildings_list_model.setQuery(query)
+            city_buildings = [b for b in buildings_list if b[2] == c.data(20)]
+            for bui in city_buildings:
+                b = QtGui.QStandardItem(bui[0])
+                b.setData(bui[1], 20)
+                b.setData('buildings', 21)
+                parent_city.appendRow(b)
 
-    def query_characters_name(self, building_id):
-        self.characters_list_model.clear()
-        query = QtSql.QSqlQuery("SELECT name, id FROM characters WHERE building_id = {0}".format(building_id))
-        self.characters_list_model.setQuery(query)
+        self.treeView.setModel(self.treeModel)
 
-    #Side view
+    # Unused, could be implemented to optimize item addition to view
+    def update_tree_model(self, table, item_id, parent=None):
+        query = None
+        if table == 'cities':
+            query = QtSql.QSqlQuery("SELECT name, id FROM cities WHERE id = {0}".format(item_id))
+            parent = self.treeModel.invisibleRootItem()
+        if table == 'buildings':
+            query = QtSql.QSqlQuery("SELECT name, id, city_id FROM buildings WHERE id = {0}".format(item_id))
+            if not parent:
+                selected_index = self.treeView.selectionModel().currentIndex()
+                parent = self.treeModel.itemFromIndex(selected_index)
 
+        while query.next():
+            new_item = QtGui.QStandardItem(query.value(0))
+            new_item.setData(QtGui.QStandardItem(query.value(1)), 20)
+            new_item.setData(QtGui.QStandardItem(table), 21)
+            parent.appendRow(new_item)
+
+    # Side view
     def set_city_side_view(self, city_id):
         side_values_list = ['ID: {0}'.format(city_id)]
         selected_city = self.get_cities_from_db('id', city_id)
@@ -199,7 +225,6 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.side_view_value_model.setStringList(side_values_list)
 
     # Set main table model
-
     def set_building_table(self, city_id):
         self.table_content_model.setEditStrategy(models.SqlTableModel.OnFieldChange)
         self.table_content_model.setTable('buildings')
@@ -279,9 +304,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table_content_model.setHeaderData(14, QtCore.Qt.Horizontal, 'Spouse Family')
             self.table_content_model.setHeaderData(15, QtCore.Qt.Horizontal, 'Note')
 
-
-    #Set special table model
-
+    # Set special table model
     def show_selected_family(self):
 
         selected_character = self.get_characters_from_db('id', self.get_selected_character_id())
@@ -339,21 +362,23 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_content_model.setHeaderData(16, QtCore.Qt.Horizontal, 'Note')
         self.tableViewSpecial.resizeColumnsToContents()
 
-    #Qury items from DB
-
-    def get_cities_from_db(self, filter_by, filter_value):
+    # Query items from DB
+    @staticmethod
+    def get_cities_from_db(filter_by, filter_value):
         connector = db_connector.Db_Connector(base.City)
         result = connector.load_from_db(filter_by, filter_value)
         connector.close_session()
         return result
 
-    def get_buildings_from_db(self, filter_by, filter_value):
+    @staticmethod
+    def get_buildings_from_db(filter_by, filter_value):
         connector = db_connector.Db_Connector(base.Building)
         result = connector.load_from_db(filter_by, filter_value)
         connector.close_session()
         return result
 
-    def get_characters_from_db(self, filter_by, filter_value):
+    @staticmethod
+    def get_characters_from_db(filter_by, filter_value):
         connector = db_connector.Db_Connector(base.Character)
         result = connector.load_from_db(filter_by, filter_value)
         connector.close_session()
@@ -378,6 +403,10 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def open_add_building_dialog(self):
         self.add_dialog = add_dialogs.add_building_dialog(self)
+        self.add_dialog.show()
+
+    def open_add_group_dialog(self):
+        self.add_dialog = add_dialogs.add_group_dialog(self)
         self.add_dialog.show()
 
     def open_add_character_dialog(self):
@@ -408,11 +437,11 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         new_city_id = connector.write_to_db(new_city)
         connector.close_session()
 
-        self.query_cities_name()
+        self.build_tree_model()
 
     def add_building(self, building_dict, auto_populate, in_city_id='selected'):
         if in_city_id == 'selected':
-            city_id = self.get_selected_city_id()
+            city_id = self.get_selected_id()
         else:
             city_id = in_city_id
 
@@ -428,7 +457,10 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             # new_populator = populator.Populator(new_building, new_building_id, city_id, loader)
             # new_populator.populate()
 
-        self.query_buildings_name(city_id)
+        self.build_tree_model()
+
+    def add_group(self, group_dict, preset=False, preset_name=None, in_building_id='selected'):
+        pass
 
     def add_character(self, character_dict, building_id='selected', city_id='selected'):
         if city_id == 'selected':
@@ -451,7 +483,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         connector.write_to_db(new_character)
         connector.close_session()
 
-        self.query_characters_name(building_id)
+        self.build_tree_model()
 
         return new_character
 
@@ -470,13 +502,13 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def delete_character(self, character_id='selected'):
         if character_id == 'selected':
-            character_id = self.get_selected_character_id()
+            character_id = self.get_selected_id()
 
         connector = db_connector.Character_Connector()
         connector.delete_entry(character_id)
         connector.close_session()
 
-        self.query_characters_name(self.get_selected_building_id())
+        self.build_tree_model()
 
     def delete_building(self, building_id='selected'):
         if building_id == 'selected':
@@ -492,7 +524,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         connector.delete_entry(building_id)
         connector.close_session()
 
-        self.query_buildings_name(self.get_selected_city_id())
+        self.build_tree_model()
 
     def delete_city(self, city_id='selected'):
         if city_id == 'selected':
@@ -508,7 +540,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         connector.delete_entry(city_id)
         connector.close_session()
 
-        self.query_cities_name()
+        self.build_tree_model()
 
 # Delete entry from popup methods -----------------------------------------------------End
 
@@ -532,15 +564,12 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def action_city_click(self):
         selected_city_id = self.get_selected_city_id()
-        self.query_buildings_name(selected_city_id)
         self.set_building_table(selected_city_id)
         self.set_city_side_view(selected_city_id)
 
     def action_building_click(self):
         selected_building_id = self.get_selected_building_id()
-        self.query_characters_name(selected_building_id)
         self.set_character_table(selected_building_id)
-        print('Here')
         self.set_building_side_view(selected_building_id)
 
     def action_character_click(self):
@@ -551,7 +580,22 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.open_add_city_dialog()
 
     def add_building_click(self):
-        self.open_add_building_dialog()
+        selected_index = self.treeView.selectionModel().currentIndex()
+        selected_item = self.treeModel.itemFromIndex(selected_index)
+        selected_table = selected_item.data(21)
+        if selected_table == 'cities':
+            self.open_add_building_dialog()
+        else:
+            print('Select a city to add a building to it')
+
+    def add_group_click(self):
+        selected_index = self.treeView.selectionModel().currentIndex()
+        selected_item = self.treeModel.itemFromIndex(selected_index)
+        selected_table = selected_item.data(21)
+        if selected_table == 'buildings':
+            self.open_add_group_dialog()
+        else:
+            print('Select a building to add a group to it')
 
     def add_character_click(self):
         self.open_add_character_dialog()

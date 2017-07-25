@@ -1,4 +1,3 @@
-import sys
 from PyQt5 import Qt, QtCore, QtWidgets, QtGui, QtSql
 
 
@@ -8,7 +7,7 @@ class StringListModel(QtCore.QStringListModel):
         super().__init__()
 
 
-class ItemModel (QtGui.QStandardItemModel):
+class TreeModel (QtGui.QStandardItemModel):
 
     def __init__(self):
         super().__init__()

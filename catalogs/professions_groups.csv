@@ -16,7 +16,7 @@ Woodwork Family;Craftsman;1;1;1;1;5;1;1;1;Woodworker;1;Woodworker;1
 Builder Family;Craftsman;1;1;1;1;5;1;1;1;Builder;1;Builder;1
 Misc Workshop Family;Craftsman;1;1;1;1;5;1;1;1;Specialist Craftsman;1;Specialist Craftsman;1
 Stronghold Family;Noble;1;1;1;1;5;1;1;1;Local Lord;1;Local Lord;1
-Master Shrine;Religious;1;0;0;0;5;1;1;1;;;Acolyte, Priest;1
+Master Shrine;Religious;1;0;0;0;5;1;1;1;;;Acolyte, Priest;1,1
 Master Church;Religious;1;0;0;0;5;1;1;1;;;Priest;1
 Master Cathedral;Religious;1;0;0;0;5;1;1;1;;;High Priest;1
 Master School;Scholar;1;0;0;0;5;1;1;1;;;Scholar;1

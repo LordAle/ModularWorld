@@ -6,7 +6,7 @@ import city
 
 
 class Building(Constructor):
-    """ Class used to generate and handle buildings. A 'building' is location used to group people together by their occupations """
+    """ Class used to generate and handle buildings. A 'building' is a location used to group people together by their occupations """
 
     def __init__(self):
         self.id = None
@@ -14,8 +14,9 @@ class Building(Constructor):
         self.kind = catalog.building_kinds['Default']
         self.in_city = city.City()
 
-    def set_from_dialog(self, param):
+    def set_from_dialog(self, param, city_id):
         # Expect dictionary with keys: name, kind
+        self.associate(city_id)
         self.set_name(param['name'])
         self.set_kind(param['kind'])
 
@@ -41,5 +42,5 @@ class Building(Constructor):
         self.associate(base_building.city_id)
 
     def associate(self, city_id):
-        new_associator = associator.Associator(self)
-        new_associator.associate(city_id=city_id)
+        asso = associator.Associator(self)
+        asso.city(city_id)

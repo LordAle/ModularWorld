@@ -1,23 +1,23 @@
 Name;Min_pop;Odds;Groups
-Farmer;0;8;Master Food
-Commoner;0;3;Master Commoner
-Bourgeois;500;2;Master Bourgeois, Maid Few
-Noble;1000;1;Master Noble, Maid Some, Guard Few
-Tavern;250;5;Master Tavern, Maid Few
-Inn;750;2;Master Inn, Maid Some
-Hospital;1500;1;Master Hospital, Hospital Employee
-Bank;5000;1;Master Bank, Guard Some
-General Store;500;5;Master General Store
-Luxury Store;1500;1;Master Luxury Store, Guard Few
-Blacksmith;200;2;Master Blacksmith, Apprentice Few, Tenter Some
-Tailor;0;3;Master Tailor, Apprentice Few, Tenter Few
-Leatherwork;0;3;Master Leatherwork, Apprentice Few, Tenter Few
-Woodwork;0;2;Master Woodwork, Apprentice Few, Tenter Some
-Builder;500;2;Master Builder, Apprentice Some, Tenter Many
-Misc Workshop;1000;1;Master Misc Workshop, Apprentice Few, Tenter Few
-Keep;0;0;Master Stronghold, Maid Some, Guard Some
-Castle (Small);1000;0;Master Stronghold, Maid Some, Guard Some
-Castle (Large);8000;0;Master Stronghold, Maid Many, Guard Many
+Farmer;0;8;Farmer Family
+Commoner;0;3;Commoner Family
+Bourgeois;500;2;Bourgeois Family, Maid Few
+Noble;1000;1;Noble Family, Maid Some, Guard Few
+Tavern;250;5;Tavern Family, Maid Few
+Inn;750;2;Inn Family, Maid Some
+Hospital;1500;1;Hospital Family, Hospital Employee
+Bank;5000;1;Bank Family, Guard Some
+General Store;500;5;General Store Family
+Luxury Store;1500;1;Luxury Store Family, Guard Few
+Blacksmith;200;2;Blacksmith Family, Apprentice Few, Tenter Some
+Tailor;0;3;Tailor Family, Apprentice Few, Tenter Few
+Leatherwork;0;3;Leatherwork Family, Apprentice Few, Tenter Few
+Woodwork;0;2;Woodwork Family, Apprentice Few, Tenter Some
+Builder;500;2;Builder Family, Apprentice Some, Tenter Many
+Misc Workshop;1000;1;Misc Workshop Family, Apprentice Few, Tenter Few
+Keep;0;0;Stronghold Family, Maid Some, Guard Some
+Castle (Small);1000;0;Stronghold Family, Maid Some, Guard Some
+Castle (Large);8000;0;Stronghold Family, Maid Many, Guard Many
 Shrine;0;5;Master Shrine
 Church;1000;2;Master Church, Acolyte Few
 Cathedral;8000;1;Master Cathedral, Acolyte Few, Priest Few

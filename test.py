@@ -1,2 +1,1 @@
-
-print(ok)
+from PyQt5 import QtCore, QtGui

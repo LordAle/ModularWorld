@@ -80,5 +80,6 @@ class Character(Base):
     family_id = Column(Integer, ForeignKey('families.id'))
     spouse_family_id = Column(Integer, ForeignKey('families.id'))
 
-    note = Column(String(10000))
+    building_id = Column(Integer)  # To be removed after groups are added
 
+    note = Column(String(10000))
