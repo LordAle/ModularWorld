@@ -41,16 +41,16 @@ class Db_Connector():
 
         else:
             if self.base == base.City:
-                new_base_item = self.base(name=item.name, culture=item.culture.name, size=item.size.name, population=item.population,
+                new_base_item = self.base(name=item.name, culture=item.culture.name, size=item.size.name, population=item.population, taken_jobs=json.dumps(item.taken_jobs),
                                           forest=item.forest, plain=item.plain, river=item.river, sea=item.sea, mountain=item.mountain, mine=item.mine)
             elif self.base == base.Building:
                 new_base_item = self.base(name=item.name, kind=item.kind.name, city_id=item.in_city.id)
             elif self.base == base.Group:
-                new_base_item = self.base(name=item.name, family=item.is_family, live=item.is_live, work=item.is_work, visit=item.is_visit, building_id=item.in_building.id)
+                new_base_item = self.base(preset=item.preset.name, name=item.name, family=item.is_family, live=item.is_live, work=item.is_work, visit=item.is_visit, building_id=item.in_building.id)
             elif self.base == base.Character:
                 new_base_item = self.base(name=item.name, culture=item.culture.name, race=item.race.name, gender=item.gender, age=item.age,
                                           social_group=item.social_group.name, profession=item.profession.name, wealth=item.wealth,
-                                          attributes=json.dumps(item.attributes), moralities=json.dumps(item.moralities), family_role=item.family_role.name,
+                                          attributes=json.dumps(item.attributes), moralities=json.dumps(item.moralities), family_role=item.family_role.role,
                                           groups=json.dumps([x.id for x in item.groups]), family_id=item.family.id, spouse_family_id=item.spouse_family.id)
             elif self.base == base.Family:
                 new_base_item = self.base(name=item.name)
@@ -65,17 +65,18 @@ class Db_Connector():
     def full_update(self, item, p_key):
         if self.base == base.City:
             self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name, 'culture': item.culture.name, 'size': item.size.name, 'population': item.population,
+                                                                                'taken_jobs': json.dumps(item.taken_jobs),
                                                                                 'forest': item.forest, 'plain': item.plain, 'river': item.river,
                                                                                 'sea': item.sea, 'mountain': item.mountain, 'mine': item.mine})
         elif self.base == base.Building:
             self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name, 'kind':item.kind.name, 'city_id': item.in_city.id})
         elif self.base == base.Group:
-            self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name, 'family': item.is_family, 'live': item.is_live, 'work': item.is_work,
-                                                                                'visit': item.is_visit, 'building_id': item.in_building.id})
+            self.session.query(self.base).filter(self.base.id == p_key).update({'preset': item.preset.name, 'name': item.name, 'family': item.is_family, 'live': item.is_live, 'work': item.is_work,
+                                                                                'visit': item.is_visit, 'building_id': item.in_building.id, 'characters': json.dumps([x.id for x in item.characters])})
         elif self.base == base.Character:
             self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name, 'culture': item.culture.name, 'race': item.race.name, 'gender': item.gender, 'age': item.age,
                                                                                 'social_group': item.social_group.name, 'profession': item.profession.name, 'wealth': item.wealth,
-                                                                                'attributes': json.dumps(item.attributes), 'moralities': json.dumps(item.moralities), 'family_role': item.family_role.name,
+                                                                                'attributes': json.dumps(item.attributes), 'moralities': json.dumps(item.moralities), 'family_role': item.family_role.role,
                                                                                 'groups': json.dumps([x.id for x in item.groups]), 'family_id': item.family.id, 'spouse_family_id': item.spouse_family.id})
         elif self.base == base.Family:
             self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name})
@@ -88,6 +89,10 @@ class Db_Connector():
             new_item.set_from_db(item)
             item_list.append(new_item)
         return item_list
+
+    def load_all(self):
+        loaded_items = self.session.query(self.base).all()
+        return loaded_items
 
     def update_entry(self, row_id, column_name, new_value):
         self.session.query(self.base).filter(self.base.id == row_id).update({column_name: new_value})

@@ -1,17 +1,18 @@
+import catalog_writer
 import sys
 from PyQt5 import Qt, QtCore, QtWidgets, QtSql, QtGui
 from db_loader import loader
 from ModularWorldUi.mainwindow import Ui_MainWindow
-import catalog_writer
-import base
-import add_dialogs
-import building
-import character
-import city
-import db_connector
-import delete_dialogs
-import family
 import models
+import base
+import city
+import building
+import group
+import character
+import family
+import db_connector
+import add_dialogs
+import delete_dialogs
 # import populator
 import visitor_manager
 
@@ -46,6 +47,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.treeView.addAction(self.actionAddCity)
         self.treeView.addAction(self.actionAddBuilding)
         self.treeView.addAction(self.actionAddGroup)
+        self.treeView.addAction(self.actionAddCharacter)
 
         self.pushButtonShowFamily.clicked.connect(self.show_family_click)
         self.pushButtonVisitor.clicked.connect(self.show_visitor_click)
@@ -57,6 +59,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAddCity.triggered.connect(self.add_city_click)
         self.actionAddBuilding.triggered.connect(self.add_building_click)
         self.actionAddGroup.triggered.connect(self.add_group_click)
+        self.actionAddCharacter.triggered.connect(self.add_character_click)
 
         self.actionCity_table.triggered.connect(self.action_full_city)
         self.actionBuilding_table.triggered.connect(self.action_full_building)
@@ -131,6 +134,11 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         while building_query.next():
             buildings_list.append([building_query.value(0), building_query.value(1), building_query.value(2)])
 
+        group_query = QtSql.QSqlQuery("SELECT name, id, building_id FROM groups")
+        group_list = []
+        while group_query.next():
+            group_list.append([group_query.value(0), group_query.value(1), group_query.value(2)])
+
         for cit in cities_list:
             c = QtGui.QStandardItem(cit[0])
             c.setData(cit[1], 20)
@@ -144,6 +152,14 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
                 b.setData(bui[1], 20)
                 b.setData('buildings', 21)
                 parent_city.appendRow(b)
+                parent_building = b
+
+                building_groups = [g for g in group_list if g[2] == b.data(20)]
+                for gro in building_groups:
+                    g = QtGui.QStandardItem(gro[0])
+                    g.setData(gro[1], 20)
+                    g.setData('groups', 21)
+                    parent_building.appendRow(g)
 
         self.treeView.setModel(self.treeModel)
 
@@ -410,7 +426,13 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.add_dialog.show()
 
     def open_add_character_dialog(self):
-        self.add_dialog = add_dialogs.add_character_dialog(self)
+        group_id = self.get_selected_id()
+        group_connector = db_connector.Db_Connector(base.Group)
+        in_group = group_connector.load_from_db('id', group_id)
+        in_group = in_group[0]
+        group_connector.close_session()
+
+        self.add_dialog = add_dialogs.add_character_dialog(self, in_group)
         self.add_dialog.show()
 
     def open_delete_city_dialog(self):
@@ -460,26 +482,37 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.build_tree_model()
 
     def add_group(self, group_dict, preset=False, preset_name=None, in_building_id='selected'):
-        pass
+        if in_building_id == 'selected':
+            building_id = self.get_selected_id()
+        else:
+            building_id = in_building_id
 
-    def add_character(self, character_dict, building_id='selected', city_id='selected'):
-        if city_id == 'selected':
-            city_id = self.get_selected_city_id()
+        new_group = group.Group()
+        if preset:
+            new_group.set_from_catalog(preset_name, building_id)
+            # Add auto populate (add_character method calls)
+        else:
+            new_group.set_from_dialog(group_dict, building_id)
 
-        if building_id == 'selected':
-            building_id = self.get_selected_building_id()
+
+        connector = db_connector.Db_Connector(base.Group)
+        new_group_id = connector.write_to_db(new_group)
+        connector.close_session()
+
+        self.build_tree_model()
+
+    def add_character(self, character_dict, in_group_id='selected'):
+        if in_group_id == 'selected':
+            group_id = self.get_selected_id()
+        else:
+            group_id = in_group_id
 
         new_character = character.Character()
-        new_character.basic_associate(city_id, building_id, character_dict)
-        new_character.set_from_dialog(character_dict)
+        new_character.associate_group(group_id)
+        new_character.build_character(character_dict)
+        print('Here')
 
-        # if core_character and new_character.role == 'Child':
-            # new_character.set_family_id(core_character.family_id)
-        # else:
-            # family_id = self.add_family(new_character.fname)
-            # new_character.set_family_id(family_id)
-
-        connector = db_connector.Character_Connector()
+        connector = db_connector.Db_Connector(base.Character)
         connector.write_to_db(new_character)
         connector.close_session()
 
@@ -488,9 +521,10 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         return new_character
 
     def add_family(self, family_name):
-        new_family = family.Family(family_name)
+        new_family = family.Family()
+        new_family.set_name(family_name)
 
-        connector = db_connector.Family_Connector()
+        connector = db_connector.Db_Connector(base.Family)
         family_id = connector.write_to_db(new_family)
         connector.close_session()
 
@@ -598,7 +632,13 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             print('Select a building to add a group to it')
 
     def add_character_click(self):
-        self.open_add_character_dialog()
+        selected_index = self.treeView.selectionModel().currentIndex()
+        selected_item = self.treeModel.itemFromIndex(selected_index)
+        selected_table = selected_item.data(21)
+        if selected_table == 'groups':
+            self.open_add_character_dialog()
+        else:
+            print('Select a group to add a character to it')
 
     def delete_city_click(self):
         self.open_delete_city_dialog()

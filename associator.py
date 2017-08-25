@@ -20,10 +20,12 @@ class Associator:
             self.item.in_building = in_building[0]
 
     def group(self, group_id):
-        if hasattr(self.item, 'groups') and group_id not in [x.id for x in self.item.groups]:
+        if hasattr(self.item, 'groups'):
             connector = db_connector.Db_Connector(base.Group)
             in_group = connector.load_from_db('id', group_id)
-            self.item.groups.append(in_group[0])
+            self.item.current_group_edit = in_group[0]
+            if group_id not in [x.id for x in self.item.groups]:
+                self.item.groups.append(in_group[0])
 
     def remove_group(self, group_id):
         if hasattr(self.item, 'groups') and group_id in [x.id for x in self.item.groups]:
@@ -43,14 +45,17 @@ class Associator:
             in_family = connector.load_from_db('id', family_id)
             self.item.spouse_family = in_family[0]
 
-    # To change
     def master(self):
-        pass
-        connector = db_connector.Db_Connector(base.Character)
-        live_chars = connector.load_from_db('live_id', self.item.building_live.id)
-        master = [char for char in live_chars if char.family_role.role == family_role.master.role]
+        if not self.item.current_group_edit.id:
+            print('No current group associated with character!')
+            return
+
+        for char in self.item.current_group_edit.characters:
+            if char.family_role.role == family_role.master.role:
+                master_char = char
+                break
         try:
-            self.item.master_char = master[0]
+            self.item.master_char = master_char
         except:
-            print('No master in selected building {0}'.format(self.item.building_live.id))
+            print('No master in selected group {0}'.format(self.item.current_group_edit.id))
 

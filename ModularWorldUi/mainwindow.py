@@ -130,6 +130,8 @@ class Ui_MainWindow(object):
         self.actionAddBuilding.setObjectName("actionAddBuilding")
         self.actionAddGroup = QtWidgets.QAction(MainWindow)
         self.actionAddGroup.setObjectName("actionAddGroup")
+        self.actionAddCharacter = QtWidgets.QAction(MainWindow)
+        self.actionAddCharacter.setObjectName("actionAddCharacter")
         self.menuFile.addAction(self.actionNewDatabase)
         self.menuFile.addAction(self.actionLoadDatabase)
         self.menuShow.addAction(self.actionCity_table)
@@ -161,4 +163,5 @@ class Ui_MainWindow(object):
         self.actionAddCity.setText(_translate("MainWindow", "Add City"))
         self.actionAddBuilding.setText(_translate("MainWindow", "Add Building"))
         self.actionAddGroup.setText(_translate("MainWindow", "Add Group"))
+        self.actionAddCharacter.setText(_translate("MainWindow", "Add Character"))
 

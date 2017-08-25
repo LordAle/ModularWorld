@@ -100,6 +100,19 @@ with open('catalog.py', 'w') as catalog:
                 name=row['Name'], min_pop=row['Min_pop'], max_pop=row['Max_pop']))
     catalog.write('} \n\n')
 
+    catalog.write('professions = {')
+    file_path = os.path.join(path, 'professions.csv')
+    with open(file_path, newline='') as read_file:
+        catalog.write('''"Error": profession.Profession("Error", 0, "", 0), \n''')
+        catalog.write('''"Default": profession.Profession("Default", 0, "", 0), \n''')
+        catalog.write('''"Child": profession.Profession("Child", 0, "", 0), \n''')
+        catalog.write('''"Same": profession.Profession("Same", 0, "", 0), \n''')
+        reader = csv.DictReader(read_file, delimiter=';')
+        for row in reader:
+            catalog.write('''"{name}": profession.Profession("{name}", {wealth}, "{geo}", {unique}), \n'''.format(
+                name=row['Name'], wealth=row['Base_wealth'], geo=row['Geo_restriction'], unique=row['Unique']))
+    catalog.write('} \n\n')
+
     catalog.write('social_groups = {')
     file_path = os.path.join(path, 'social_groups.csv')
     with open(file_path, newline='') as read_file:
@@ -110,25 +123,16 @@ with open('catalog.py', 'w') as catalog:
             attributes_list = list_builder(row['Attributes'])
             moralities_list = list_builder(row['Moralities'])
             cultures_list = list_builder(row['Cultures'], 'dict_list', 'cultures')
-            catalog.write('''"{name}": social_group.Social_Group("{name}", {inherit}, "{gender}", "{wealth}", {attributes}, {moralities}, {cultures}), \n'''.format(
+            professions_list = list_builder(row['Default_professions'], 'dict_list', 'professions')
+            catalog.write('''"{name}": social_group.Social_Group("{name}", {inherit}, "{gender}", "{wealth}", {attributes}, {moralities}, {cultures}, {professions}, [{odds}]), \n'''.format(
                 name=row['Name'], inherit=row['Strict_inheritance'], gender=row['Gender'], wealth=row['Wealth'], attributes=attributes_list,
-                moralities=moralities_list, cultures=cultures_list))
-    catalog.write('} \n\n')
-
-    catalog.write('professions = {')
-    file_path = os.path.join(path, 'professions.csv')
-    with open(file_path, newline='') as read_file:
-        catalog.write('''"Error": profession.Profession("Error", 0, "", 0), \n''')
-        catalog.write('''"Default": profession.Profession("Default", 0, "", 0), \n''')
-        reader = csv.DictReader(read_file, delimiter=';')
-        for row in reader:
-            catalog.write('''"{name}": profession.Profession("{name}", {wealth}, "{geo}", {unique}), \n'''.format(
-                name=row['Name'], wealth=row['Base_wealth'], geo=row['Geo_restriction'], unique=row['Unique']))
+                moralities=moralities_list, cultures=cultures_list, professions=professions_list, odds=row['Professions_odds']))
     catalog.write('} \n\n')
 
     catalog.write('professions_groups = {')
     file_path = os.path.join(path, 'professions_groups.csv')
     with open(file_path, newline='') as read_file:
+        catalog.write('''"Default": professions_group.Professions_Group("Default", social_groups["Default"], 0, 0, 0, 0, 0, 0, 0, 0, [], [], [], []), \n''')
         reader = csv.DictReader(read_file, delimiter=';')
         for row in reader:
             professions_list = list_builder(row['Professions'], 'dict_list', 'professions')
@@ -168,23 +172,4 @@ with open('catalog.py', 'w') as catalog:
         reader = csv.DictReader(read_file, fieldnames=['name', 'value'], delimiter=';')
         for row in reader:
             catalog.write("""{name} = {value} \n""".format(name=row['name'], value=row['value']))
-
-    """
-    catalog.write('city_kinds = {')
-    file_path = os.path.join(path, 'city_kinds.csv')
-    with open(file_path, newline='') as read_file:
-        reader = csv.DictReader(read_file, delimiter=';')
-        for row in reader:
-            catalog.write('''"{name}": city_kind.City_Kind("{name}", {housing}), \n'''.format(name=row['Name'], housing=row['Housing']))
-    catalog.write('} \n\n')
-
-    catalog.write('classes = {')
-    file_path = os.path.join(path, 'classes.csv')
-    with open(file_path, newline='') as read_file:
-        reader = csv.DictReader(read_file, delimiter=';')
-        for row in reader:
-            catalog.write('''"{name}": classes.Classes("{name}", {hit_dice}), \n'''.format(name=row['Name'], hit_dice=row['Hit_dice']))
-    catalog.write('} \n\n')
-    """
-
 

@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
 Base = declarative_base()
@@ -13,6 +13,7 @@ class City(Base):
     culture = Column(String)
     size = Column(String)
     population = Column(Integer)
+    taken_jobs = Column(String)
 
     forest = Column(Boolean)
     plain = Column(Boolean)
@@ -38,17 +39,22 @@ class Building(Base):
 
     note = Column(String(10000))
 
+
 class Group(Base):
     __tablename__ = 'groups'
 
     id = Column(Integer, primary_key=True)
+    preset = Column(String)
     name = Column(String)
     family = Column(Boolean)
     live = Column(Boolean)
     work = Column(Boolean)
     visit = Column(Boolean)
+    characters = Column(String)
 
     building_id = Column(Integer, ForeignKey('buildings.id'))
+
+    note = Column(String(10000))
 
 
 class Family(Base):
@@ -56,8 +62,6 @@ class Family(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-
-    # characters = relationship('Character', back_populates='families')
 
 
 class Character(Base):
@@ -71,7 +75,7 @@ class Character(Base):
     age = Column(Integer)
     social_group = Column(String)
     profession = Column(String)
-    wealth = Column(String)
+    wealth = Column(Float)
     attributes = Column(String)
     moralities = Column(String)
     family_role = Column(String)
@@ -79,7 +83,5 @@ class Character(Base):
 
     family_id = Column(Integer, ForeignKey('families.id'))
     spouse_family_id = Column(Integer, ForeignKey('families.id'))
-
-    building_id = Column(Integer)  # To be removed after groups are added
 
     note = Column(String(10000))

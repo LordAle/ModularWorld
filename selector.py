@@ -39,6 +39,195 @@ class Selector:
             total_odds = total_odds + value.other_cultures_odds
         return self.weighted(total_odds)
 
+    def profession(self, odds, in_city):
+        total_odds = 0
+        ok_prof = []
+        prof_odds = []
+        for index, item in enumerate(self.selection):
+            if item not in in_city.taken_jobs and self.check_geography(item, in_city):
+                ok_prof.append(item)
+                prof_odds.append(odds[index])
+                total_odds += odds[index]
+
+        random_nb = random.randint(1, total_odds)
+        for index, item in enumerate(ok_prof):
+            random_nb = random_nb - prof_odds[index]
+            if random_nb <= 0:
+                return item
+        self.error_message()
+        raise Exception  # Should never get here during execution
+
+    def check_geography(self, prof, in_city):
+        if not prof.geo_restric:
+            return True
+        else:
+            if prof.geo_restric == 'Forest' and in_city.forest:
+                return True
+            elif prof.geo_restric == 'Plain' and in_city.plain:
+                return True
+            elif prof.geo_restric == 'River' and in_city.river:
+                return True
+            elif prof.geo_restric == 'Sea' and in_city.sea:
+                return True
+            elif prof.geo_restric == 'Mountain' and in_city.mountain:
+                return True
+            elif prof.geo_restric == 'Mine' and in_city.mine:
+                return True
+            elif prof.geo_restric == 'Water':
+                if in_city.sea or in_city.river:
+                    return True
+            else:
+                return False
+
+    def social_group(self, character):
+        incompatible = []
+        for key, value in self.selection.items():
+            print(incompatible)
+            print(key, value)
+            if value.strict_inheritance:  # Remove all social groups with strict inheritance
+                print('Strict')
+                incompatible.append(key)
+                continue
+            if value.gender and value.gender != character.gender:  # If there is a gender condition, check character gender
+                print('Gender')
+                incompatible.append(key)
+                continue
+            if value.wealth:  # Check if character wealth is in correct range
+                print('Wealth')
+                print(character.wealth, value.wealth)
+                if not self.check_wealth(character.wealth, value.wealth):
+                    incompatible.append(key)
+                    continue
+            if value.attributes:
+                print('Attributes')
+                if not self.check_attributes(character.attributes, value.attributes):
+                    incompatible.append(key)
+                    continue
+            if value.moralities:
+                print('Moralities')
+                if not self.check_moralities(character.moralities, value.moralities):
+                    incompatible.append(key)
+                    continue
+            if value.cultures:
+                print('Culture')
+                if not self.check_culture(character.culture, value.cultures):
+                    incompatible.append(key)
+                    continue
+
+        for key in incompatible:
+            del self.selection[key]
+        try:
+            return random.choice(list(self.selection.items()))
+        except:
+            print('Error in social group selection, no compatible choice were available')
+
+    @staticmethod
+    def check_wealth(wealth, target):
+        if '<' in target:
+            check_tuple = target.partition('<')
+            if wealth < float(check_tuple[2]):
+                return True
+            else:
+                return False
+        elif '>' in target:
+            check_tuple = target.partition('>')
+            if wealth > float(check_tuple[2]):
+                return True
+            else:
+                return False
+        else:
+            print('Error in wealth prerequisite of social group')
+            return True
+
+    @staticmethod
+    def check_attributes(attributes, target):  # Definitely not optimized...
+        target_list = target.split(',')
+        for index, item in enumerate(target_list):
+            target_list[index] = item.strip()
+        for target in target_list:
+            if '<' in target:
+                check_tuple = target.partition('<')
+                for index, item in check_tuple:
+                    check_tuple[index] = item.strip()
+                for index, item in catalog.attributes:
+                    if item.name == check_tuple[0]:
+                        attr_index = index
+                        break
+                try:
+                    if attributes[attr_index] < float(check_tuple[2]):
+                        return True
+                    else:
+                        return False
+                except:
+                    print('Error in attributes prerequisite of social group')
+                    return True
+            if '>' in target:
+                check_tuple = target.partition('>')
+                for index, item in check_tuple:
+                    check_tuple[index] = item.strip()
+                for index, item in catalog.attributes:
+                    if item.name == check_tuple[0]:
+                        attr_index = index
+                        break
+                try:
+                    if attributes[attr_index] > float(check_tuple[2]):
+                        return True
+                    else:
+                        return False
+                except:
+                    print('Error in attributes prerequisite of social group')
+                    return True
+
+    @staticmethod
+    def check_moralities(moralities, target):
+        target_list = target.split(',')
+        print(target_list)
+        for index, item in enumerate(target_list):
+            target_list[index] = item.strip()
+        for target in target_list:
+            if '<' in target:
+                check_tuple = target.partition('<')
+                for index, item in check_tuple:
+                    check_tuple[index] = item.strip()
+                for index, item in catalog.moralities:
+                    if item.name == check_tuple[0]:
+                        attr_index = index
+                        break
+                try:
+                    if moralities[attr_index] < float(check_tuple[2]):
+                        return True
+                    else:
+                        return False
+                except:
+                    print('Error in moralities prerequisite of social group')
+                    return True
+            if '>' in target:
+                check_tuple = target.partition('>')
+                for index, item in check_tuple:
+                    check_tuple[index] = item.strip()
+                for index, item in catalog.moralities:
+                    if item.name == check_tuple[0]:
+                        attr_index = index
+                        break
+                try:
+                    if moralities[attr_index] > float(check_tuple[2]):
+                        return True
+                    else:
+                        return False
+                except:
+                    print('Error in moralities prerequisite of social group')
+                    return True
+
+    @staticmethod
+    def check_culture(culture, target):
+        target_list = target.split(',')
+        for index, item in enumerate(target_list):
+            target_list[index] = item.strip()
+        if culture.name in target_list:
+            return True
+        else:
+            return False
+
     def remove_error(self):
         if 'Error' in self.selection:
             del self.selection['Error']

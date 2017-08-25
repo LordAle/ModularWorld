@@ -1,9 +1,11 @@
 from constructor import Constructor
-import math
 import random
+import json
 import copy
+import base
 import catalog
 import db_connector
+import group
 import family
 import family_role
 import associator
@@ -11,6 +13,7 @@ import selector
 
 
 class Character(Constructor):
+    """ Class used to create and handle characters. Characters are part of one or multiple Groups. """
 
     def __init__(self):
         self.id = None
@@ -33,25 +36,32 @@ class Character(Constructor):
         self.family_role = family_role.Family_Role()
         self.groups = []
 
+        # Temporary values not saved in database directly
+        self.current_group_edit = group.Group()
         self.master_char = None
+        self.auto_populate = False
+        self.will_leave = False
+
+    def build_character(self, param_dict, auto_populate=False):
+        # auto_populate is set to True if method call is made as part of a building/group preset
+        if auto_populate:
+            self.auto_populate = True
+        self.set_base(param_dict)
+        if self.family_role.role != family_role.child.role:
+            self.search_existing_char()
+        self.complete_info()
+        print('Inside')
 
     # -------------------------- Association methods -------------------------------- Begin
 
-    def basic_associate(self, city_id, building_id, param={'live': True, 'work': True}):
-        if param['live']:
-            live_id = building_id
-        else:
-            live_id = None
-        if param['work']:
-            work_id = building_id
-        else:
-            work_id = None
+    def associate_group(self, group_id):
+        # Add group_id to groups list if it's not already there and set current_group_edit to that Group object
         new_associator = associator.Associator(self)
-        new_associator.associate(city_id=city_id, live_id=live_id, work_id=work_id)
+        new_associator.group(group_id)
 
-    def associate_building(self, live_id, work_id, visit_id):
+    def set_master(self):
         new_associator = associator.Associator(self)
-        new_associator.associate(live_id=live_id, work_id=work_id, visit_id=visit_id)
+        new_associator.master()
 
     # -------------------------- Association methods -------------------------------- End
 
@@ -82,10 +92,6 @@ class Character(Constructor):
         if self.family_role.role == family_role.spouse.role or self.family_role.role == family_role.child.role:
             self.set_master()
 
-    def set_master(self):
-        new_associator = associator.Associator(self)
-        new_associator.master()
-
     def set_base_culture(self, culture):
         if culture != 'Random':
             try:
@@ -108,7 +114,7 @@ class Character(Constructor):
                 self.gender = 'Error'
 
     def set_base_name(self, name):
-        if name!= 'Random':
+        if name != 'Random':
             self.name = name
 
     def set_base_family(self, fname):
@@ -150,7 +156,7 @@ class Character(Constructor):
     def set_base_wealth(self, wealth):
         if wealth != 'Random':
             try:
-                self.wealth = int(wealth)
+                self.wealth = float(wealth)
             except:
                 self.wealth = -2
 
@@ -161,26 +167,40 @@ class Character(Constructor):
     def search_existing_char(self):
         # Search for an existing char with compatible information
 
-        # First, fetch a list of existing character without associated live or work building
-        connector = db_connector.Character_Connector()
-        if self.building_live:
-            candidates = connector.load_from_db('live_id', None)
-            if self.building_work:
-                removed_work = []
-                for char in candidates:
-                    if char.building_work:
-                        removed_work.append(char)
-                for char in removed_work:
-                    candidates.remove(char)
-        elif self.building_work:
-            candidates = connector.load_from_db('work_id', None)
-        else:
-            raise Exception
+        # First, fetch a random list of potentiel characters
+        connector = db_connector.Db_Connector(base.Character)
+        bases = connector.load_all()
+        random.shuffle(bases)
+        candidates = []
+        search_range = min(100, len(bases))
+        for x in range(search_range):  # Limit loaded character to 100 to prevent having too many operations and randomizing the selection process
+            char = Character()
+            char.set_from_db(bases[x])
+            candidates.append(char)
 
         # Then, remove character with info incompatible with preset information
         default_char = Character()
         removed = []
         for char in candidates:
+            if self.current_group_edit.is_live:  # Remove character who already live somewhere
+                found = False
+                for g in char.groups:
+                    if g.is_live:
+                        removed.append(char)
+                        found = True
+                        continue
+                if found:
+                    continue
+            if self.current_group_edit.is_work:  # Remove character who already work somewhere
+                found = False
+                for g in char.groups:
+                    if g.is_work:
+                        removed.append(char)
+                        found = True
+                        continue
+                if found:
+                    continue
+
             if self.name != default_char.name:  # If new char attribute value is default, any character can do so skip verification
                 if self.name != char.name:  # If new char attribute isn't the same as candidate ...
                     removed.append(char)  # ... remove candidate from list.
@@ -224,7 +244,7 @@ class Character(Constructor):
             selected = random.choice(candidates)
             f_role = self.family_role
             self.__dict__ = copy.copy(selected.__dict__)  # ... copy all info from selected existing character.
-            self.family_role = f_role  # But make sure to keep new_family_role
+            self.family_role = f_role  # But make sure to keep new_group_role
 
     # ------------------ Search existing character for compatible ones --------------------- End
 
@@ -233,32 +253,53 @@ class Character(Constructor):
     def complete_info(self):
         # Add missing information to the character
         default_char = Character()
+        self.set_family_role(default_char.family_role.role)
+        print(self.family_role.role)
         self.set_culture(default_char.culture)
+        print(self.culture.name)
         self.set_race(default_char.race)
+        print(self.race.name)
         self.set_gender(default_char.gender)
+        print(self.gender)
         self.set_name(default_char.name)
-        self.set_family(default_char.family.id)
+        print(self.name)
+        self.set_family(default_char.family)
+        print(self.family.name)
         self.set_age(default_char.age)
+        print(self.age)
+        self.set_will_leave()
+        print(self.will_leave)
         self.set_attributes(default_char.attributes)
+        print(self.attributes)
         self.set_moralities(default_char.moralities)
-        # Note to self: Be weary of spouse_family interaction!
-        pass
+        print(self.moralities)
+        self.set_wealth(default_char.wealth)
+        print(self.wealth)
+        self.set_social_group(default_char.social_group)
+        print(self.social_group.name)
+        self.set_profession(default_char.profession)
+        print(self.profession.name)
+
+    def set_family_role(self, default):
+        if self.family_role.role == default:  # Assign family role if still default according to group attribute
+            if self.current_group_edit.is_family:  # If group is a family, additional character are children of master (master and spouse must be preset in other way)
+                self.family_role.role = family_role.child.role
 
     def set_culture(self, default):
         if self.culture == default:  # Assign culture if it is still default
             if self.family_role == family_role.spouse or self.family_role == family_role.child:  # If child or spouse, set culture to master's
                 self.culture = self.master_char.culture
             else:  # Otherwise, check city dominant culture
-                openness = 100 + self.in_city.culture.cultural_openness
+                openness = 100 + self.current_group_edit.in_building.in_city.culture.cultural_openness
                 result = random.randint(1, openness)
                 if result <= 100:
-                    self.culture = self.in_city.culture
+                    self.culture = self.current_group_edit.in_building.in_city.culture
                 else:
                     self.assign_minority_culture()
 
     def assign_minority_culture(self):
         culture_selector = selector.Selector(catalog.cultures)
-        self.culture = culture_selector.minority_culture(self.in_city.culture)
+        self.culture = culture_selector.minority_culture(self.current_group_edit.in_building.in_city.culture)
 
     def set_race(self, default):
         if self.race == default:  # If race is default, set it culture race
@@ -282,10 +323,10 @@ class Character(Constructor):
                 self.name = random.choice(self.culture.female_names)
 
     def set_family(self, default):
-        if self.family.id == default:  # If no family has been associated, create a new one in database, with preset or random name
-            if self.family.name == default.family.name:
+        if self.family.id == default.id:  # If no family has been associated, create a new one in database, with preset or random name
+            if self.family.name == default.name:
                 self.family.name = random.choice(self.culture.family_names)
-            connector = db_connector.Family_Connector()
+            connector = db_connector.Db_Connector(base.Family)
             self.family.id = connector.write_to_db(self.family)
 
     def set_age(self, default):
@@ -296,24 +337,104 @@ class Character(Constructor):
                 self.age = max(0, self.master_char.age - max(self.race.adult_age, round(random.gauss(self.race.adult_age+5, 5))))
             else:
                 self.age = max(self.race.adult_age + random.randint(0,4), random.triangular(self.race.adult_age/2, self.race.old_age*1.1, self.race.old_age/2.2))
+            self.age = int(self.age)
+
+    def set_will_leave(self):
+        if self.auto_populate and self.family_role.role == family_role.child.role:  # Manually added character cannot leave
+            first_child = True
+            for char in self.current_group_edit.characters:
+                if char.family_role.role == family_role.child.role:
+                    first_child = False
+                    break
+            if first_child and self.current_group_edit.preset.inheritance:  # First child of inherited group cannot leave
+                return
+            if self.age >= self.race.working_age and random.randint(1, 100) <= 80:  # !!! Can be changed to a config option
+                self.will_leave = True
 
     def set_attributes(self, default):
         if self.attributes == default:
             modifiers = self.build_race_modifiers()
             for index, value in enumerate(catalog.attributes):
-                self.attributes[index] = random.gauss(value.mean, value.variance)
-                if value.rounding:
+                self.attributes[index] = random.gauss(value.mean, value.variance)  # Assign random base value
+                for modifier in modifiers:  # Check for racial modifiers
+                    if modifier[0].strip() == value.name:
+                        if modifier[1] == '+':
+                            self.attributes[index] += float(modifier[2])
+                        elif modifier[1] == '-':
+                            self.attributes[index] -= float(modifier[2])
+                if value.rounding:  # Round value if necessary
                     self.attributes[index] = round(self.attributes[index])
-                if self.attributes[index] < value.range[0]:
+                if self.attributes[index] < value.range[0]:  # Make sure value is inside limits
                     self.attributes[index] = value.range[0]
                 elif self.attributes[index] > value.range[1]:
                     self.attributes[index] = value.range[1]
-                for modifier in modifiers:
-                    if modifier[0].rstrip() == value.name:
+
+    def set_moralities(self, default):
+        if self.moralities == default:
+            modifiers = self.build_culture_modifiers()
+            for index, value in enumerate(catalog.moralities):
+                self.moralities[index] = random.gauss(value.mean, value.variance)  # Assign random base value
+                for modifier in modifiers:  # Check for cultural modifiers
+                    if modifier[0].strip() == value.name:
                         if modifier[1] == '+':
-                            self.attributes[index] += int(modifier[2])
+                            self.moralities[index] += float(modifier[2])
                         elif modifier[1] == '-':
-                            self.attributes[index] -= int(modifier[2])
+                            self.moralities[index] -= float(modifier[2])
+                if value.rounding:  # Round value if necessary
+                    self.moralities[index] = round(self.moralities[index])
+                if self.moralities[index] < value.range[0]:  # Make sure value is inside limits
+                    self.moralities[index] = value.range[0]
+                elif self.moralities[index] > value.range[1]:
+                    self.moralities[index] = value.range[1]
+
+    def set_wealth(self, default):
+        if self.wealth == default:
+            if self.family_role.role == family_role.child.role or self.family_role.role == family_role.spouse.role:
+                self.wealth = max(0, round(self.master_char.wealth + self.master_char.wealth*random.uniform(-0.3, 0.3), 2))
+            else:
+                self.wealth = random.betavariate(2, 5)
+
+    def set_social_group(self, default):
+        if self.social_group == default and not self.will_leave:
+            if self.current_group_edit.preset.name != 'Default':
+                self.social_group = self.current_group_edit.preset.social_group
+            else:
+                social_selector = selector.Selector(catalog.social_groups)
+                self.social_group = social_selector.social_group(self)
+                print('Here')
+
+    def set_profession(self, default):
+        if self.profession == default and not self.will_leave:
+            if self.age < self.race.working_age:
+                self.profession = catalog.professions['Child']
+            else:
+                if self.current_group_edit.preset.name != 'Default':
+                    if self.family_role.role == family_role.master.role:
+                        prof_list = self.current_group_edit.preset.professions_main
+                        odds = self.current_group_edit.preset.odds_main
+                    else:
+                        prof_list = self.current_group_edit.preset.professions
+                        odds = self.current_group_edit.preset.professions_odds
+                else:
+                    prof_list = self.social_group.professions_main
+                    odds = self.social_group.professions_odds
+
+                prof_selector = selector.Selector(prof_list)
+                self.profession = prof_selector.profession(odds, self.current_group_edit.in_building.in_city)
+
+        if self.profession.unique:
+            self.update_taken_job()
+
+    def update_taken_job(self):
+        in_city = self.current_group_edit.in_building.in_city
+        in_city.taken_jobs.append(self.profession)
+        city_connector = db_connector.Db_Connector(base.City)
+        city_connector.update_entry(in_city.id, 'taken_jobs', json.dumps(in_city.taken_jobs))
+        city_connector.close_session()
+
+    # ------------------ Complete missing info after other steps --------------------------- End
+
+    # --------------------- Misc. list construction methods -------------------------------- Begin
 
     def build_race_modifiers(self):
         race_modifiers = []
@@ -325,28 +446,10 @@ class Character(Constructor):
                 modifier_tuple = modifier_string.partition('-')
             race_modifiers.append(modifier_tuple)
             try:
-                int(modifier_tuple[2])
+                float(modifier_tuple[2])
             except:
-                print('Error in race attributes modifier')
+                print('Error in race "{0}" attributes modifier'.format(self.race.name))
         return race_modifiers
-
-    def set_moralities(self, default):
-        if self.moralities == default:
-            modifiers = self.build_culture_modifiers()
-            for index, value in enumerate(catalog.moralities):
-                self.moralities[index] = random.gauss(value.mean, value.variance)
-                if value.rounding:
-                    self.moralities[index] = round(self.moralities[index])
-                if self.moralities[index] < value.range[0]:
-                    self.moralities[index] = value.range[0]
-                elif self.moralities[index] > value.range[1]:
-                    self.moralities[index] = value.range[1]
-                for modifier in modifiers:
-                    if modifier[0].rstrip() == value.name:
-                        if modifier[1] == '+':
-                            self.moralities[index] += int(modifier[2])
-                        elif modifier[1] == '-':
-                            self.moralities[index] -= int(modifier[2])
 
     def build_culture_modifiers(self):
         culture_modifiers = []
@@ -358,99 +461,51 @@ class Character(Constructor):
                 modifier_tuple = modifier_string.partition('-')
             culture_modifiers.append(modifier_tuple)
             try:
-                int(modifier_tuple[2])
+                float(modifier_tuple[2])
             except:
-                print('Error in culture morality modifier')
+                print('Error in culture "{0}" morality modifier'.format(self.culture.name))
         return culture_modifiers
 
-    def set_profession(self, profession):
-        try:
-            self.profession = profession
-            if self.profession == 'Random' or self.profession == 'random':
-                profession_list = self.construct_profession(self.in_building, self.in_city, self.role)
-                self.profession = random.choice(profession_list)
-            if self.profession == 'Same':
-                self.profession = self.core.profession
-        except:
-            self.profession = 'Error'
+    # --------------------- Misc. list construction methods -------------------------------- End
 
-    def set_wealth(self, wealth):
-        try:
-            self.wealth = wealth
-            if self.wealth == 'Random' or self.wealth == 'random':
-                wealth_odds = [x for x in catalog_profession.professions if x.name == self.profession]
-                wealth_odds = wealth_odds[0].wealth
-                if (wealth_odds % 1) >= random.random():
-                    wealth_odds = math.ceil(wealth_odds)
-                else:
-                    wealth_odds = math.floor(wealth_odds)
-                self.wealth = catalog_character.wealth[int(wealth_odds)]
-        except:
-            self.wealth = 'Error'
-
-    # ------------------ Complete missing info after other steps --------------------------- End
+    # ----------------------- Load from database methods ----------------------------------- Begin
 
     def set_from_db(self, base_character):
         self.id = base_character.id
         self.name = base_character.name
-        self.fname = base_character.fname
-        self.race = base_character.race
+        self.culture = catalog.cultures[base_character.culture]
+        self.race = catalog.races[base_character.race]
         self.gender = base_character.gender
         self.age = base_character.age
-        self.role = base_character.role
-        self.profession = base_character.profession
+        self.social_group = catalog.social_groups[base_character.social_group]
+        self.profession = catalog.professions[base_character.profession]
         self.wealth = base_character.wealth
-        self.classe = base_character.classe
-        self.level = base_character.level
-        self.family_id = base_character.family_id
-        self.city_id = base_character.city_id
-        self.building_id = base_character.building_id
-        self.visiting_id = base_character.visiting_id
+        self.attributes = json.loads(base_character.attributes)
+        self.moralities = json.loads(base_character.moralities)
+        self.family_role.role = base_character.family_role
+        self.load_groups(json.loads(base_character.groups))
+        self.load_family(base_character.family_id)
+        self.load_spouse_family(base_character.spouse_family_id)
 
-    def construct_profession(self, in_building, in_city, role):
-        good_preset = None
-        preset_list = [x.groups for x in catalog_building if x.name == in_building.subkind]
-        for preset in preset_list:
-            if preset.role == role:
-                good_preset = preset
-                break
-            else:
-                continue
-        if type(good_preset) is role_professions.RoleProfessions:
-            possible_job = good_preset.professions
-            odds = good_preset.odds
-            profession_list = []
-            for x in range(len(possible_job)):
-                required_feature = [x for x in catalog_profession.professions if x == possible_job[x]]
-                required_feature = required_feature[0].geo_restric
-                for y in range(odds[x]):
-                    if self.test_geography(required_feature, in_city):
-                        profession_list.append(possible_job[x].name)
-                    else:
-                        break
-        else:
-            profession_list = ['No preset profession available']
-        return profession_list
+    def load_groups(self, id_list):
+        group_connector = db_connector.Db_Connector(base.Group)
+        for item in id_list:
+            g = group_connector.load_from_db('id', item)
+            self.groups.append(g[0])
+        group_connector.close_session()
 
-    def test_geography(self, feature, in_city):
-        if feature == 'Plains':
-            return in_city.plains
-        elif feature == 'Forest':
-            return in_city.forests
-        elif feature == 'River':
-            return in_city.river
-        elif feature == 'Sea':
-            return in_city.sea
-        elif feature == 'Mountains':
-            return in_city.mountains
-        elif feature == 'Mines':
-            return in_city.mines
-        elif feature == 'Water':
-            if in_city.river or in_city.sea:
-                return True
-            else:
-                return False
-        else:
-            return True
+    def load_family(self, family_id):
+        if family_id:
+            family_connector = db_connector.Db_Connector(base.Family)
+            f = family_connector.load_from_db('id', family_id)
+            self.family = f[0]
+            family_connector.close_session()
 
+    def load_spouse_family(self, spouse_family_id):
+        if spouse_family_id:
+            family_connector = db_connector.Db_Connector(base.Family)
+            f = family_connector.load_from_db('id', spouse_family_id)
+            self.spouse_family = f[0]
+            family_connector.close_session()
 
+    # ----------------------- Load from database methods ----------------------------------- End

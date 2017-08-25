@@ -1,14 +1,14 @@
-Name;Strict_inheritance;Gender;Wealth;Attributes;Moralities;Cultures
-Noble;1;;;;;
-Bourgeois;0;;>0.4;;;Human, Elven, Dwarven
-Commoner;0;;<0.4;;;
-Farmer;0;;<0.4;;;
-Servant;0;Female;<0.4;;;
-Craftsman;0;;>0.2;Dexterity>9;;
-Scholar;0;;>0.3;Intelligence>12;;
-Religious;0;;;Wisdom>11;;
-Criminal;0;;;;Altruism<0;
-Artist;0;;;Charisma>11;;
-Military;0;Male;>0.2;Strength>11, Constitution>9;Order>0;
-Outsider;0;;;;;
-Monster;1;;;;;
+Name;Strict_inheritance;Gender;Wealth;Attributes;Moralities;Cultures;Default_professions;Professions_odds
+Noble;1;;;;;;Noble;1
+Bourgeois;0;;>0.4;;;;Merchant;1
+Commoner;0;;<0.4;;;;Miner, Tenter;1,1
+Farmer;0;;<0.4;;;;Farmer;1
+Servant;0;Female;<0.4;;;;Maid;1
+Craftsman;0;;>0.2;Dexterity>9;;;Blacksmith, Builder, Leatherworker, Tailor, Woodworker;1,2,2,3,2
+Scholar;0;;>0.3;Intelligence>12;;Human, Elven, Dwarven;Scholar;1
+Religious;0;;;Wisdom>11;;;Acolyte, Priest;3,1
+Criminal;0;;;;Altruism<0;;Thief;1
+Artist;0;;;Charisma>11;;;Artist;1
+Military;0;Male;>0.2;Strength>11, Constitution>9;Order>0;;Guard;1
+Outsider;0;;;;;;Hermit, Savage;1,1
+Monster;1;;;;;;Savage;1

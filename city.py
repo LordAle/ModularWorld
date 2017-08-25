@@ -1,4 +1,5 @@
 from constructor import Constructor
+import json
 import random
 import catalog
 import selector
@@ -14,6 +15,7 @@ class City (Constructor):
         self.culture = catalog.cultures['Default']
         self.size = catalog.city_sizes['Default']
         self.population = 0
+        self.taken_jobs = []
         self.forest = False
         self.plain = False
         self.river = False
@@ -93,12 +95,19 @@ class City (Constructor):
         except:
             pass
 
+    def build_taken_jobs_list(self, names_list):
+        jobs = []
+        for name in names_list:
+            jobs.append(catalog.professions[name])
+        return jobs
+
     def set_from_db(self, base_city):
         self.id = base_city.id
         self.name = base_city.name
         self.culture = catalog.cultures[base_city.culture]
         self.size = catalog.city_sizes[base_city.size]
         self.population = base_city.population
+        self.taken_jobs = self.build_taken_jobs_list(json.loads(base_city.taken_jobs))
         self.forest = base_city.forest
         self.plain = base_city.plain
         self.river = base_city.river

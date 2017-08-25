@@ -36,6 +36,7 @@ class Building(Constructor):
             self.kind = catalog.building_kinds['Error']
 
     def set_from_db(self, base_building):
+        self.associate(base_building.city_id)
         self.id = base_building.id
         self.name = base_building.name
         self.kind = catalog.building_kinds[base_building.kind]

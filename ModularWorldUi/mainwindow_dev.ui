@@ -260,6 +260,11 @@
     <string>Add Group</string>
    </property>
   </action>
+  <action name="actionAddCharacter">
+   <property name="text">
+    <string>Add Character</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

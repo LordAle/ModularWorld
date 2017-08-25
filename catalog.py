@@ -51,25 +51,10 @@ city_sizes = {"Error": city_size.City_Size("Error", (0, 0)),
 "Metropolis": city_size.City_Size("Metropolis", (20000, 100000)), 
 } 
 
-social_groups = {"Error": social_group.Social_Group("Error", 0, "", "", [], [], [cultures["Error"]]), 
-"Default": social_group.Social_Group("Default", 0, "", "", [], [], [cultures["Error"]]), 
-"Noble": social_group.Social_Group("Noble", 1, "", "", [], [], []), 
-"Bourgeois": social_group.Social_Group("Bourgeois", 0, "", ">0.4", [], [], [cultures["Human"], cultures["Elven"], cultures["Dwarven"]]), 
-"Commoner": social_group.Social_Group("Commoner", 0, "", "<0.4", [], [], []), 
-"Farmer": social_group.Social_Group("Farmer", 0, "", "<0.4", [], [], []), 
-"Servant": social_group.Social_Group("Servant", 0, "Female", "<0.4", [], [], []), 
-"Craftsman": social_group.Social_Group("Craftsman", 0, "", ">0.2", ["Dexterity>9"], [], []), 
-"Scholar": social_group.Social_Group("Scholar", 0, "", ">0.3", ["Intelligence>12"], [], []), 
-"Religious": social_group.Social_Group("Religious", 0, "", "", ["Wisdom>11"], [], []), 
-"Criminal": social_group.Social_Group("Criminal", 0, "", "", [], ["Altruism<0"], []), 
-"Artist": social_group.Social_Group("Artist", 0, "", "", ["Charisma>11"], [], []), 
-"Military": social_group.Social_Group("Military", 0, "Male", ">0.2", ["Strength>11", "Constitution>9"], ["Order>0"], []), 
-"Outsider": social_group.Social_Group("Outsider", 0, "", "", [], [], []), 
-"Monster": social_group.Social_Group("Monster", 1, "", "", [], [], []), 
-} 
-
 professions = {"Error": profession.Profession("Error", 0, "", 0), 
 "Default": profession.Profession("Default", 0, "", 0), 
+"Child": profession.Profession("Child", 0, "", 0), 
+"Same": profession.Profession("Same", 0, "", 0), 
 "Burgomeister": profession.Profession("Burgomeister", 0.4, "", 1), 
 "Chancellor": profession.Profession("Chancellor", 0.6, "", 1), 
 "Constable": profession.Profession("Constable", 0.6, "", 1), 
@@ -122,10 +107,27 @@ professions = {"Error": profession.Profession("Error", 0, "", 0),
 "Beggar": profession.Profession("Beggar", 0, "", 0), 
 "Hermit": profession.Profession("Hermit", 0, "", 0), 
 "Savage": profession.Profession("Savage", 0, "", 0), 
-"Child": profession.Profession("Child", 0, "", 0), 
 } 
 
-professions_groups = {"Farmer Family": professions_group.Professions_Group("Farmer Family", social_groups["Farmer"], 1, 1, 1, 1,
+social_groups = {"Error": social_group.Social_Group("Error", 0, "", "", [], [], [cultures["Error"]]), 
+"Default": social_group.Social_Group("Default", 0, "", "", [], [], [cultures["Error"]]), 
+"Noble": social_group.Social_Group("Noble", 1, "", "", [], [], [], [professions["Noble"]], [1]), 
+"Bourgeois": social_group.Social_Group("Bourgeois", 0, "", ">0.4", [], [], [], [professions["Merchant"]], [1]), 
+"Commoner": social_group.Social_Group("Commoner", 0, "", "<0.4", [], [], [], [professions["Miner"], professions["Tenter"]], [1,1]), 
+"Farmer": social_group.Social_Group("Farmer", 0, "", "<0.4", [], [], [], [professions["Farmer"]], [1]), 
+"Servant": social_group.Social_Group("Servant", 0, "Female", "<0.4", [], [], [], [professions["Maid"]], [1]), 
+"Craftsman": social_group.Social_Group("Craftsman", 0, "", ">0.2", ["Dexterity>9"], [], [], [professions["Blacksmith"], professions["Builder"], professions["Leatherworker"], professions["Tailor"], professions["Woodworker"]], [1,2,2,3,2]), 
+"Scholar": social_group.Social_Group("Scholar", 0, "", ">0.3", ["Intelligence>12"], [], [cultures["Human"], cultures["Elven"], cultures["Dwarven"]], [professions["Scholar"]], [1]), 
+"Religious": social_group.Social_Group("Religious", 0, "", "", ["Wisdom>11"], [], [], [professions["Acolyte"], professions["Priest"]], [3,1]), 
+"Criminal": social_group.Social_Group("Criminal", 0, "", "", [], ["Altruism<0"], [], [professions["Thief"]], [1]), 
+"Artist": social_group.Social_Group("Artist", 0, "", "", ["Charisma>11"], [], [], [professions["Artist"]], [1]), 
+"Military": social_group.Social_Group("Military", 0, "Male", ">0.2", ["Strength>11", "Constitution>9"], ["Order>0"], [], [professions["Guard"]], [1]), 
+"Outsider": social_group.Social_Group("Outsider", 0, "", "", [], [], [], [professions["Hermit"], professions["Savage"]], [1,1]), 
+"Monster": social_group.Social_Group("Monster", 1, "", "", [], [], [], [professions["Savage"]], [1]), 
+} 
+
+professions_groups = {"Default": professions_group.Professions_Group("Default", social_groups["Default"], 0, 0, 0, 0, 0, 0, 0, 0, [], [], [], []), 
+"Farmer Family": professions_group.Professions_Group("Farmer Family", social_groups["Farmer"], 1, 1, 1, 1,
                 5, 1, 1, 1, [professions["Farmer"], professions["Fisherman"], professions["Herder"]], [10,10,5], [professions["Farmer"], professions["Fisherman"], professions["Herder"]], [10,10,5]), 
 "Commoner Family": professions_group.Professions_Group("Commoner Family", social_groups["Commoner"], 1, 1, 1, 1,
                 5, 1, 1, 1, [professions["Barber"], professions["Ferryman"], professions["Gravedigger"], professions["Midwife"], professions["Raker"], professions["Water Carrier"]], [1,1,1,1,1,1], [professions["Barber"], professions["Ferryman"], professions["Gravedigger"], professions["Midwife"], professions["Raker"], professions["Water Carrier"]], [1,1,1,1,1,1]), 
@@ -271,3 +273,4 @@ cultures["Half-Orcish"].fill_names_lists(["Darvin", "Dorn", "Evendur", "Gorstag"
 
 Age_search_range = 5 
 Wealth_search_range = 0.1 
+children_leaving_odds = 80 

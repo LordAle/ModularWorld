@@ -145,7 +145,7 @@ class add_group_dialog(QtWidgets.QDialog, add_group_ui):
 
 class add_character_dialog(QtWidgets.QDialog, add_char_ui):
 
-    def __init__(self, main_window):
+    def __init__(self, main_window, in_group):
         super(self.__class__, self).__init__()
         add_char_ui.__init__(self)
         self.setupUi(self)
@@ -157,7 +157,7 @@ class add_character_dialog(QtWidgets.QDialog, add_char_ui):
         self.cultureComboBox.setModel(self.cultureModel)
 
         self.raceModel = models.StringListModel()
-        self.raceModel.setStringList([x.name for x in catalog.races.values() if (x.name != 'Error' and x.name != 'Default')])
+        self.raceModel.setStringList(['Random'] + [x.name for x in catalog.races.values() if (x.name != 'Error' and x.name != 'Default')])
         self.raceComboBox.setModel(self.raceModel)
 
         self.genderModel = models.StringListModel()
@@ -165,15 +165,21 @@ class add_character_dialog(QtWidgets.QDialog, add_char_ui):
         self.genderComboBox.setModel(self.genderModel)
 
         self.socialGroupModel = models.StringListModel()
-        self.socialGroupModel.setStringList([x.name for x in catalog.social_groups.values() if (x.name != 'Error' and x.name != 'Default')])
+        self.socialGroupModel.setStringList(['Random'] + [x.name for x in catalog.social_groups.values() if (x.name != 'Error' and x.name != 'Default')])
         self.socialGroupComboBox.setModel(self.socialGroupModel)
 
         self.professionModel = models.StringListModel()
-        self.professionModel.setStringList([x.name for x in catalog.professions.values() if (x.name != 'Error' and x.name != 'Default')])
+        self.professionModel.setStringList(['Random'] + [x.name for x in catalog.professions.values() if (x.name != 'Error' and x.name != 'Default')])
         self.professionComboBox.setModel(self.professionModel)
 
         self.familyRoleModel = models.StringListModel()
-        self.familyRoleModel.setStringList(['None', 'Master', 'Spouse', 'Child'])
+        if in_group.is_family:
+            if 'Master' in [x.family_role.role for x in in_group.characters]:
+                self.familyRoleModel.setStringList(['Child', 'Spouse'])
+            else:
+                self.familyRoleModel.setStringList(['Master'])
+        else:
+            self.familyRoleModel.setStringList(['None'])
         self.familyRoleComboBox.setModel(self.familyRoleModel)
 
     def accept(self):
@@ -187,8 +193,6 @@ class add_character_dialog(QtWidgets.QDialog, add_char_ui):
                  'profession': self.professionComboBox.currentText(),
                  'wealth': self.wealthLineEdit.text(),
                  'family role': self.familyRoleComboBox.currentText(),
-                 'live': self.liveCheckBox.checkState(),
-                 'work': self.workCheckBox.checkState()
                  }
 
         self.main_window.add_character(param)
