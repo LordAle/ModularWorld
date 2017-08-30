@@ -45,13 +45,14 @@ class Group(Constructor):
         asso = associator.Associator(self)
         asso.building(building_id)
 
+    def add_character(self, added_character_id):
+        if added_character_id not in [self.characters]:
+            self.characters.append(added_character_id)
+
     def assign_characters(self, chars_id):
-        connector = db_connector.Db_Connector(base.Character)
         for x in chars_id:
-            char = connector.load_from_db('id', x)
-            if char.id not in [x.id for x in self.characters]:
-                self.characters.append(char)
-        connector.close_session()
+            if x not in [y for y in self.characters]:
+                self.characters.append(x)
 
     def set_from_db(self, base_group):
         self.associate(base_group.building_id)

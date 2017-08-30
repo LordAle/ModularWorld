@@ -82,34 +82,25 @@ class Selector:
     def social_group(self, character):
         incompatible = []
         for key, value in self.selection.items():
-            print(incompatible)
-            print(key, value)
             if value.strict_inheritance:  # Remove all social groups with strict inheritance
-                print('Strict')
                 incompatible.append(key)
                 continue
             if value.gender and value.gender != character.gender:  # If there is a gender condition, check character gender
-                print('Gender')
                 incompatible.append(key)
                 continue
             if value.wealth:  # Check if character wealth is in correct range
-                print('Wealth')
-                print(character.wealth, value.wealth)
                 if not self.check_wealth(character.wealth, value.wealth):
                     incompatible.append(key)
                     continue
             if value.attributes:
-                print('Attributes')
                 if not self.check_attributes(character.attributes, value.attributes):
                     incompatible.append(key)
                     continue
             if value.moralities:
-                print('Moralities')
                 if not self.check_moralities(character.moralities, value.moralities):
                     incompatible.append(key)
                     continue
             if value.cultures:
-                print('Culture')
                 if not self.check_culture(character.culture, value.cultures):
                     incompatible.append(key)
                     continue
@@ -117,7 +108,7 @@ class Selector:
         for key in incompatible:
             del self.selection[key]
         try:
-            return random.choice(list(self.selection.items()))
+            return random.choice(list(self.selection.values()))
         except:
             print('Error in social group selection, no compatible choice were available')
 
@@ -140,21 +131,19 @@ class Selector:
             return True
 
     @staticmethod
-    def check_attributes(attributes, target):  # Definitely not optimized...
-        target_list = target.split(',')
-        for index, item in enumerate(target_list):
-            target_list[index] = item.strip()
-        for target in target_list:
+    def check_attributes(attributes, targets):  # Definitely not optimized...
+        for target in targets:
+            print(target)
             if '<' in target:
-                check_tuple = target.partition('<')
-                for index, item in check_tuple:
-                    check_tuple[index] = item.strip()
-                for index, item in catalog.attributes:
-                    if item.name == check_tuple[0]:
+                check_list = list(target.partition('<'))
+                for index, item in enumerate(check_list):
+                    check_list[index] = item.strip()
+                for index, item in enumerate(catalog.attributes):
+                    if item.name == check_list[0]:
                         attr_index = index
                         break
                 try:
-                    if attributes[attr_index] < float(check_tuple[2]):
+                    if attributes[attr_index] < float(check_list[2]):
                         return True
                     else:
                         return False
@@ -162,15 +151,15 @@ class Selector:
                     print('Error in attributes prerequisite of social group')
                     return True
             if '>' in target:
-                check_tuple = target.partition('>')
-                for index, item in check_tuple:
-                    check_tuple[index] = item.strip()
-                for index, item in catalog.attributes:
-                    if item.name == check_tuple[0]:
+                check_list = list(target.partition('>'))
+                for index, item in enumerate(check_list):
+                    check_list[index] = item.strip()
+                for index, item in enumerate(catalog.attributes):
+                    if item.name == check_list[0]:
                         attr_index = index
                         break
                 try:
-                    if attributes[attr_index] > float(check_tuple[2]):
+                    if attributes[attr_index] > float(check_list[2]):
                         return True
                     else:
                         return False
@@ -179,22 +168,18 @@ class Selector:
                     return True
 
     @staticmethod
-    def check_moralities(moralities, target):
-        target_list = target.split(',')
-        print(target_list)
-        for index, item in enumerate(target_list):
-            target_list[index] = item.strip()
-        for target in target_list:
+    def check_moralities(moralities, targets):
+        for target in targets:
             if '<' in target:
-                check_tuple = target.partition('<')
-                for index, item in check_tuple:
-                    check_tuple[index] = item.strip()
-                for index, item in catalog.moralities:
-                    if item.name == check_tuple[0]:
+                check_list = list(target.partition('<'))
+                for index, item in enumerate(check_list):
+                    check_list[index] = item.strip()
+                for index, item in enumerate(catalog.moralities):
+                    if item.name == check_list[0]:
                         attr_index = index
                         break
                 try:
-                    if moralities[attr_index] < float(check_tuple[2]):
+                    if moralities[attr_index] < float(check_list[2]):
                         return True
                     else:
                         return False
@@ -202,15 +187,15 @@ class Selector:
                     print('Error in moralities prerequisite of social group')
                     return True
             if '>' in target:
-                check_tuple = target.partition('>')
-                for index, item in check_tuple:
-                    check_tuple[index] = item.strip()
-                for index, item in catalog.moralities:
-                    if item.name == check_tuple[0]:
+                check_list = list(target.partition('>'))
+                for index, item in enumerate(check_list):
+                    check_list[index] = item.strip()
+                for index, item in enumerate(catalog.moralities):
+                    if item.name == check_list[0]:
                         attr_index = index
                         break
                 try:
-                    if moralities[attr_index] > float(check_tuple[2]):
+                    if moralities[attr_index] > float(check_list[2]):
                         return True
                     else:
                         return False

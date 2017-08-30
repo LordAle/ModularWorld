@@ -1,5 +1,6 @@
 import catalog_writer
 import sys
+import json
 from PyQt5 import Qt, QtCore, QtWidgets, QtSql, QtGui
 from db_loader import loader
 from ModularWorldUi.mainwindow import Ui_MainWindow
@@ -134,10 +135,15 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         while building_query.next():
             buildings_list.append([building_query.value(0), building_query.value(1), building_query.value(2)])
 
-        group_query = QtSql.QSqlQuery("SELECT name, id, building_id FROM groups")
+        group_query = QtSql.QSqlQuery("SELECT name, id, building_id, characters FROM groups")
         group_list = []
         while group_query.next():
-            group_list.append([group_query.value(0), group_query.value(1), group_query.value(2)])
+            group_list.append([group_query.value(0), group_query.value(1), group_query.value(2), group_query.value(3)])
+
+        character_query = QtSql.QSqlQuery("SELECT name, id FROM characters")
+        character_list = []
+        while character_query.next():
+            character_list.append([character_query.value(0), character_query.value(1)])
 
         for cit in cities_list:
             c = QtGui.QStandardItem(cit[0])
@@ -160,6 +166,18 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
                     g.setData(gro[1], 20)
                     g.setData('groups', 21)
                     parent_building.appendRow(g)
+                    parent_group = g
+
+                    try:
+                        group_characters_id = json.loads(gro[3])
+                    except:
+                        group_characters_id = []
+                    group_characters = [ch for ch in character_list if ch[1] in group_characters_id]
+                    for cha in group_characters:
+                        ch = QtGui.QStandardItem(cha[0])
+                        ch.setData(cha[1], 20)
+                        ch.setData('characters', 21)
+                        parent_group.appendRow(ch)
 
         self.treeView.setModel(self.treeModel)
 
@@ -501,6 +519,15 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.build_tree_model()
 
+    def update_group(self, group_id, new_character_id):
+        group_connector = db_connector.Db_Connector(base.Group)
+        g = group_connector.load_from_db('id', group_id)
+        g = g[0]
+        g.add_character(new_character_id)
+
+        group_connector.full_update(g, group_id)
+        group_connector.close_session()
+
     def add_character(self, character_dict, in_group_id='selected'):
         if in_group_id == 'selected':
             group_id = self.get_selected_id()
@@ -510,11 +537,12 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         new_character = character.Character()
         new_character.associate_group(group_id)
         new_character.build_character(character_dict)
-        print('Here')
 
         connector = db_connector.Db_Connector(base.Character)
-        connector.write_to_db(new_character)
+        new_char_id = connector.write_to_db(new_character)
         connector.close_session()
+
+        self.update_group(group_id, new_char_id)
 
         self.build_tree_model()
 

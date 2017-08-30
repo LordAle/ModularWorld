@@ -5,6 +5,8 @@ from ModularWorldUi.add_group_dialog import Ui_Dialog as add_group_ui
 from ModularWorldUi.add_char_dialog import Ui_Dialog as add_char_ui
 import models
 import catalog
+import verifier
+import family_role
 
 
 class add_city_dialog(QtWidgets.QDialog, add_city_ui):
@@ -174,7 +176,7 @@ class add_character_dialog(QtWidgets.QDialog, add_char_ui):
 
         self.familyRoleModel = models.StringListModel()
         if in_group.is_family:
-            if 'Master' in [x.family_role.role for x in in_group.characters]:
+            if verifier.if_role_in_group(in_group.characters, family_role.master.role):
                 self.familyRoleModel.setStringList(['Child', 'Spouse'])
             else:
                 self.familyRoleModel.setStringList(['Master'])

@@ -10,6 +10,7 @@ import family
 import family_role
 import associator
 import selector
+import verifier
 
 
 class Character(Constructor):
@@ -48,9 +49,11 @@ class Character(Constructor):
             self.auto_populate = True
         self.set_base(param_dict)
         if self.family_role.role != family_role.child.role:
+            print('Search start')
             self.search_existing_char()
+            print('Search end')
         self.complete_info()
-        print('Inside')
+
 
     # -------------------------- Association methods -------------------------------- Begin
 
@@ -69,17 +72,30 @@ class Character(Constructor):
 
     def set_base(self, param):
         # Take a param dict to set predefined information before searching for compatible characters
+        print('set_base start')
         self.set_base_family_role(param['family role'])
+        print(self.family_role.role)
         self.set_base_culture(param['culture'])
+        print(self.culture.name)
         self.set_base_race(param['race'])
+        print(self.race.name)
         self.set_base_gender(param['gender'])
+        print(self.gender)
         self.set_base_name(param['name'])
+        print(self.name)
         self.set_base_family(param['fname'])
+        print(self.family.name)
         self.set_spouse_family()
+        print(self.spouse_family.name)
         self.set_base_age(param['age'])
+        print(self.age)
         self.set_base_social_group(param['social group'])
+        print(self.social_group.name)
         self.set_base_profession(param['profession'])
+        print(self.profession.name)
         self.set_base_wealth(param['wealth'])
+        print(self.wealth)
+        print('set_base end')
 
     def set_base_family_role(self, role):
         if role != 'None':
@@ -342,10 +358,8 @@ class Character(Constructor):
     def set_will_leave(self):
         if self.auto_populate and self.family_role.role == family_role.child.role:  # Manually added character cannot leave
             first_child = True
-            for char in self.current_group_edit.characters:
-                if char.family_role.role == family_role.child.role:
-                    first_child = False
-                    break
+            if verifier.if_role_in_group(self.current_group_edit.characters, family_role.child.role):
+                first_child = False
             if first_child and self.current_group_edit.preset.inheritance:  # First child of inherited group cannot leave
                 return
             if self.age >= self.race.working_age and random.randint(1, 100) <= 80:  # !!! Can be changed to a config option
@@ -401,7 +415,6 @@ class Character(Constructor):
             else:
                 social_selector = selector.Selector(catalog.social_groups)
                 self.social_group = social_selector.social_group(self)
-                print('Here')
 
     def set_profession(self, default):
         if self.profession == default and not self.will_leave:
@@ -416,7 +429,7 @@ class Character(Constructor):
                         prof_list = self.current_group_edit.preset.professions
                         odds = self.current_group_edit.preset.professions_odds
                 else:
-                    prof_list = self.social_group.professions_main
+                    prof_list = self.social_group.professions
                     odds = self.social_group.professions_odds
 
                 prof_selector = selector.Selector(prof_list)

@@ -81,6 +81,8 @@ class Db_Connector():
         elif self.base == base.Family:
             self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name})
 
+        self.session.commit()
+
     def load_from_db(self, filter_by, filter_value):
         item_list = []
         loaded_items = self.session.query(self.base).filter(getattr(self.base, filter_by) == filter_value).all()

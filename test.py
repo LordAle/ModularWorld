@@ -1,12 +1,7 @@
 
-a_string = 'one, two'
+a_string_1 = '  one  '
+a_string_2 = 'Two'
 
-new = a_string.split(',')
-for index, item in enumerate(new):
-    print(index)
-    new[index] = new[index].strip()
+print(a_string_1.strip())
+print(a_string_2.strip())
 
-print(new)
-
-if 'w' in a_string:
-    print('Ok')

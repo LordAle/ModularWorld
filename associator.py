@@ -50,7 +50,10 @@ class Associator:
             print('No current group associated with character!')
             return
 
-        for char in self.item.current_group_edit.characters:
+        char_connector = db_connector.Db_Connector(base.Character)
+        for char_id in self.item.current_group_edit.characters:
+            char = char_connector.load_from_db('id', char_id)
+            char = char[0]
             if char.family_role.role == family_role.master.role:
                 master_char = char
                 break
