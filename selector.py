@@ -33,10 +33,17 @@ class Selector:
         return self.weighted(total_odds)
 
     def minority_culture(self, main_culture):
-        self.selection = {name: self.selection[name] for name in main_culture.other_cultures}
+        self.selection = [catalog.cultures[name] for name in main_culture.other_cultures]
         total_odds = 0
-        for key, value in self.selection.items():
-            total_odds = total_odds + value.other_cultures_odds
+        for weight in main_culture.odds:
+            total_odds = total_odds + weight
+        random_nb = random.randint(1, total_odds)
+        for index, weight in enumerate(main_culture.odds):
+            random_nb = random_nb - weight
+            if random_nb <= 0:
+                return self.selection[index]
+
+
         return self.weighted(total_odds)
 
     def profession(self, odds, in_city):

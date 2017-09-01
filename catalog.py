@@ -41,6 +41,7 @@ cultures = {"Error": culture.Culture("Error", races["Error"], [], "Equal", 0, []
 "Gnomish": culture.Culture("Gnomish", races["Gnome"], ["Order-0.5"], "Matriarchal", 5, ["Elven", "Dwarven", "Halfling", "Human", "Half-Elven"], [1,1,1,1,1]), 
 "Half-Elven": culture.Culture("Half-Elven", races["Half-Elf"], [], "Equal", 10, ["Human", "Elven", "Halfling", "Gnomish"], [5,4,3,1]), 
 "Half-Orcish": culture.Culture("Half-Orcish", races["Half-Orc"], ["Altruism-0.2", "Order-0.2"], "Patriarchal", 10, ["Human"], [1]), 
+"Open Human": culture.Culture("Open Human", races["Human"], [], "Equal", 1000, ["Halfling", "Half-Elven", "Half-Orcish", "Dwarven", "Gnomish", "Elven"], [8,4,3,1,1,1]), 
 } 
 
 city_sizes = {"Error": city_size.City_Size("Error", (0, 0)), 

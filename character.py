@@ -303,7 +303,7 @@ class Character(Constructor):
 
     def set_culture(self, default):
         if self.culture == default:  # Assign culture if it is still default
-            if self.family_role == family_role.spouse or self.family_role == family_role.child:  # If child or spouse, set culture to master's
+            if self.family_role.role == family_role.spouse.role or self.family_role.role == family_role.child.role:  # If child or spouse, set culture to master's
                 self.culture = self.master_char.culture
             else:  # Otherwise, check city dominant culture
                 openness = 100 + self.current_group_edit.in_building.in_city.culture.cultural_openness
@@ -323,7 +323,7 @@ class Character(Constructor):
 
     def set_gender(self, default):
         if self.gender == default:
-            if self.family_role == family_role.spouse:  # Assign opposite gender if spouse
+            if self.family_role.role == family_role.spouse.role:  # Assign opposite gender if spouse
                 if self.master_char.gender == 'Male':
                     self.gender = 'Female'
                 elif self.master_char.gender == 'Female':

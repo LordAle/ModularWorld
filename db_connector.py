@@ -72,7 +72,7 @@ class Db_Connector():
             self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name, 'kind':item.kind.name, 'city_id': item.in_city.id})
         elif self.base == base.Group:
             self.session.query(self.base).filter(self.base.id == p_key).update({'preset': item.preset.name, 'name': item.name, 'family': item.is_family, 'live': item.is_live, 'work': item.is_work,
-                                                                                'visit': item.is_visit, 'building_id': item.in_building.id, 'characters': json.dumps([x.id for x in item.characters])})
+                                                                                'visit': item.is_visit, 'building_id': item.in_building.id, 'characters': json.dumps(item.characters)})
         elif self.base == base.Character:
             self.session.query(self.base).filter(self.base.id == p_key).update({'name': item.name, 'culture': item.culture.name, 'race': item.race.name, 'gender': item.gender, 'age': item.age,
                                                                                 'social_group': item.social_group.name, 'profession': item.profession.name, 'wealth': item.wealth,

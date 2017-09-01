@@ -6,3 +6,4 @@ Halfling;Halfling;Altruism+0.5, Order+0.5;Equal;15;Human, Gnomish, Half-Elven;7,
 Gnomish;Gnome;Order-0.5;Matriarchal;5;Elven, Dwarven, Halfling, Human, Half-Elven;1,1,1,1,1
 Half-Elven;Half-Elf;;Equal;10;Human, Elven, Halfling, Gnomish;5,4,3,1
 Half-Orcish;Half-Orc;Altruism-0.2, Order-0.2;Patriarchal;10;Human;1
+Open Human;Human;;Equal;1000;Halfling, Half-Elven, Half-Orcish, Dwarven, Gnomish, Elven;8,4,3,1,1,1
