@@ -36,19 +36,12 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.listViewBuildings.clicked.connect(self.action_building_click)
         # self.listViewCharacters.clicked.connect(self.action_character_click)
 
-        # Buttons triggers
-        # self.pushButtonAddCity.clicked.connect(self.add_city_click)
-        # self.pushButtonAddBuilding.clicked.connect(self.add_building_click)
-        # self.pushButtonAddCharacter.clicked.connect(self.add_character_click)
-        # self.pushButtonDeleteCity.clicked.connect(self.delete_city_click)
-        # self.pushButtonDeleteBuilding.clicked.connect(self.delete_building_click)
-        # self.pushButtonDeleteCharacter.clicked.connect(self.delete_character_click)
-
         # Contextual menus
         self.treeView.addAction(self.actionAddCity)
         self.treeView.addAction(self.actionAddBuilding)
         self.treeView.addAction(self.actionAddGroup)
         self.treeView.addAction(self.actionAddCharacter)
+        self.treeView.addAction(self.actionDelete)
 
         self.pushButtonShowFamily.clicked.connect(self.show_family_click)
         self.pushButtonVisitor.clicked.connect(self.show_visitor_click)
@@ -61,6 +54,8 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAddBuilding.triggered.connect(self.add_building_click)
         self.actionAddGroup.triggered.connect(self.add_group_click)
         self.actionAddCharacter.triggered.connect(self.add_character_click)
+
+        self.actionDelete.triggered.connect(self.delete_click)
 
         self.actionCity_table.triggered.connect(self.action_full_city)
         self.actionBuilding_table.triggered.connect(self.action_full_building)
@@ -180,6 +175,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
                         parent_group.appendRow(ch)
 
         self.treeView.setModel(self.treeModel)
+        self.treeView.expandAll()
 
     # Unused, could be implemented to optimize item addition to view
     def update_tree_model(self, table, item_id, parent=None):
@@ -453,16 +449,8 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.add_dialog = add_dialogs.add_character_dialog(self, in_group)
         self.add_dialog.show()
 
-    def open_delete_city_dialog(self):
-        self.delete_dialog = delete_dialogs.delete_dialog(self, 'cities', 'city')
-        self.delete_dialog.show()
-
-    def open_delete_building_dialog(self):
-        self.delete_dialog = delete_dialogs.delete_dialog(self, 'buildings', 'building')
-        self.delete_dialog.show()
-
-    def open_delete_character_dialog(self):
-        self.delete_dialog = delete_dialogs.delete_dialog(self, 'characters', 'character')
+    def open_delete_dialog(self, table):
+        self.delete_dialog = delete_dialogs.delete_dialog(self, table)
         self.delete_dialog.show()
 
 # View open dialogs methods --------------------------------------------------------End
@@ -566,43 +554,45 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         if character_id == 'selected':
             character_id = self.get_selected_id()
 
-        connector = db_connector.Character_Connector()
+        connector = db_connector.Db_Connector(base.Character)
         connector.delete_entry(character_id)
         connector.close_session()
 
-        self.build_tree_model()
+    def delete_group(self, group_id='selected'):
+        if group_id == 'selected':
+            group_id = self.get_selected_id()
+
+        connector = db_connector.Db_Connector(base.Group)
+        connector.delete_entry(group_id)
+        connector.close_session()
 
     def delete_building(self, building_id='selected'):
         if building_id == 'selected':
-            building_id = self.get_selected_building_id()
+            building_id = self.get_selected_id()
 
-        char_connector = db_connector.Character_Connector()
-        characters = char_connector.load_from_db('building_id', building_id)
-        char_connector.close_session()
-        for deleted in characters:
-            self.delete_character(deleted.id)
+        group_connector = db_connector.Db_Connector(base.Group)
+        groups = group_connector.load_from_db('building_id', building_id)
+        group_connector.close_session()
+        for deleted in groups:
+            self.delete_group(deleted.id)
 
-        connector = db_connector.Building_Connector()
+        connector = db_connector.Db_Connector(base.Building)
         connector.delete_entry(building_id)
         connector.close_session()
 
-        self.build_tree_model()
-
     def delete_city(self, city_id='selected'):
         if city_id == 'selected':
-            city_id = self.get_selected_city_id()
+            city_id = self.get_selected_id()
 
-        building_connector = db_connector.Building_Connector()
+        building_connector = db_connector.Db_Connector(base.Building)
         buildings = building_connector.load_from_db('city_id', city_id)
         building_connector.close_session()
         for deleted in buildings:
             self.delete_building(deleted.id)
 
-        connector = db_connector.City_Connector()
+        connector = db_connector.Db_Connector(base.City)
         connector.delete_entry(city_id)
         connector.close_session()
-
-        self.build_tree_model()
 
 # Delete entry from popup methods -----------------------------------------------------End
 
@@ -668,14 +658,10 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             print('Select a group to add a character to it')
 
-    def delete_city_click(self):
-        self.open_delete_city_dialog()
-
-    def delete_building_click(self):
-        self.open_delete_building_dialog()
-
-    def delete_character_click(self):
-        self.open_delete_character_dialog()
+    def delete_click(self):
+        selected_index = self.treeView.selectionModel().currentIndex()
+        selected_item = self.treeModel.itemFromIndex(selected_index)
+        self.open_delete_dialog(selected_item.data(21))
 
     def show_family_click(self):
         self.show_selected_family()

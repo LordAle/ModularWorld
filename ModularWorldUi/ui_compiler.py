@@ -24,3 +24,7 @@ with open('add_char_dialog.py', mode='w') as pyfile:
 with open('delete_dialog.py', mode='w') as pyfile:
     with open('delete_dialog.ui', mode='r') as uifile:
         uic.compileUi(uifile, pyfile)
+
+with open('edit_city_dialog.py', mode='w') as pyfile:
+    with open('edit_city_dialog.ui', mode='r') as uifile:
+        uic.compileUi(uifile, pyfile)
