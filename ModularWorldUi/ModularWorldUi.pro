@@ -38,6 +38,9 @@ FORMS    += mainwindow.ui \
     map_view.ui \
     mainwindow_dev.ui \
     add_group_dialog.ui \
-    edit_city_dialog.ui
+    edit_city_dialog.ui \
+    edit_building_dialog.ui \
+    edit_group_dialog.ui \
+    edit_char_dialog.ui
 
 DISTFILES +=

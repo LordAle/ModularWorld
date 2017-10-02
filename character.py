@@ -521,4 +521,17 @@ class Character(Constructor):
             self.spouse_family = f[0]
             family_connector.close_session()
 
+    def set_from_edit_box(self, param):
+        self.name = param['name']
+        self.family.update_name(param['fname'])  # Change method call to edit dialog
+        self.culture = catalog.cultures[param['culture']]
+        self.race = catalog.races[param['race']]
+        self.gender = param['gender']
+        self.age = int(param['age'])
+        self.social_group = catalog.social_groups[param['social group']]
+        self.profession = catalog.professions[param['profession']]
+        self.wealth = int(param['wealth'])
+        self.family_role.role = param['family role']
+
+
     # ----------------------- Load from database methods ----------------------------------- End

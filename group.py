@@ -68,3 +68,24 @@ class Group(Constructor):
         else:
             self.assign_characters([])
 
+    def set_from_edit_box(self, param):
+        self.name = param['name']
+        if param['family']:
+            self.is_family = True
+        else:
+            self.is_family = False
+        if param['live']:
+            self.is_live = True
+        else:
+            self.is_live = False
+        if param['work']:
+            self.is_work = True
+        else:
+            self.is_work = False
+        if param['visit']:
+            self.is_visit = True
+        else:
+            self.is_visit = False
+        if self.in_building.id != param['in_building_id']:
+            self.associate(param['in_building_id'])
+

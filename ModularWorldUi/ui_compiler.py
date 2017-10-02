@@ -28,3 +28,15 @@ with open('delete_dialog.py', mode='w') as pyfile:
 with open('edit_city_dialog.py', mode='w') as pyfile:
     with open('edit_city_dialog.ui', mode='r') as uifile:
         uic.compileUi(uifile, pyfile)
+
+with open('edit_building_dialog.py', mode='w') as pyfile:
+    with open('edit_building_dialog.ui', mode='r') as uifile:
+        uic.compileUi(uifile, pyfile)
+
+with open('edit_group_dialog.py', mode='w') as pyfile:
+    with open('edit_group_dialog.ui', mode='r') as uifile:
+        uic.compileUi(uifile, pyfile)
+
+with open('edit_char_dialog.py', mode='w') as pyfile:
+    with open('edit_char_dialog.ui', mode='r') as uifile:
+        uic.compileUi(uifile, pyfile)

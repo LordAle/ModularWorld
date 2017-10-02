@@ -115,3 +115,10 @@ class City (Constructor):
         self.mountain = base_city.mountain
         self.mine = base_city.mine
 
+    def set_from_edit_box(self, param):
+        self.name = param['name']
+        self.culture = catalog.cultures[param['culture']]
+        self.size = catalog.city_sizes[param['size']]
+        self.population = param['population']
+        self.set_geography(param['geography'])
+

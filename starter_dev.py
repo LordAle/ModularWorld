@@ -14,6 +14,7 @@ import family
 import db_connector
 import add_dialogs
 import delete_dialogs
+import edit_dialogs
 # import populator
 import visitor_manager
 
@@ -26,6 +27,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.add_dialog = None
+        self.edit_dialog = None
         self.delete_dialog = None
 
         # Declare models
@@ -41,6 +43,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.treeView.addAction(self.actionAddBuilding)
         self.treeView.addAction(self.actionAddGroup)
         self.treeView.addAction(self.actionAddCharacter)
+        self.treeView.addAction(self.actionEdit)
         self.treeView.addAction(self.actionDelete)
 
         self.pushButtonShowFamily.clicked.connect(self.show_family_click)
@@ -55,6 +58,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAddGroup.triggered.connect(self.add_group_click)
         self.actionAddCharacter.triggered.connect(self.add_character_click)
 
+        self.actionEdit.triggered.connect(self.edit_click)
         self.actionDelete.triggered.connect(self.delete_click)
 
         self.actionCity_table.triggered.connect(self.action_full_city)
@@ -408,6 +412,13 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         return result
 
     @staticmethod
+    def get_group_from_db(filter_by, filter_value):
+        connector = db_connector.Db_Connector(base.Group)
+        result = connector.load_from_db(filter_by, filter_value)
+        connector.close_session()
+        return result
+
+    @staticmethod
     def get_characters_from_db(filter_by, filter_value):
         connector = db_connector.Db_Connector(base.Character)
         result = connector.load_from_db(filter_by, filter_value)
@@ -441,13 +452,43 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def open_add_character_dialog(self):
         group_id = self.get_selected_id()
-        group_connector = db_connector.Db_Connector(base.Group)
-        in_group = group_connector.load_from_db('id', group_id)
+        in_group = self.get_group_from_db('id', group_id)
         in_group = in_group[0]
-        group_connector.close_session()
 
         self.add_dialog = add_dialogs.add_character_dialog(self, in_group)
         self.add_dialog.show()
+
+    def open_edit_city_dialog(self):
+        city_id = self.get_selected_id()
+        in_city = self.get_cities_from_db('id', city_id)
+        in_city = in_city[0]
+
+        self.edit_dialog = edit_dialogs.edit_city_dialog(self, in_city)
+        self.edit_dialog.show()
+
+    def open_edit_building_dialog(self):
+        building_id = self.get_selected_id()
+        in_building = self.get_buildings_from_db('id', building_id)
+        in_building = in_building[0]
+
+        self.edit_dialog = edit_dialogs.edit_builduing_dialog(self, in_building)
+        self.edit_dialog.show()
+
+    def open_edit_group_dialog(self):
+        group_id = self.get_selected_id()
+        in_group = self.get_group_from_db('id', group_id)
+        in_group = in_group[0]
+
+        self.edit_dialog = edit_dialogs.edit_group_dialog(self, in_group)
+        self.edit_dialog.show()
+
+    def open_edit_character_dialog(self):
+        char_id = self.get_selected_id()
+        in_char = self.get_characters_from_db('id', char_id)
+        in_char = in_char[0]
+
+        self.edit_dialog = edit_dialogs.edit_character_dialog(self, in_char)
+        self.edit_dialog.show()
 
     def open_delete_dialog(self, table):
         self.delete_dialog = delete_dialogs.delete_dialog(self, table)
@@ -657,6 +698,18 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
             self.open_add_character_dialog()
         else:
             print('Select a group to add a character to it')
+
+    def edit_click(self):
+        selected_index = self.treeView.selectionModel().currentIndex()
+        selected_item = self.treeModel.itemFromIndex(selected_index)
+        if selected_item.data(21) == 'cities':
+            self.open_edit_city_dialog()
+        if selected_item.data(21) == 'buildings':
+            self.open_edit_building_dialog()
+        if selected_item.data(21) == 'groups':
+            self.open_edit_group_dialog()
+        if selected_item.data(21) == 'characters':
+            self.open_edit_character_dialog()
 
     def delete_click(self):
         selected_index = self.treeView.selectionModel().currentIndex()

@@ -134,6 +134,8 @@ class Ui_MainWindow(object):
         self.actionAddCharacter.setObjectName("actionAddCharacter")
         self.actionDelete = QtWidgets.QAction(MainWindow)
         self.actionDelete.setObjectName("actionDelete")
+        self.actionEdit = QtWidgets.QAction(MainWindow)
+        self.actionEdit.setObjectName("actionEdit")
         self.menuFile.addAction(self.actionNewDatabase)
         self.menuFile.addAction(self.actionLoadDatabase)
         self.menuShow.addAction(self.actionCity_table)
@@ -167,4 +169,5 @@ class Ui_MainWindow(object):
         self.actionAddGroup.setText(_translate("MainWindow", "Add Group"))
         self.actionAddCharacter.setText(_translate("MainWindow", "Add Character"))
         self.actionDelete.setText(_translate("MainWindow", "Delete"))
+        self.actionEdit.setText(_translate("MainWindow", "Edit"))
 

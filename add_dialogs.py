@@ -55,8 +55,8 @@ class add_city_dialog(QtWidgets.QDialog, add_city_ui):
         if self.geographyButton.isChecked():
             self.geography = 'Random'
         else:
-            self.geography = {'forest': self.forestsCheckBox.checkState(), 'plain': self.plainsCheckBox.checkState(), 'river': self.riverCheckBox.checkState(),
-                              'sea': self.seaCheckBox.checkState(), 'mountain': self.mountainsCheckBox.checkState(), 'mine': self.minesCheckBox.checkState()}
+            self.geography = {'forest': self.forestCheckBox.checkState(), 'plain': self.plainCheckBox.checkState(), 'river': self.riverCheckBox.checkState(),
+                              'sea': self.seaCheckBox.checkState(), 'mountain': self.mountainCheckBox.checkState(), 'mine': self.mineCheckBox.checkState()}
 
     def accept(self):
         # Pass all parameters to the add_city method in controller
@@ -71,6 +71,7 @@ class add_city_dialog(QtWidgets.QDialog, add_city_ui):
 
         self.main_window.add_city(param)
         self.close()
+
 
 class add_building_dialog(QtWidgets.QDialog, add_building_ui):
 

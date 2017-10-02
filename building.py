@@ -45,3 +45,9 @@ class Building(Constructor):
     def associate(self, city_id):
         asso = associator.Associator(self)
         asso.city(city_id)
+
+    def set_from_edit_box(self, param):
+        self.name = param['name']
+        self.kind = catalog.building_kinds[param['kind']]
+        if self.in_city.id != param['in_city_id']:
+            self.associate(param['in_city_id'])
