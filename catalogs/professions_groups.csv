@@ -1,34 +1,34 @@
 Name;Social_group;Main_figure;Spouse;Children;Inheritance;Mean;Variance;Live;Work;Professions_main;Odds_main;Professions;Odds
-Farmer Family;Farmer;1;1;1;1;5;1;1;1;Farmer, Fisherman, Herder;10,10,5;Farmer, Fisherman, Herder;10,10,5
-Commoner Family;Commoner;1;1;1;1;5;1;1;1;Barber, Ferryman, Gravedigger, Midwife, Raker, Water Carrier;1,1,1,1,1,1;Barber, Ferryman, Gravedigger, Midwife, Raker, Water Carrier;1,1,1,1,1,1
-Bourgeois Family;Bourgeois;1;1;1;1;5;1;1;1;Animal Keeper, Bather, Burgomeister, Doctor, Miller;2,1,5,2,3;Animal Keeper, Bather, Burgomeister, Doctor, Miller;2,1,5,2,3
-Noble Family;Noble;1;1;1;1;5;1;1;0;Diplomat, Knight, Noble, Chancellor, Constable, Exchequer, Forester;1,2,2,3,3,3,3;Diplomat, Knight, Noble, Chancellor, Constable, Exchequer, Forester;1,2,2,3,3,3,3
-Tavern Family;Commoner;1;1;1;1;5;1;1;1;Cook;1;Cook;1
-Inn Family;Bourgeois;1;1;1;1;5;1;1;1;Innkeeper;1;Innkeeper;1
-Hospital Family;Bourgeois;1;1;1;1;5;1;1;1;Doctor;1;Doctor;1
-Bank Family;Bourgeois;1;1;1;1;5;1;1;1;Banker;1;Banker;1
-General Store Family;Commoner;1;1;1;1;5;1;1;1;Merchant;1;Merchant;1
-Luxury Store Family;Bourgeois;1;1;1;1;5;1;1;1;Merchant;1;Merchant;1
-Blacksmith Family;Craftsman;1;1;1;1;5;1;1;1;Blacksmith;1;Blacksmith;1
-Tailor Family;Craftsman;1;1;1;1;5;1;1;1;Tailor;1;Tailor;1
-Leatherwork Family;Craftsman;1;1;1;1;5;1;1;1;Leatherworker;1;Leatherworker;1
-Woodwork Family;Craftsman;1;1;1;1;5;1;1;1;Woodworker;1;Woodworker;1
-Builder Family;Craftsman;1;1;1;1;5;1;1;1;Builder;1;Builder;1
-Misc Workshop Family;Craftsman;1;1;1;1;5;1;1;1;Specialist Craftsman;1;Specialist Craftsman;1
-Stronghold Family;Noble;1;1;1;1;5;1;1;1;Local Lord;1;Local Lord;1
-Master Shrine;Religious;1;0;0;0;5;1;1;1;;;Acolyte, Priest;1,1
-Master Church;Religious;1;0;0;0;5;1;1;1;;;Priest;1
-Master Cathedral;Religious;1;0;0;0;5;1;1;1;;;High Priest;1
-Master School;Scholar;1;0;0;0;5;1;1;1;;;Scholar;1
-Master University;Scholar;1;0;0;0;5;1;1;1;;;Scholar;1
-Master Prison;Military;1;0;0;0;5;1;0;1;;;Guard;1
-Master Barrack;Military;1;0;0;0;5;1;0;1;;;Soldier;1
-Master Fortress;Military;1;0;0;0;5;1;0;1;;;Soldier;1
-Master Thieves Den;Criminal;1;0;0;0;5;1;1;1;;;Thief;1
-Master Criminal Front;Criminal;1;0;0;0;5;1;1;1;;;Thief;1
-Master Artists Guild;Artist;1;0;0;0;5;1;1;1;;;Artist;1
-Master Circus;Artist;1;0;0;0;5;1;1;1;;;Artist;1
-Master Museum;Scholar;1;0;0;0;5;1;1;1;;;Scholar;1
+Farmer Family;Farmer;1;0.95;1;1;5;1;1;1;Farmer, Fisherman, Herder;10,10,5;Farmer, Fisherman, Herder;10,10,5
+Commoner Family;Commoner;1;0.95;1;1;5;1;1;1;Barber, Ferryman, Gravedigger, Midwife, Raker, Water Carrier;1,1,1,1,1,1;Barber, Ferryman, Gravedigger, Midwife, Raker, Water Carrier;1,1,1,1,1,1
+Bourgeois Family;Bourgeois;1;0.85;1;1;5;1;1;1;Animal Keeper, Bather, Burgomeister, Doctor, Miller;2,1,5,2,3;Animal Keeper, Bather, Burgomeister, Doctor, Miller;2,1,5,2,3
+Noble Family;Noble;1;0.95;1;1;5;1;1;0;Diplomat, Knight, Noble, Chancellor, Constable, Exchequer, Forester;1,2,2,3,3,3,3;Diplomat, Knight, Noble, Chancellor, Constable, Exchequer, Forester;1,2,2,3,3,3,3
+Tavern Family;Commoner;1;0.9;1;1;5;1;1;1;Cook;1;Cook;1
+Inn Family;Bourgeois;1;0.9;1;1;5;1;1;1;Innkeeper;1;Innkeeper;1
+Hospital Family;Bourgeois;1;0.8;1;1;5;1;1;1;Doctor;1;Doctor;1
+Bank Family;Bourgeois;1;0.9;1;1;5;1;1;1;Banker;1;Banker;1
+General Store Family;Commoner;1;0.95;1;1;5;1;1;1;Merchant;1;Merchant;1
+Luxury Store Family;Bourgeois;1;0.9;1;1;5;1;1;1;Merchant;1;Merchant;1
+Blacksmith Family;Craftsman;1;0.9;1;1;5;1;1;1;Blacksmith;1;Blacksmith;1
+Tailor Family;Craftsman;1;0.95;1;1;5;1;1;1;Tailor;1;Tailor;1
+Leatherwork Family;Craftsman;1;0.8;1;1;5;1;1;1;Leatherworker;1;Leatherworker;1
+Woodwork Family;Craftsman;1;0.9;1;1;5;1;1;1;Woodworker;1;Woodworker;1
+Builder Family;Craftsman;1;0.9;1;1;5;1;1;1;Builder;1;Builder;1
+Misc Workshop Family;Craftsman;1;0.9;1;1;5;1;1;1;Specialist Craftsman;1;Specialist Craftsman;1
+Stronghold Family;Noble;1;0.95;1;1;5;1;1;1;Local Lord;1;Local Lord;1
+Master Shrine;Religious;1;0;0;0;5;1;1;1;Priest;1;Acolyte, Priest;1,1
+Master Church;Religious;1;0;0;0;5;1;1;1;Priest;1;Acolyte, Priest;1,1
+Master Cathedral;Religious;1;0;0;0;5;1;1;1;High Priest;1;Acolyte, Priest;1,1
+Master School;Scholar;1;0;0;0;5;1;1;1;Scholar;1;Scholar;1
+Master University;Scholar;1;0;0;0;5;1;1;1;Scholar;1;Scholar;1
+Master Prison;Military;1;0;0;0;5;1;0;1;Guard;1;Guard;1
+Master Barrack;Military;1;0;0;0;5;1;0;1;Guard;1;Soldier;1
+Master Fortress;Military;1;0;0;0;5;1;0;1;Guard;1;Soldier;1
+Master Thieves Den;Criminal;1;0;0;0;5;1;1;1;Thief;1;Thief;1
+Master Criminal Front;Criminal;1;0;0;0;5;1;1;1;Thief;1;Thief;1
+Master Artists Guild;Artist;1;0;0;0;5;1;1;1;Artist;1;Artist;1
+Master Circus;Artist;1;0;0;0;5;1;1;1;Artist;1;Artist;1
+Master Museum;Scholar;1;0;0;0;5;1;1;1;Scholar;1;Scholar;1
 Maid Few;Servant;0;0;0;0;5;1;1;1;;;Maid;1
 Maid Some;Servant;0;0;0;0;5;1;1;1;;;Maid;1
 Maid Many;Servant;0;0;0;0;5;1;1;1;;;Maid;1

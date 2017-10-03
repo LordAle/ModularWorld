@@ -1,6 +1,8 @@
 import catalog_writer
 import sys
 import json
+import copy
+import random
 from PyQt5 import Qt, QtCore, QtWidgets, QtSql, QtGui
 from db_loader import loader
 from ModularWorldUi.mainwindow import Ui_MainWindow
@@ -17,6 +19,7 @@ import delete_dialogs
 import edit_dialogs
 # import populator
 import visitor_manager
+import catalog
 
 
 class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -528,7 +531,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.build_tree_model()
 
-    def add_group(self, group_dict, preset=False, preset_name=None, in_building_id='selected'):
+    def add_group(self, group_dict, preset=None, preset_name=None, in_building_id='selected'):
         if in_building_id == 'selected':
             building_id = self.get_selected_id()
         else:
@@ -537,16 +540,52 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         new_group = group.Group()
         if preset:
             new_group.set_from_catalog(preset_name, building_id)
-            # Add auto populate (add_character method calls)
         else:
             new_group.set_from_dialog(group_dict, building_id)
-
 
         connector = db_connector.Db_Connector(base.Group)
         new_group_id = connector.write_to_db(new_group)
         connector.close_session()
 
+        if preset:  # Auto-populate preset groups
+            self.populate_group(new_group_id, new_group.preset)
+
         self.build_tree_model()
+
+    def populate_group(self, group_id, preset):
+        base_param = {'name': 'Random',
+                      'fname': 'Random',
+                      'culture': 'Random',
+                      'race': 'Random',
+                      'gender': 'Random',
+                      'age': 'Random',
+                      'social group': 'Random',
+                      'profession': 'Random',
+                      'wealth': 'Random',
+                      'family role': 'None',
+                      }
+        main_added = 0
+        spouse_added = 0
+
+        if preset.main_figure:
+            if preset.children:
+                base_param['family role'] = 'Master'
+            self.add_character(base_param, group_id, True)
+            main_added = 1
+
+            if random.random() <= preset.spouse:
+                base_param['family role'] = 'Spouse'
+                self.add_character(base_param, group_id, True)
+                spouse_added = 1
+
+            if preset.children:
+                base_param['family role'] = 'Child'
+            else:
+                base_param['family role'] = 'None'
+
+        nb_to_add = max(0, int(random.gauss(preset.mean, preset.variance)) - main_added - spouse_added)
+        for x in range(nb_to_add):
+            self.add_character(base_param, group_id, True)
 
     def update_group(self, group_id, new_character_id):
         group_connector = db_connector.Db_Connector(base.Group)
@@ -557,7 +596,7 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
         group_connector.full_update(g, group_id)
         group_connector.close_session()
 
-    def add_character(self, character_dict, in_group_id='selected'):
+    def add_character(self, character_dict, in_group_id='selected', auto_populate=False):
         if in_group_id == 'selected':
             group_id = self.get_selected_id()
         else:
@@ -565,13 +604,14 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
         new_character = character.Character()
         new_character.associate_group(group_id)
-        new_character.build_character(character_dict)
+        new_character.build_character(character_dict, auto_populate)
 
         connector = db_connector.Db_Connector(base.Character)
         new_char_id = connector.write_to_db(new_character)
         connector.close_session()
 
-        self.update_group(group_id, new_char_id)
+        if not new_character.will_leave:
+            self.update_group(group_id, new_char_id)
 
         self.build_tree_model()
 
@@ -591,21 +631,54 @@ class Controller(QtWidgets.QMainWindow, Ui_MainWindow):
 
 # Delete entry from popup methods ---------------------------------------------------Begin
 
-    def delete_character(self, character_id='selected'):
+    def delete_character(self, character_id='selected'):  # Add method to remove character id from groups he is part of
         if character_id == 'selected':
             character_id = self.get_selected_id()
+
+        self.remove_char_id_from_groups(character_id)
 
         connector = db_connector.Db_Connector(base.Character)
         connector.delete_entry(character_id)
         connector.close_session()
 
+    def remove_char_id_from_groups(self, char_id):
+        char_connector = db_connector.Db_Connector(base.Character)
+        char = char_connector.load_from_db('id', char_id)
+        char = char[0]
+        groups_list = char.groups
+        char_connector.close_session()
+
+        group_connector = db_connector.Db_Connector(base.Group)
+        for g in groups_list:
+            g.characters = [x for x in g.characters if x != char_id]
+            group_connector.update_entry(g.id, 'characters', json.dumps(g.characters))
+        group_connector.close_session()
+
     def delete_group(self, group_id='selected'):
         if group_id == 'selected':
             group_id = self.get_selected_id()
 
+        self.remove_group_id_from_char(group_id)
+
         connector = db_connector.Db_Connector(base.Group)
         connector.delete_entry(group_id)
         connector.close_session()
+
+    def remove_group_id_from_char(self, group_id):
+        group_connector = db_connector.Db_Connector(base.Group)
+        in_group = group_connector.load_from_db('id', group_id)
+        in_group = in_group[0]
+        char_id_list = in_group.characters
+        group_connector.close_session()
+
+        char_connector = db_connector.Db_Connector(base.Character)
+        for i in char_id_list:
+            char = char_connector.load_from_db('id', i)
+            char = char[0]
+            char.groups = [x for x in char.groups if x.id != group_id]
+            char_connector.update_entry(char.id, 'groups', json.dumps([x.id for x in char.groups]))
+        char_connector.close_session()
+
 
     def delete_building(self, building_id='selected'):
         if building_id == 'selected':

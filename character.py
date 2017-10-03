@@ -253,14 +253,26 @@ class Character(Constructor):
                 if self.profession != char.profession:
                     removed.append(char)
                     continue
+            if self.family_role.role == family_role.spouse.role:  # Prevent incest
+                if char.family.id == self.master_char.family.id:
+                    removed.append(char)
+                    continue
         for char in removed:
             candidates.remove(char)
 
-        if candidates:  # if compatible candidates remains ...
+
+        if candidates:  # if compatible candidates remains
             selected = random.choice(candidates)
             f_role = self.family_role
-            self.__dict__ = copy.copy(selected.__dict__)  # ... copy all info from selected existing character.
-            self.family_role = f_role  # But make sure to keep new_group_role
+            current_group = self.current_group_edit
+            master = self.master_char
+            auto_pop = self.auto_populate
+            self.__dict__ = copy.copy(selected.__dict__)  # Copy all info from selected existing character.
+            self.family_role = f_role  # But make sure to keep new family role ...
+            self.current_group_edit = current_group  # ... and current group info, master character and auto-populate settings
+            self.associate_group(current_group.id)
+            self.master_char = master
+            self.auto_populate = auto_pop
 
     # ------------------ Search existing character for compatible ones --------------------- End
 
@@ -281,6 +293,8 @@ class Character(Constructor):
         print(self.name)
         self.set_family(default_char.family)
         print(self.family.name)
+        if self.family_role.role == family_role.spouse.role:
+            self.update_master_spouse_family()
         self.set_age(default_char.age)
         print(self.age)
         self.set_will_leave()
@@ -295,6 +309,8 @@ class Character(Constructor):
         print(self.social_group.name)
         self.set_profession(default_char.profession)
         print(self.profession.name)
+        if self.will_leave:
+            self.remove_current_group()
 
     def set_family_role(self, default):
         if self.family_role.role == default:  # Assign family role if still default according to group attribute
@@ -345,6 +361,11 @@ class Character(Constructor):
             connector = db_connector.Db_Connector(base.Family)
             self.family.id = connector.write_to_db(self.family)
 
+    def update_master_spouse_family(self):
+        self.master_char.spouse_family = self.family
+        connector = db_connector.Db_Connector(base.Character)
+        connector.update_entry(self.master_char.id, 'spouse_family_id', self.family.id)
+
     def set_age(self, default):
         if self.age == default:
             if self.family_role.role == family_role.spouse.role:
@@ -362,7 +383,7 @@ class Character(Constructor):
                 first_child = False
             if first_child and self.current_group_edit.preset.inheritance:  # First child of inherited group cannot leave
                 return
-            if self.age >= self.race.working_age and random.randint(1, 100) <= 80:  # !!! Can be changed to a config option
+            if self.age >= self.race.working_age and random.randint(1, 100) <= catalog.children_leaving_odds:
                 self.will_leave = True
 
     def set_attributes(self, default):
@@ -445,6 +466,9 @@ class Character(Constructor):
         city_connector.update_entry(in_city.id, 'taken_jobs', json.dumps(in_city.taken_jobs))
         city_connector.close_session()
 
+    def remove_current_group(self):
+        self.groups = [x for x in self.groups if x.id != self.current_group_edit.id]
+
     # ------------------ Complete missing info after other steps --------------------------- End
 
     # --------------------- Misc. list construction methods -------------------------------- Begin
@@ -485,25 +509,40 @@ class Character(Constructor):
 
     def set_from_db(self, base_character):
         self.id = base_character.id
+        #print(self.id)
         self.name = base_character.name
+        #print(self.name)
         self.culture = catalog.cultures[base_character.culture]
+        #print(self.culture)
         self.race = catalog.races[base_character.race]
+        #print(self.race)
         self.gender = base_character.gender
+        #print(self.gender)
         self.age = base_character.age
+        #print(self.age)
         self.social_group = catalog.social_groups[base_character.social_group]
+        #print(self.social_group)
         self.profession = catalog.professions[base_character.profession]
+        #print(self.profession)
         self.wealth = base_character.wealth
+        #print(self.wealth)
         self.attributes = json.loads(base_character.attributes)
+        #print(self.attributes)
         self.moralities = json.loads(base_character.moralities)
+        #print(self.moralities)
         self.family_role.role = base_character.family_role
+        #print(self.family_role.role)
         self.load_groups(json.loads(base_character.groups))
+        #print(self.groups)
         self.load_family(base_character.family_id)
+        #print(self.family.name)
         self.load_spouse_family(base_character.spouse_family_id)
+        #print(self.spouse_family.name)
 
     def load_groups(self, id_list):
         group_connector = db_connector.Db_Connector(base.Group)
-        for item in id_list:
-            g = group_connector.load_from_db('id', item)
+        for i in id_list:
+            g = group_connector.load_from_db('id', i)
             self.groups.append(g[0])
         group_connector.close_session()
 
@@ -523,14 +562,14 @@ class Character(Constructor):
 
     def set_from_edit_box(self, param):
         self.name = param['name']
-        self.family.update_name(param['fname'])  # Change method call to edit dialog
+        self.family.update_name_to_db(param['fname'])
         self.culture = catalog.cultures[param['culture']]
         self.race = catalog.races[param['race']]
         self.gender = param['gender']
         self.age = int(param['age'])
         self.social_group = catalog.social_groups[param['social group']]
         self.profession = catalog.professions[param['profession']]
-        self.wealth = int(param['wealth'])
+        self.wealth = float(param['wealth'])
         self.family_role.role = param['family role']
 
 
